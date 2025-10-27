@@ -1,4 +1,4 @@
-# 🧭 Hướng Dẫn Chạy Đồ Án
+# 🧭 Hướng Dẫn Chạy Đồ Án HKPDAW_Showbiz
 
 ## 🚀 Cài Đặt Ban Đầu
 
@@ -13,6 +13,16 @@ cp .env.example .env
 
 # B3: Tạo key cho ứng dụng
 php artisan key:generate
+```
+
+---
+
+## ⚙️ Cấu Hình APP_NAME
+
+Mở file `.env` và chỉnh lại phần cấu hình như sau:
+
+```dotenv
+APP_NAME=HKPDAW_Showbiz
 ```
 
 ---
