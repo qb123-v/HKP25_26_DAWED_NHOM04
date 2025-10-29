@@ -48,6 +48,16 @@ php artisan migrate
 
 ---
 
+## ⚙️ Thêm dữ liệu
+
+Mở **Terminal** và chạy lệnh sau:
+
+```bash
+php artisan db:seed
+```
+
+---
+
 ## 🧩 Cài Đặt Frontend
 
 ```bash
