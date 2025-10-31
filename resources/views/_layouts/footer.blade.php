@@ -1,7 +1,5 @@
 <footer>
-
-    <footer>
-        <h2>footer</h2>
-    </footer>
-
+    <div class="header-container">
+        <h1 class="header-title">Footer</h1>
+    </div>
 </footer>
