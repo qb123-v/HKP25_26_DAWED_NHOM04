@@ -96,7 +96,6 @@ chmod -R 775 storage bootstrap/cache
 
 ## 🏃‍♂️ Truy cập vào trang quản trị
 
-Chạy song song hai lệnh sau ở hai terminal khác nhau:
 
 Truy cập trình duyệt tại:  
 👉 [http://localhost:8000/admin](http://localhost:8000/admin)
