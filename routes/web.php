@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\admin\NewController;
 use App\Http\Controllers\admin\AdminAuthController;
 use App\Http\Controllers\admin\CategorieController;
@@ -30,10 +31,6 @@ Route::get('/register', function () {
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->name('password.request');
-
-
-
-
 // group route cho admin
 
 Route::get('admin', function () {
