@@ -15,6 +15,7 @@ class AdminSeeder extends Seeder
     {
         \App\Models\admin\Admin::create([
             'username' => 'admin',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password123'),
         ]);
     }
