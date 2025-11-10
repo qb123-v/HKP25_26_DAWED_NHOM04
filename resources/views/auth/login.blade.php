@@ -18,7 +18,7 @@
 <!-- Dùng để import CDN/file js -->
 @push('stylesjs')
     <script>
-        document.getElementById('togglePassword').addEventListener('click', function() {
+        document.getElementById('togglePassword').addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const icon = document.getElementById('toggleIcon');
 
@@ -36,13 +36,16 @@
         <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 12px;">
             <h4 class="text-center mb-4 fw-bold">Đăng nhập tài khoản</h4>
 
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('user.login.post') }}" novalidate>
                 @csrf
                 <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email"
-                        required autofocus>
+                    <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email" required
+                        autofocus>
+                    @error('email')
+                        <span class="text-danger mt-1">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Password -->
@@ -55,10 +58,14 @@
                         <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             <i class="fa fa-eye" id="toggleIcon"></i>
                         </button>
+
                     </div>
+                    @error('password')
+                        <span class="text-danger mt-1">{{ $message }}</span>
+                    @enderror
 
                     <div class="text-end mt-1">
-                        <a href="{{ route('password.request') }}" class="small text-decoration-none">Quên mật khẩu?</a>
+                        <a href="" class="small text-decoration-none">Quên mật khẩu?</a>
                     </div>
                 </div>
 
@@ -66,31 +73,32 @@
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-dark rounded-pill py-2">Đăng nhập</button>
                 </div>
-
-                <!-- Nút đăng ký -->
-                <div class="d-grid mt-3">
-                    <a href="{{ route('register') }}" class="btn btn-outline-dark rounded-pill py-2">Đăng ký</a>
-                </div>
-
-                <!-- OR -->
-                <div class="text-center my-3 text-muted">
-                    <span>OR</span>
-                </div>
-
-                <!-- Login with Google -->
-                <div class="d-grid mb-2">
-                    <a href="{{ url('auth/google') }}" class="btn btn-outline-danger rounded-pill py-2">
-                        <i class="bi bi-google me-2"></i> Continue with Google
-                    </a>
-                </div>
-
-                <!-- Login with Facebook -->
-                <div class="d-grid">
-                    <a href="{{ url('auth/facebook') }}" class="btn btn-outline-primary rounded-pill py-2">
-                        <i class="bi bi-facebook me-2"></i> Continue with Facebook
-                    </a>
-                </div>
             </form>
+
+            <!-- Nút đăng ký -->
+            <div class="d-grid mt-3">
+                <a href="" class="btn btn-outline-dark rounded-pill py-2">Đăng ký</a>
+            </div>
+
+            <!-- OR -->
+            <div class="text-center my-3 text-muted">
+                <span>OR</span>
+            </div>
+
+            <!-- Login with Google -->
+            <div class="d-grid mb-2">
+                <a href="" class="btn btn-outline-danger rounded-pill py-2">
+                    <i class="bi bi-google me-2"></i> Continue with Google
+                </a>
+            </div>
+
+            <!-- Login with Facebook -->
+            <div class="d-grid">
+                <a href="" class="btn btn-outline-primary rounded-pill py-2">
+                    <i class="bi bi-facebook me-2"></i> Continue with Facebook
+                </a>
+            </div>
+
         </div>
     </div>
 @endsection
