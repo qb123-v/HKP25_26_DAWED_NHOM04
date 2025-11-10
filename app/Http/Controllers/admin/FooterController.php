@@ -11,4 +11,10 @@ class FooterController extends Controller
     {
         return view('_admin.footer.index');
     }
+
+    public function update(Request $request)
+    {
+        // Tạm thời chỉ demo
+        return back()->with('success', 'Đã lưu thay đổi thành công!');
+    }
 }
