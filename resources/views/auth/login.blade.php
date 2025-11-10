@@ -41,8 +41,8 @@
                 <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email" required
-                        autofocus>
+                    <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email"
+                        value="{{ old('email') }}" autofocus>
                     @error('email')
                         <span class="text-danger mt-1">{{ $message }}</span>
                     @enderror
@@ -54,7 +54,7 @@
 
                     <div class="input-group">
                         <input id="password" type="password" name="password" class="form-control"
-                            placeholder="Nhập mật khẩu" required>
+                            placeholder="Nhập mật khẩu" value="{{ old('password') }}">
                         <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             <i class="fa fa-eye" id="toggleIcon"></i>
                         </button>
