@@ -35,7 +35,9 @@
     <div class="container d-flex justify-content-center align-items-center my-5">
         <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 12px;">
             <h4 class="text-center mb-4 fw-bold">Đăng nhập tài khoản</h4>
-
+            @if(session('message'))
+                <div class="alert alert-success">{{ session('message') }}</div>
+            @endif
             <form method="post" action="{{ route('user.login.post') }}" novalidate>
                 @csrf
                 <!-- Email -->
@@ -72,13 +74,12 @@
                 <!-- Nút đăng nhập -->
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-dark rounded-pill py-2">Đăng nhập</button>
-                    <!-- <button type="submit" class="btn btn-success">Đăng nhập</button> -->
                 </div>
             </form>
 
             <!-- Nút đăng ký -->
             <div class="d-grid mt-3">
-                <a href="#" class="btn btn-outline-dark rounded-pill py-2">Đăng ký</a>
+                <a href="{{ route('user.register') }}" class="btn btn-outline-dark rounded-pill py-2">Đăng ký</a>
             </div>
 
             <!-- OR -->
