@@ -2,14 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\admin\NewController;
+use App\Http\Controllers\admin\ArticleManagementController;
 use App\Http\Controllers\admin\AdminAuthController;
-use App\Http\Controllers\admin\CategorieController;
-use App\Http\Controllers\admin\ArtistController;
-use App\Http\Controllers\admin\CommentController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\MediaController;
-use App\Http\Controllers\admin\FooterController;
+use App\Http\Controllers\admin\CategorieManagementController;
+use App\Http\Controllers\admin\ArtistManagementController;
+use App\Http\Controllers\admin\CommentManagementController;
+use App\Http\Controllers\admin\UserManagementController;
+use App\Http\Controllers\admin\MediaManagementController;
+use App\Http\Controllers\admin\FooterManagementController;
 use App\Http\Controllers\UserAuthController;
 
 
@@ -84,12 +84,12 @@ Route::prefix('admin')->group(function () {
         Route::get('dashboard', function () {
             return view('_admin.dashboard');
         })->name('admin.dashboard');
-        Route::resource('news', NewController::class)->names('admin.news');
-        Route::resource('categories', CategorieController::class)->names('admin.categories');
-        Route::resource('artists', ArtistController::class)->names('admin.artists');
-        Route::resource('comments', CommentController::class)->names('admin.comments');
-        Route::resource('users', UserController::class)->names('admin.users');
-        Route::resource('media', MediaController::class)->names('admin.media');
-        Route::resource('footers', FooterController::class)->names('admin.footers');
+        Route::resource('news', ArticleManagementController::class)->names('admin.news');
+        Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
+        Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
+        Route::resource('comments', CommentManagementController::class)->names('admin.comments');
+        Route::resource('users', UserManagementController::class)->names('admin.users');
+        Route::resource('media', MediaManagementController::class)->names('admin.media');
+        Route::resource('footers', FooterManagementController::class)->names('admin.footers');
     });
 });
