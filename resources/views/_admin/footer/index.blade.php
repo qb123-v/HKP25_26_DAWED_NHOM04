@@ -24,11 +24,15 @@
         <!--begin::App Content-->
         <div class="app-content">
             <div class="container-fluid">
-
+                @if (session('success'))
+                    <div class="alert alert-{{ session('alert-type', 'success') }}">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <div class="bg-white rounded shadow p-4">
-                    <form id="footerForm" class="row" method="POST" action="{{ route('admin.footer.update') }}">
+                    <form id="footerForm" class="row" method="POST" action="{{ route('admin.footers.update') }}">
                         @csrf
-
+                        @method('PUT')
                         <!-- Cột trái -->
                         <div class="col-md-6 border-end pe-4">
                             <!-- Thông tin chung -->
@@ -75,11 +79,13 @@
                                 <div class="row g-3 mt-2">
                                     <div class="col-md-6">
                                         <label class="form-label">Màu nền Footer</label>
-                                        <input type="color" class="form-control form-control-color" name="bg_color" value="#f8f9fa">
+                                        <input type="color" class="form-control form-control-color" name="bg_color"
+                                            value="#f8f9fa">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Màu chữ</label>
-                                        <input type="color" class="form-control form-control-color" name="text_color" value="#000000">
+                                        <input type="color" class="form-control form-control-color" name="text_color"
+                                            value="#000000">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Căn chỉnh nội dung</label>
@@ -107,11 +113,13 @@
                                 <h5 class="fw-semibold mb-0">Xem trước Footer</h5>
                                 <div>
                                     <button type="submit" class="btn btn-primary btn-sm">Lưu thay đổi</button>
-                                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">Trang chủ admin</a>
+                                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">Trang
+                                        chủ admin</a>
                                 </div>
                             </div>
 
-                            <div id="footerPreview" class="border rounded p-4 text-center" style="background-color:#f8f9fa;">
+                            <div id="footerPreview" class="border rounded p-4 text-center"
+                                style="background-color:#f8f9fa;">
                                 <div class="row mb-4">
                                     <div class="col">
                                         <h6 class="fw-bold mb-2">About</h6>
@@ -152,14 +160,14 @@
 @endsection
 
 @push('scripts')
-<script>
-    // Cập nhật xem trước khi chọn màu
-    document.querySelector('input[name="bg_color"]').addEventListener('input', e => {
-        document.getElementById('footerPreview').style.backgroundColor = e.target.value;
-    });
+    <script>
+        // Cập nhật xem trước khi chọn màu
+        document.querySelector('input[name="bg_color"]').addEventListener('input', e => {
+            document.getElementById('footerPreview').style.backgroundColor = e.target.value;
+        });
 
-    document.querySelector('input[name="text_color"]').addEventListener('input', e => {
-        document.getElementById('footerPreview').style.color = e.target.value;
-    });
-</script>
+        document.querySelector('input[name="text_color"]').addEventListener('input', e => {
+            document.getElementById('footerPreview').style.color = e.target.value;
+        });
+    </script>
 @endpush
