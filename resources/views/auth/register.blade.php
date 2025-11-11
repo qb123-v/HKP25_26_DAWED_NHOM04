@@ -10,17 +10,131 @@
     <!-- Dòng này cho bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 @endpush
 
 <!-- Dùng để import CDN/file js -->
 @push('stylesjs')
     <!-- import js vào đây -->
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('toggleIcon');
+
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    </script>
+    <script>
+        document.getElementById('togglePasswordConfirmation').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password_confirmation');
+            const icon = document.getElementById('toggleIcon2');
+
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    </script>
 @endpush
 
 
 @section('content')
-    <!-- viết nội dung cho trang chủ -->
-    <div class="container" style="min-height: 80vh;">
-        <h2 class="text-center">Đăng ký tài khoản</h2>
+    <div class="container d-flex justify-content-center align-items-center my-5">
+        <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 12px;">
+            <h4 class="text-center mb-4 fw-bold">Đăng ký tài khoản</h4>
+
+            <form method="post" action="{{ route('user.register.post') }}" novalidate>
+                @csrf
+                <!-- Name -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Tên của bạn</label>
+                    <input id="name" type="text" name="name" class="form-control" placeholder="Nhập tên của bạn"
+                        value="{{ old('name') }}">
+                    @error('name')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!-- Email -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email"
+                        value="{{ old('email') }}">
+                    @error('email')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3 position-relative">
+                    <label for="password" class="form-label">Mật khẩu</label>
+
+                    <div class="input-group">
+                        <input id="password" type="password" name="password" class="form-control"
+                            placeholder="Nhập mật khẩu" value="{{ old('password') }}">
+                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                            <i class="fa fa-eye" id="toggleIcon"></i>
+                        </button>
+
+                    </div>
+                    @error('password')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!-- Password confirm -->
+                <div class="mb-3 position-relative">
+                    <label for="password_confirmation" class="form-label">Mật khẩu xác nhận</label>
+
+                    <div class="input-group">
+                        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control"
+                            placeholder="Nhập lại mật khẩu" value="{{ old('password_confirmation') }}">
+                        <button type="button" class="btn btn-outline-secondary" id="togglePasswordConfirmation">
+                            <i class="fa fa-eye" id="toggleIcon2"></i>
+                        </button>
+                    </div>
+                    @error('password_confirmation')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="text-end mt-1 small">
+                    Đã có tài khoản? <a href="{{ route('user.login') }}" class=" ">Đăng nhập
+                        ngay</a>
+
+                </div>
+
+                <!-- Nút đăng ký -->
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-dark rounded-pill py-2">Đăng ký tài khoản</button>
+                    <!-- <button type="submit" class="btn btn-success">Đăng nhập</button> -->
+                </div>
+            </form>
+
+
+
+
+            <!-- OR -->
+            <div class="text-center my-3 text-muted">
+                <span>OR</span>
+            </div>
+
+            <!-- Login with Google -->
+            <div class="d-grid mb-2">
+                <a href="" class="btn btn-outline-danger rounded-pill py-2">
+                    <i class="bi bi-google me-2"></i> Continue with Google
+                </a>
+            </div>
+
+            <!-- Login with Facebook -->
+            <div class="d-grid">
+                <a href="" class="btn btn-outline-primary rounded-pill py-2">
+                    <i class="bi bi-facebook me-2"></i> Continue with Facebook
+                </a>
+            </div>
+        </div>
     </div>
 @endsection

@@ -31,7 +31,7 @@ Route::get('news-item', function () {
 Route::get('tai-khoan', function () {
 
     return redirect()->route('user.dashboard');
-})->middleware('user.auth');
+})->middleware('user.auth')->name('user');
 
 
 
@@ -44,9 +44,10 @@ Route::prefix('tai-khoan')->name('user.')->group(function () {
 
     // User đã đăng nhập không được phép truy cập các trang dưới đây
     Route::middleware('user.checkLogin')->group(function () {
-        Route::get('dang-ky', function () {
-            return view('auth.register');
-        })->name('register');
+        Route::controller(UserController::class)->group(function () {
+            Route::get('dang-ky', 'create')->name('register');
+            Route::post('dang-ky', 'store')->name('register.post');
+        });
         Route::get('/quen-mat-khau', function () {
             return view('auth.forgot-password');
         })->name('forgot-password');
