@@ -6,6 +6,10 @@
                 <li><a class="header-nav-link" href="/">Trang chủ</a></li>
                 <li><a class="header-nav-link" href="/news">Tin tức</a></li>
                 <li><a class="header-nav-link" href="/news-item">Chi tiết tin tức</a></li> <!-- gắn tạm -->
+
+                <li><a class="header-nav-link" href="{{ route('user.dashboard') }}">Thông tin tài khoản</a></li>
+                <!-- gắn tạm -->
+
                 <li><a class="header-nav-link" href="{{ route('user.register') }}">Đăng ký</a></li>
                 <li><a class="header-nav-link" href="{{ route('user.forgot-password') }}">Quên mật khẩu</a></li>
 

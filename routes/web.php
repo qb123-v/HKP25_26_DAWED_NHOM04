@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\admin\ArticleManagementController;
@@ -33,6 +34,7 @@ Route::get('tai-khoan', function () {
 })->middleware('user.auth');
 
 
+
 // group route cho user
 Route::prefix('tai-khoan')->name('user.')->group(function () {
 
@@ -56,9 +58,12 @@ Route::prefix('tai-khoan')->name('user.')->group(function () {
     Route::middleware('user.auth')->group(function () {
         Route::post('dang-xuat', [UserAuthController::class, 'logout'])->name('logout');
 
-        Route::get('thong-tin-tai-khoan', function () {
-            return view('users.index');
-        })->name('dashboard');
+
+        Route::controller(UserController::class)
+            ->group(function () {
+                Route::get('/thong-tin-tai-khoan', 'show')->name('dashboard');
+                Route::get('/cap-nhat-thong-tin', 'edit')->name('edit');
+            });
 
     });
 

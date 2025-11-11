@@ -18,9 +18,14 @@
 @endpush
 
 
+
 @section('content')
     <!-- viết nội dung cho trang chủ -->
     <div class="container" style="min-height: 80vh;">
         <h2 class="text-center">Thông tin tài khoản</h2>
+        <p>{{ 'Tên:' . $user->name }}</p>
+        <p>{{ 'Email:' . $user->email }}</p>
+        <a href="{{ route('user.edit') }}">Chỉnh sửa thông tin</a>
+
     </div>
 @endsection
