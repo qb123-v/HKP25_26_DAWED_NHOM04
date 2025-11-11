@@ -3,13 +3,12 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
 
-class AuthencateUser
+class CheckUserLogin
 {
     /**
      * Handle an incoming request.
@@ -18,9 +17,9 @@ class AuthencateUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::guard('user')->check())
+        if (Auth::guard('user')->check())
         {
-            return redirect()->guest(route('user.login'));
+            return redirect()->guest(route('user.dashboard'));
         }
         return $next($request);
     }

@@ -32,19 +32,19 @@
 @endpush
 
 @section('content')
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="container d-flex justify-content-center align-items-center my-5">
         <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 12px;">
             <h4 class="text-center mb-4 fw-bold">Đăng nhập tài khoản</h4>
 
-            <form method="POST" action="{{ route('user.login.post') }}" novalidate>
+            <form method="post" action="{{ route('user.login.post') }}" novalidate>
                 @csrf
                 <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email"
-                        value="{{ old('email') }}" autofocus>
+                        value="{{ old('email') }}">
                     @error('email')
-                        <span class="text-danger mt-1">{{ $message }}</span>
+                        <div class="text-danger mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -61,7 +61,7 @@
 
                     </div>
                     @error('password')
-                        <span class="text-danger mt-1">{{ $message }}</span>
+                        <div class="text-danger mt-1">{{ $message }}</div>
                     @enderror
 
                     <div class="text-end mt-1">
@@ -72,12 +72,13 @@
                 <!-- Nút đăng nhập -->
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-dark rounded-pill py-2">Đăng nhập</button>
+                    <!-- <button type="submit" class="btn btn-success">Đăng nhập</button> -->
                 </div>
             </form>
 
             <!-- Nút đăng ký -->
             <div class="d-grid mt-3">
-                <a href="" class="btn btn-outline-dark rounded-pill py-2">Đăng ký</a>
+                <a href="#" class="btn btn-outline-dark rounded-pill py-2">Đăng ký</a>
             </div>
 
             <!-- OR -->

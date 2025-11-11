@@ -26,34 +26,41 @@ Route::get('news-item', function () {
 });
 
 
-
+// Điều hướng về đường dẫn /tai-khoan/*
 Route::get('tai-khoan', function () {
+
     return redirect()->route('user.dashboard');
-    // return Auth('user')->id();
 })->middleware('user.auth');
 
+
+// group route cho user
 Route::prefix('tai-khoan')->name('user.')->group(function () {
-    Route::get('dang-nhap', [UserAuthController::class, 'showLoginForm'])->name('login');
+
+    // Xử lý post đăng nhập
     Route::post('dang-nhap', [UserAuthController::class, 'login'])->name('login.post');
 
 
-    // Route::get('/register', function () {
-//     return view('auth.register');
-// })->name('register');
-// Route::get('/forgot-password', function () {
-//     return view('auth.forgot-password');
-// })->name('password.request');
+    // User đã đăng nhập không được phép truy cập các trang dưới đây
+    Route::middleware('user.checkLogin')->group(function () {
+        Route::get('dang-ky', function () {
+            return view('auth.register');
+        })->name('register');
+        Route::get('/quen-mat-khau', function () {
+            return view('auth.forgot-password');
+        })->name('forgot-password');
+        Route::get('dang-nhap', [UserAuthController::class, 'showLoginForm'])->name('login');
+    });
 
 
+    // User đã đăng nhập mới truy cập được các đường dẫn sau đây
     Route::middleware('user.auth')->group(function () {
-        Route::get('dang-xuat', [UserAuthController::class, 'logout'])->name('logout');
+        Route::post('dang-xuat', [UserAuthController::class, 'logout'])->name('logout');
 
         Route::get('thong-tin-tai-khoan', function () {
             return view('users.index');
         })->name('dashboard');
+
     });
-
-
 
 });
 
