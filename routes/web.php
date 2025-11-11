@@ -90,6 +90,11 @@ Route::prefix('admin')->group(function () {
         Route::resource('comments', CommentManagementController::class)->names('admin.comments');
         Route::resource('users', UserManagementController::class)->names('admin.users');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
-        Route::resource('footers', FooterManagementController::class)->names('admin.footers');
+
+        // route admin management footer
+        Route::controller(FooterManagementController::class)->name('admin.footers.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::put('/', 'update')->name('update');
+        });
     });
 });
