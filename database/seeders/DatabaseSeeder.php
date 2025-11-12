@@ -26,5 +26,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password123'),
         ]);
         // $this->call(AdminSeeder::class);
+        User::create([
+            'name' => 'Test User',
+            'email' => 'baoquang366@gmail.com',
+            // 'avatar' => 'avt.jpg',
+            'password' => Hash::make('password123'),
+        ]);
     }
 }
