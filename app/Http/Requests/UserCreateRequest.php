@@ -25,7 +25,8 @@ class UserCreateRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|min:8',
+            'password_confirmation' => 'required|string|min:8||confirmed'
         ];
     }
     public function messages()
@@ -36,8 +37,10 @@ class UserCreateRequest extends FormRequest
             'email.email' => 'Email không đúng định dạng',
             'email.unique' => 'Email đã được đăng ký',
             'password.required' => 'Vui lòng nhập mật khẩu',
-            'password.confirmed' => 'Mật khẩu xác nhận không khớp',
-            'password.min' => 'Mật khẩu vài dài hơn 8 ký tự'
+            'password.min' => 'Mật khẩu phải dài hơn 8 ký tự',
+            'password_confirmation.required' => 'Nhập mật khẩu xác nhận',
+            'password_confirmation.min' => 'Mật khẩu phải dài hơn 8 ký tự',
+            'password_confirmation.confirmed' => 'Mật khẩu xác nhận không khớp',
         ];
     }
 }
