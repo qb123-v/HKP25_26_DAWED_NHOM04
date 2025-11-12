@@ -12,6 +12,11 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    public function getFirstNameAttribute()
+    {
+        $parts = explode(' ', trim($this->name));
+        return end($parts);
+    }
     /**
      * The attributes that are mass assignable.
      *

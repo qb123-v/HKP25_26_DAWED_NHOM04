@@ -18,10 +18,10 @@ use App\Http\Controllers\UserAuthController;
 // route cho người dùng
 Route::get('/', function () {
     return view('index');
-});
+})->name('index');
 Route::get('news', function () {
     return view('news.index');
-});
+})->name('articles');
 Route::get('news-item', function () {
     return view('news.show');
 });
