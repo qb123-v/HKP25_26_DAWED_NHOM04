@@ -36,11 +36,10 @@ Route::get('tai-khoan', function () {
 
 
 // group route cho user
-Route::prefix('tai-khoan')->name('user.')->group(function () {
+Route::prefix('tai-khoan')->name('user.')->middleware('web')->group(function () {
 
     // Xử lý post đăng nhập
     Route::post('dang-nhap', [UserAuthController::class, 'login'])->name('login.post');
-
 
     // User đã đăng nhập không được phép truy cập các trang dưới đây
     Route::middleware('user.checkLogin')->group(function () {
@@ -48,30 +47,29 @@ Route::prefix('tai-khoan')->name('user.')->group(function () {
             Route::get('dang-ky', 'create')->name('register');
             Route::post('dang-ky', 'store')->name('register.post');
         });
-        Route::get('/quen-mat-khau', function () {
-            return view('auth.forgot-password');
-        })->name('forgot-password');
         Route::get('dang-nhap', [UserAuthController::class, 'showLoginForm'])->name('login');
+        Route::get('/quen-mat-khau', [UserAuthController::class, 'showForgotPasswordForm'])
+            ->name('forgot-password');
+        Route::post('/quen-mat-khau', [UserAuthController::class, 'forgotPassword'])
+            ->name('forgot-password.post');
     });
 
+    Route::get('/dat-lai-mat-khau/{token}', [UserAuthController::class, 'showResetPasswordForm'])
+        ->name('reset-password');
+    Route::post('/dat-lai-mat-khau', [UserAuthController::class, 'resetPassword'])
+        ->name('reset-password.post');
 
     // User đã đăng nhập mới truy cập được các đường dẫn sau đây
     Route::middleware('user.auth')->group(function () {
         Route::post('dang-xuat', [UserAuthController::class, 'logout'])->name('logout');
-
 
         Route::controller(UserController::class)
             ->group(function () {
                 Route::get('/thong-tin-tai-khoan', 'show')->name('dashboard');
                 Route::get('/cap-nhat-thong-tin', 'edit')->name('edit');
             });
-
     });
-
 });
-
-
-
 
 // group route cho admin
 Route::get('admin', function () {

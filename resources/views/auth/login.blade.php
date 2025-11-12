@@ -67,7 +67,7 @@
                     @enderror
 
                     <div class="text-end mt-1">
-                        <a href="" class="small text-decoration-none">Quên mật khẩu?</a>
+                        <a href="{{ route('user.forgot-password') }}" class="small text-decoration-none">Quên mật khẩu?</a>
                     </div>
                 </div>
 
