@@ -28,7 +28,7 @@
     </div>
     --}}
     <div class="header-container">
-        <div class="header-logo">SHOWBIZ</div>
+        <div class="header-logo"><a href="{{ route('index') }}">SHOWBIZ</a></div>
         <form method="get" action="">
             <input class="header-search-input" type="text" name="search" placeholder="Tìm kiếm">
             <button class="header-search-submit">Tìm</button>
