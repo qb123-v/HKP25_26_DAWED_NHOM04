@@ -28,7 +28,7 @@
     </div>
     --}}
     <div class="header-container">
-        <div class="header-logo">SHOWBIZ</div>
+        <a href="/" class="header-logo text-white text-decoration-none">SHOWBIZ</a>
         <form method="get" action="">
             <input class="header-search-input" type="text" name="search" placeholder="Tìm kiếm">
             <button class="header-search-submit">Tìm</button>
@@ -48,7 +48,7 @@
             </li>
         </ul>
         <div class="header-user">
-            @if($user)
+            @if ($user)
                 <a class="user-link" href="{{ route('user.dashboard') }}">Chào! {{ $user->first_name }}</a>
             @else
                 <a class="user-link" href="{{ route('user.login') }}">Đăng nhập</a>
