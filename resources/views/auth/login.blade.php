@@ -43,10 +43,10 @@
                 <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email"
-                        value="{{ old('email') }}">
+                    <input id="email" type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                        placeholder="Nhập email" value="{{ old('email') }}">
                     @error('email')
-                        <div class="text-danger mt-1">{{ $message }}</div>
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -55,16 +55,18 @@
                     <label for="password" class="form-label">Mật khẩu</label>
 
                     <div class="input-group">
-                        <input id="password" type="password" name="password" class="form-control"
+                        <input id="password" type="password" name="password"
+                            class="form-control rounded-end-0 @error('password') is-invalid @enderror"
                             placeholder="Nhập mật khẩu" value="{{ old('password') }}">
+
                         <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             <i class="fa fa-eye" id="toggleIcon"></i>
                         </button>
-
                     </div>
                     @error('password')
-                        <div class="text-danger mt-1">{{ $message }}</div>
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
+
 
                     <div class="text-end mt-1">
                         <a href="{{ route('user.forgot-password') }}" class="small text-decoration-none">Quên mật khẩu?</a>

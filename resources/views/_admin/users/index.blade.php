@@ -7,22 +7,6 @@
 @endpush
 
 @php
-    $categories = [
-        (object) [
-            'id' => 1,
-            'title' => 'abc',
-        ],
-        (object) [
-            'id' => 2,
-            'title' => 'dbc',
-        ]
-    ];
-    $users = [
-        (object) ['id' => 1, 'name' => 'user1', 'email' => 'email1@gmail.com'],
-        (object) ['id' => 2, 'name' => 'user1', 'email' => 'email1@gmail.com'],
-        (object) ['id' => 3, 'name' => 'user1', 'email' => 'email1@gmail.com'],
-        (object) ['id' => 4, 'name' => 'user1', 'email' => 'email1@gmail.com'],
-    ];
 @endphp
 
 @section('content')
@@ -65,7 +49,7 @@
                     <div class="card-body">
                         <div class="row">
                             <!-- <div class="col-8">
-                                                    </div> -->
+                                                                                                                </div> -->
                             <div class="col-12">
                                 <form method="get" action="" class="">
                                     <div class="d-flex">
@@ -81,7 +65,7 @@
                 </div>
                 <div class="card mb-4"> <!--begin::Header-->
                     <div class="card-header ">
-                        Danh sách người dùng (.... người dùng)
+                        Danh sách người dùng ({{ $users->total() }} người dùng)
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">
@@ -104,7 +88,7 @@
 
                                         </td>
                                         <td class="text-center">
-                                            1
+                                            {{ $loop->iteration + ($users->currentPage() - 1) * $users->perPage() }}
                                         </td>
                                         <td>
                                             <a href="" class="text-decoration-none text-black fw-bold">{{ $user->name }}</a>
@@ -113,13 +97,11 @@
                                             {{ $user->email }}
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.categories.edit', $user->id) }}"
-                                                class="text-decoration-none text-secondary"><i class="fa-solid fa-eye"></i></a>
-                                            <a href="{{ route('admin.categories.edit', $user->id) }}"
-                                                class="text-decoration-none text-secondary"><i
+                                            <a href="" class="text-decoration-none text-secondary"><i
+                                                    class="fa-solid fa-eye"></i></a>
+                                            <a href="" class="text-decoration-none text-secondary"><i
                                                     class="fa-solid fa-pen-to-square "></i></a>
-                                            <form action="{{ route('admin.categories.destroy', $user->id) }}" method="POST"
-                                                class="d-inline" id="CategorieFormDelete">
+                                            <form action="" method="POST" class="d-inline" id="CategorieFormDelete">
                                                 @csrf
                                                 @method('DELETE')
                                                 <a href="#" class="fw-bold text-decoration-none text-secondary"
@@ -140,36 +122,36 @@
                         </table>
                     </div> <!-- /.card-body -->
                     <!-- phân trang nếu quá 10 chuyên mục -->
-                    <div class="card-footer clearfix">
-                        <div class="float-start mt-1">
-                            Hiển thị ... trên tổng số ... người dùng
+                    @if ($users->lastPage() > 1)
+                        <div class="card-footer clearfix">
+                            <div class="float-start mt-1">
+                                Hiển thị {{ $users->count() }} trên tổng số {{ $users->total() }} chuyên mục
+                            </div>
+                            <ul class="pagination pagination-sm m-0 float-end">
+                                {{-- Nút "Trước" --}}
+                                @if ($users->onFirstPage())
+                                    <li class="page-item disabled"><span class="page-link">«</span></li>
+                                @else
+                                    <li class="page-item"><a class="page-link" href="{{ $users->previousPageUrl() }}">«</a>
+                                    </li>
+                                @endif
+
+                                {{-- Danh sách các trang --}}
+                                @for ($i = 1; $i <= $users->lastPage(); $i++)
+                                    <li class="page-item {{ $i == $users->currentPage() ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                {{-- Nút "Sau" --}}
+                                @if ($users->hasMorePages())
+                                    <li class="page-item"><a class="page-link" href="{{ $users->nextPageUrl() }}">»</a></li>
+                                @else
+                                    <li class="page-item disabled"><span class="page-link">»</span></li>
+                                @endif
+                            </ul>
                         </div>
-                        <ul class="pagination pagination-sm m-0 float-end">
-                            {{-- Nút "Trước" --}}
-
-
-
-                            <li class="page-item"><a class="page-link" href="">«</a>
-                            </li>
-
-
-                            {{-- Danh sách các trang --}}
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item ">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-
-
-                            <!-- nút sau -->
-                            <li class="page-item"><a class="page-link" href="">»</a></li>
-
-                        </ul>
-                    </div>
+                    @endif
 
                 </div>
 

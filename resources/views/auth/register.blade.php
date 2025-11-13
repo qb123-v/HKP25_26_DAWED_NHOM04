@@ -54,19 +54,19 @@
                 <!-- Name -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Tên của bạn</label>
-                    <input id="name" type="text" name="name" class="form-control" placeholder="Nhập tên của bạn"
-                        value="{{ old('name') }}">
+                    <input id="name" type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                        placeholder="Nhập tên của bạn" value="{{ old('name') }}">
                     @error('name')
-                        <div class="text-danger mt-1">{{ $message }}</div>
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
                 <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email"
-                        value="{{ old('email') }}">
+                    <input id="email" type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                        placeholder="Nhập email" value="{{ old('email') }}">
                     @error('email')
-                        <div class="text-danger mt-1">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -75,30 +75,31 @@
                     <label for="password" class="form-label">Mật khẩu</label>
 
                     <div class="input-group">
-                        <input id="password" type="password" name="password" class="form-control"
-                            placeholder="Nhập mật khẩu" value="{{ old('password') }}">
+                        <input id="password" type="password" name="password"
+                            class="form-control @error('password') is-invalid @enderror" placeholder="Nhập mật khẩu"
+                            value="{{ old('password') }}">
                         <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             <i class="fa fa-eye" id="toggleIcon"></i>
                         </button>
 
                     </div>
                     @error('password')
-                        <div class="text-danger mt-1">{{ $message }}</div>
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
                 <!-- Password confirm -->
                 <div class="mb-3 position-relative">
                     <label for="password_confirmation" class="form-label">Mật khẩu xác nhận</label>
-
                     <div class="input-group">
-                        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control"
+                        <input id="password_confirmation" type="password" name="password_confirmation"
+                            class="form-control @error('password_confirmation') is-invalid @enderror"
                             placeholder="Nhập lại mật khẩu" value="{{ old('password_confirmation') }}">
                         <button type="button" class="btn btn-outline-secondary" id="togglePasswordConfirmation">
                             <i class="fa fa-eye" id="toggleIcon2"></i>
                         </button>
                     </div>
                     @error('password_confirmation')
-                        <div class="text-danger mt-1">{{ $message }}</div>
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="text-end mt-1 small">
