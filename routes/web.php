@@ -102,3 +102,18 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
+
+
+use App\Http\Controllers\ArticleController;
+
+Route::get('/bai-viet/{id}/{slug}', [ArticleController::class, 'show'])
+    ->name('articles.show');
+
+// Gửi comment chỉ cho user đã đăng nhập (guard 'user')
+Route::post('/bai-viet/{id}/comment', [ArticleController::class, 'storeComment'])
+    ->middleware('auth:user')  // <- dùng guard 'user'
+    ->name('articles.comment');
+
+
+
+
