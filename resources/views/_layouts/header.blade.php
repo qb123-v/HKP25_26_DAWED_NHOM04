@@ -48,7 +48,7 @@
             </li>
         </ul>
         <div class="header-user">
-            @if($user)
+            @if ($user)
                 <a class="user-link" href="{{ route('user.dashboard') }}">Chào! {{ $user->first_name }}</a>
             @else
                 <a class="user-link" href="{{ route('user.login') }}">Đăng nhập</a>

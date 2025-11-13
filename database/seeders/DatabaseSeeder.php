@@ -7,7 +7,6 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
@@ -17,20 +16,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::create([
-            'name' => 'Test User',
-            'email' => '123@gmail.com',
-            // 'avatar' => 'avt.jpg',
-            'password' => Hash::make('password123'),
-        ]);
-        // $this->call(AdminSeeder::class);
-        User::create([
-            'name' => 'Test User',
-            'email' => 'baoquang366@gmail.com',
-            // 'avatar' => 'avt.jpg',
-            'password' => Hash::make('password123'),
+        $this->call([
+            UserSeeder::class,
+            AdminSeeder::class,
+            CategorySeeder::class,
+            ArtistSeeder::class,
+            ArticleSeeder::class,
+            FooterSeeder::class,
         ]);
     }
 }
