@@ -12,8 +12,8 @@ use App\Http\Controllers\admin\UserManagementController;
 use App\Http\Controllers\admin\MediaManagementController;
 use App\Http\Controllers\admin\FooterManagementController;
 use App\Http\Controllers\UserAuthController;
-
-
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\NewsletterController;
 
 // route cho người dùng
 Route::get('/', function () {
@@ -26,14 +26,11 @@ Route::get('news-item', function () {
     return view('news.show');
 });
 
-
 // Điều hướng về đường dẫn /tai-khoan/*
 Route::get('tai-khoan', function () {
 
     return redirect()->route('user.dashboard');
 })->middleware('user.auth')->name('user');
-
-
 
 // group route cho user
 Route::prefix('tai-khoan')->name('user.')->middleware('web')->group(function () {
@@ -103,9 +100,6 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-
-use App\Http\Controllers\ArticleController;
-
 Route::get('/bai-viet/{id}/{slug}', [ArticleController::class, 'show'])
     ->name('articles.show');
 
@@ -114,6 +108,6 @@ Route::post('/bai-viet/{id}/comment', [ArticleController::class, 'storeComment']
     ->middleware('auth:user')  // <- dùng guard 'user'
     ->name('articles.comment');
 
-
-
-
+// Route đăng ký nhận bản tin
+Route::post('/dang-ky-nhan-bao', [NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe');
