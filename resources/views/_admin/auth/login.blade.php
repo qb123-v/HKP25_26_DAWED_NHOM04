@@ -18,6 +18,10 @@
             transform: translateY(-50%);
             right: 13px;
         }
+
+        .password-input {
+            background-image: none !important;
+        }
     </style>
 </head>
 
@@ -29,25 +33,27 @@
                 <h4 class="text-center mb-4">Đăng nhập Admin</h4>
                 <div class="mb-3">
                     <label for="username" class="form-label">Tài khoản</label>
-                    <input type="text" class="form-control" id="username" name="username" value="{{ old('username') }}">
+                    <input type="text" class="form-control @error('username') is-invalid @enderror" id="username"
+                        name="username" value="{{ old('username') }}">
                     @error('username')
-                        <div class="text-danger mt-1">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-4">
                     <label for="password" class="form-label">Mật khẩu</label>
 
                     <div class="box-password position-relative">
-                        <input type="password" class="form-control password-input" id="password" name="password"
-                            value="{{ old('password') }}">
+                        <input type="password"
+                            class="form-control password-input @error('password') is-invalid @enderror" id="password"
+                            name="password" value="{{ old('password') }}">
                         <div class="box-icon">
                             <button type="button" class="btn p-0 border-0 bg-transparent text-black toggle-password">
-                                <i class="fa-solid fa-eye eye-icon"></i>
+                                <i class="fa-solid fa-eye eye-icon @error('password') text-danger @enderror"></i>
                             </button>
                         </div>
                     </div>
                     @error('password')
-                        <div class="text-danger mt-1">{{ $message }}</div>
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-dark w-100 btn-lg">Đăng nhập</button>
