@@ -98,8 +98,10 @@
                     <!--end::Menu Body-->
                     <!--begin::Menu Footer-->
                     <li class="user-footer">
-                        <!-- <a href="#" class="btn btn-default btn-flat">Profile</a> -->
-                        <a href="{{ route('admin.logout') }}" class="btn btn-default btn-flat ">Đăng xuất</a>
+                        <form action="{{ route('admin.logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-default btn-flat">Đăng xuất</button>
+                        </form>
                     </li>
                     <!--end::Menu Footer-->
                 </ul>
