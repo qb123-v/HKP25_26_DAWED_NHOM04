@@ -38,6 +38,14 @@ DB_PORT=3306
 DB_DATABASE=HKPDAW_Showbiz
 DB_USERNAME=root
 DB_PASSWORD=
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=0306221104@caothang.edu.vn
+MAIL_PASSWORD=fblvbwgnpaishctm
+MAIL_FROM_ADDRESS=0306221104@caothang.edu.vn
+MAIL_FROM_NAME=HKP25_26_DAWED_NHOM04
 ```
 
 Sau đó chạy:
@@ -68,11 +76,12 @@ npm install
 
 ## 🏃‍♂️ Chạy Dự Án
 
-Chạy song song hai lệnh sau ở hai terminal khác nhau:
+Chạy song song ba lệnh sau ở ba terminal khác nhau:
 
 ```bash
 npm run dev
 php artisan serve
+php artisan queue:work
 ```
 
 Truy cập trình duyệt tại:  
