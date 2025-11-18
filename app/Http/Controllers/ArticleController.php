@@ -32,7 +32,7 @@ class ArticleController extends Controller
     ]);
 
     Comment::create([
-        'article_id' => $id,  // dùng $id từ route
+        'article_id' => $id,  
         'user_id' => Auth::id(),
         'parent_id' => $request->input('parent_id') ?: null,
         'content' => $request->content,
