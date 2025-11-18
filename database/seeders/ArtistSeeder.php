@@ -14,7 +14,7 @@ class ArtistSeeder extends Seeder
                 'slug' => 'artist-john-doe',
                 'name' => 'John Doe',
                 'bio' => 'A popular artist in the world.',
-                'avatar' => 'john.jpg',
+                'avatar' => 'images/artists/john.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -22,7 +22,7 @@ class ArtistSeeder extends Seeder
                 'slug' => 'artist-jane-smith',
                 'name' => 'Jane Smith',
                 'bio' => 'Famous for modern art.',
-                'avatar' => 'jane.jpg',
+                'avatar' => 'images/artists/jane.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -30,12 +30,17 @@ class ArtistSeeder extends Seeder
                 'slug' => 'artist-mike-lee',
                 'name' => 'Mike Lee',
                 'bio' => 'Known for classical paintings.',
-                'avatar' => 'mike.jpg',
+                'avatar' => 'images/artists/mike.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ];
 
-        DB::table('artists')->insert($artists);
+        foreach ($artists as $artist) {
+            DB::table('artists')->updateOrInsert(
+                ['slug' => $artist['slug']],
+                $artist
+            );
+        }
     }
 }

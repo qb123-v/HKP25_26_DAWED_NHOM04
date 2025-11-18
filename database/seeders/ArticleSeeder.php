@@ -35,7 +35,7 @@ class ArticleSeeder extends Seeder
             [
                 'slug' => 'politics-today',
                 'categorie_id' => 3,
-                'artist_id' => null,
+                'artist_id' => 2, // Jane Smith
                 'thumbnail' => 'thumb3.jpg',
                 'title' => 'Politics Today',
                 'content' => 'Content about current political events...',
@@ -50,7 +50,7 @@ class ArticleSeeder extends Seeder
             [
                 'slug' => 'world-economy-update',
                 'categorie_id' => 1,
-                'artist_id' => 1,
+                'artist_id' => 1, // John Doe
                 'thumbnail' => 'thumb4.jpg',
                 'title' => 'World Economy Update',
                 'content' => 'Content about global economy updates...',
@@ -93,59 +93,36 @@ class ArticleSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Category 3 (Politics) related
+            [
+                'slug' => 'political-analysis',
+                'categorie_id' => 3,
+                'artist_id' => 3, // Mike Lee
+                'thumbnail' => 'thumb8.jpg',
+                'title' => 'Political Analysis',
+                'content' => 'In-depth political analysis...',
+                'tag' => 'politics,analysis',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'slug' => 'election-updates',
+                'categorie_id' => 3,
+                'artist_id' => 1, // John Doe
+                'thumbnail' => 'thumb9.jpg',
+                'title' => 'Election Updates',
+                'content' => 'Latest updates on elections...',
+                'tag' => 'politics,election',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
-        $additionalArticles = [
-    // Bài Politics Today hiện tại
-    [
-        'slug' => 'politics-today',
-        'categorie_id' => 3, // Politics
-        'artist_id' => 2,    // Gán Jane Smith
-        'thumbnail' => 'thumb3.jpg',
-        'title' => 'Politics Today',
-        'content' => 'Content about current political events...',
-        'tag' => 'politics,government',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ],
-    // Bài liên quan cùng category Politics
-    [
-        'slug' => 'political-analysis',
-        'categorie_id' => 3,
-        'artist_id' => 3, // Mike Lee
-        'thumbnail' => 'thumb8.jpg',
-        'title' => 'Political Analysis',
-        'content' => 'In-depth political analysis...',
-        'tag' => 'politics,analysis',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ],
-    [
-        'slug' => 'election-updates',
-        'categorie_id' => 3,
-        'artist_id' => 1, // John Doe
-        'thumbnail' => 'thumb9.jpg',
-        'title' => 'Election Updates',
-        'content' => 'Latest updates on elections...',
-        'tag' => 'politics,election',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ],
-];
-
-foreach ($additionalArticles as $article) {
-    DB::table('articles')->updateOrInsert(
-        ['slug' => $article['slug']],
-        $article
-    );
-}
-
-
-        // Chèn hoặc update nếu slug đã tồn tại
         foreach (array_merge($articles, $relatedArticles) as $article) {
             DB::table('articles')->updateOrInsert(
-                ['slug' => $article['slug']], // điều kiện kiểm tra
-                $article // dữ liệu để insert/update
+                ['slug' => $article['slug']],
+                $article
             );
         }
     }

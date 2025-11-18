@@ -13,16 +13,19 @@ class Article extends Model
         'slug', 'categorie_id', 'artist_id', 'thumbnail', 'title', 'content', 'tag'
     ];
 
+    // Quan hệ với nghệ sĩ
     public function artist() {
         return $this->belongsTo(Artist::class);
     }
 
+    // Quan hệ với comment, chỉ lấy comment cha, kèm reply và user
     public function comments() {
         return $this->hasMany(Comment::class)
                     ->whereNull('parent_id')
-                    ->with('replies.user');
+                    ->with(['replies.user']);
     }
 
+    // Lấy 3 bài viết liên quan cùng category, không lấy chính nó
     public function relatedArticles() {
         return self::where('categorie_id', $this->categorie_id)
                     ->where('id', '<>', $this->id)
