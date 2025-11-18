@@ -80,7 +80,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('auth.admin')->group(function () {
 
-        Route::get('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+        Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
         Route::get('dashboard', function () {
             return view('_admin.dashboard');
