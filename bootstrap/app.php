@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Middleware\AuthenticateUser;
+use App\Http\Middleware\CheckUserLogin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\admin\AuthenticateAdmin;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,7 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'auth.admin' => \App\Http\Middleware\admin\AuthenticateAdmin::class,
+            'auth.admin' => AuthenticateAdmin::class,
+            'user.auth' => AuthenticateUser::class,
+            'user.checkLogin' => CheckUserLogin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

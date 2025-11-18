@@ -18,7 +18,7 @@
 <!-- Dùng để import CDN/file js -->
 @push('stylesjs')
     <script>
-        document.getElementById('togglePassword').addEventListener('click', function() {
+        document.getElementById('togglePassword').addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const icon = document.getElementById('toggleIcon');
 
@@ -32,17 +32,22 @@
 @endpush
 
 @section('content')
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="container d-flex justify-content-center align-items-center my-5">
         <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 12px;">
             <h4 class="text-center mb-4 fw-bold">Đăng nhập tài khoản</h4>
-
-            <form method="POST" action="{{ route('login') }}">
+            @if(session('message'))
+                <div class="alert alert-success">{{ session('message') }}</div>
+            @endif
+            <form method="post" action="{{ route('user.login.post') }}" novalidate>
                 @csrf
                 <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input id="email" type="email" name="email" class="form-control" placeholder="Nhập email"
-                        required autofocus>
+                    <input id="email" type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                        placeholder="Nhập email" value="{{ old('email') }}">
+                    @error('email')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <!-- Password -->
@@ -50,15 +55,21 @@
                     <label for="password" class="form-label">Mật khẩu</label>
 
                     <div class="input-group">
-                        <input id="password" type="password" name="password" class="form-control"
-                            placeholder="Nhập mật khẩu" required>
+                        <input id="password" type="password" name="password"
+                            class="form-control rounded-end-0 @error('password') is-invalid @enderror"
+                            placeholder="Nhập mật khẩu" value="{{ old('password') }}">
+
                         <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             <i class="fa fa-eye" id="toggleIcon"></i>
                         </button>
                     </div>
+                    @error('password')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+
 
                     <div class="text-end mt-1">
-                        <a href="{{ route('password.request') }}" class="small text-decoration-none">Quên mật khẩu?</a>
+                        <a href="{{ route('user.forgot-password') }}" class="small text-decoration-none">Quên mật khẩu?</a>
                     </div>
                 </div>
 
@@ -66,31 +77,32 @@
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-dark rounded-pill py-2">Đăng nhập</button>
                 </div>
-
-                <!-- Nút đăng ký -->
-                <div class="d-grid mt-3">
-                    <a href="{{ route('register') }}" class="btn btn-outline-dark rounded-pill py-2">Đăng ký</a>
-                </div>
-
-                <!-- OR -->
-                <div class="text-center my-3 text-muted">
-                    <span>OR</span>
-                </div>
-
-                <!-- Login with Google -->
-                <div class="d-grid mb-2">
-                    <a href="{{ url('auth/google') }}" class="btn btn-outline-danger rounded-pill py-2">
-                        <i class="bi bi-google me-2"></i> Continue with Google
-                    </a>
-                </div>
-
-                <!-- Login with Facebook -->
-                <div class="d-grid">
-                    <a href="{{ url('auth/facebook') }}" class="btn btn-outline-primary rounded-pill py-2">
-                        <i class="bi bi-facebook me-2"></i> Continue with Facebook
-                    </a>
-                </div>
             </form>
+
+            <!-- Nút đăng ký -->
+            <div class="d-grid mt-3">
+                <a href="{{ route('user.register') }}" class="btn btn-outline-dark rounded-pill py-2">Đăng ký</a>
+            </div>
+
+            <!-- OR -->
+            <div class="text-center my-3 text-muted">
+                <span>OR</span>
+            </div>
+
+            <!-- Login with Google -->
+            <div class="d-grid mb-2">
+                <a href="" class="btn btn-outline-danger rounded-pill py-2">
+                    <i class="bi bi-google me-2"></i> Continue with Google
+                </a>
+            </div>
+
+            <!-- Login with Facebook -->
+            <div class="d-grid">
+                <a href="" class="btn btn-outline-primary rounded-pill py-2">
+                    <i class="bi bi-facebook me-2"></i> Continue with Facebook
+                </a>
+            </div>
+
         </div>
     </div>
 @endsection

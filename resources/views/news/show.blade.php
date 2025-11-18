@@ -1,167 +1,43 @@
 @extends('_layouts.app')
-@section('title', 'Chi tiết tin tức')
+@section('title', $article->title)
 
 @push('styles')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <style>
-        body {
-            background-color: #fff;
-            font-family: "Helvetica Neue", Arial, sans-serif;
-        }
+<style>
+    body { background-color: #fff; font-family: "Helvetica Neue", Arial, sans-serif; }
+    .news-container { max-width: 1400px; margin: 0 auto; padding: 50px 40px; }
+    h1 { font-size: 2.6rem; font-weight: 700; margin-bottom: 10px; }
+    h5 { font-size: 1.25rem; color: #555; }
+    .breadcrumb { font-size: 0.9rem; }
+    .breadcrumb a { text-decoration: none; color: #007bff; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .article-meta { font-size: 0.9rem; color: #6c757d; }
+    .social-icons a { font-size: 1.3rem; color: #333; margin-right: 15px; }
+    .social-icons a:hover { color: #0d6efd; }
+    .article-content { font-size: 1.05rem; line-height: 1.8; color: #212529; }
 
-        .news-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 50px 40px;
-        }
+    .related-card { transition: all 0.2s ease; cursor: pointer; }
+    .related-card:hover { transform: translateY(-3px); }
+    .related-card img { border-radius: 8px; width: 100%; height: 180px; object-fit: cover; }
+    .related-card h6 { font-weight: 600; font-size: 0.95rem; margin-top: 8px; margin-bottom: 5px; color: #000; }
+    .related-card p { font-size: 0.85rem; color: #6c757d; }
 
-        h1 {
-            font-size: 2.6rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
+    .comments-box { border: 1px solid #ddd; background: #f8f9fa; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem; }
+    .comments-box h6 { font-weight: 600; margin-bottom: 0.5rem; }
+    .comment-reply { margin-left: 1rem; border-left: 2px solid #ccc; padding-left: 1rem; margin-top: 0.5rem; }
 
-        h5 {
-            font-size: 1.25rem;
-            color: #555;
-        }
+    @media (min-width: 1200px) {
+        .col-article { flex: 0 0 72%; max-width: 72%; }
+        .col-sidebar { flex: 0 0 28%; max-width: 28%; padding-left: 40px; }
+    }
 
-        .breadcrumb {
-            font-size: 0.9rem;
-        }
-
-        .breadcrumb a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .article-meta {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-
-        .caption {
-            font-size: 0.85rem;
-            color: #6c757d;
-        }
-
-        .social-icons a {
-            font-size: 1.3rem;
-            color: #333;
-            margin-right: 15px;
-        }
-
-        .social-icons a:hover {
-            color: #0d6efd;
-        }
-
-        .article-content {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: #212529;
-        }
-
-        .sidebar {
-            position: sticky;
-            top: 20px;
-        }
-
-        .sidebar .border {
-            border: 1px solid #e5e5e5 !important;
-        }
-
-        .trending li {
-            margin-bottom: 8px;
-        }
-
-        .trending a {
-            color: #000;
-            text-decoration: none;
-        }
-
-        .trending a:hover {
-            text-decoration: underline;
-        }
-
-        .related-card {
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .related-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .related-card img {
-            border-radius: 8px;
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .related-card h6 {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-top: 8px;
-            margin-bottom: 5px;
-            color: #000;
-        }
-
-        .related-card p {
-            font-size: 0.85rem;
-            color: #6c757d;
-        }
-
-        .comments-section {
-            margin-top: 2.5rem;
-            padding-top: 2rem;
-            border-top: 1px solid #ddd;
-        }
-
-        .comments-box {
-            border: 1px solid #ddd;
-            background: #f8f9fa;
-            border-radius: 6px;
-            padding: 1.25rem;
-        }
-
-        /* Small comment box in sidebar */
-        .sidebar .comments-box {
-            padding: 0.75rem;
-            font-size: 0.85rem;
-        }
-
-        @media (min-width: 1200px) {
-            .col-article {
-                flex: 0 0 72%;
-                max-width: 72%;
-            }
-
-            .col-sidebar {
-                flex: 0 0 28%;
-                max-width: 28%;
-                padding-left: 40px;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .news-container {
-                padding: 20px;
-            }
-
-            .col-sidebar {
-                padding-left: 0 !important;
-                margin-top: 40px;
-            }
-        }
-    </style>
+    @media (max-width: 992px) {
+        .news-container { padding: 20px; }
+        .col-sidebar { padding-left: 0 !important; margin-top: 40px; }
+    }
+</style>
 @endpush
 
 @section('content')
@@ -169,24 +45,23 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">World</a></li>
-            <li class="breadcrumb-item"><a href="#">Category</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Subcategory</li>
+            <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">{{ $article->categorie->name ?? 'Category' }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $article->title }}</li>
         </ol>
     </nav>
 
     <!-- Headline -->
-    <h1>Headline</h1>
-    <h5>Subheadline / Dek</h5>
+    <h1>{{ $article->title }}</h1>
+    <h5 class="mb-2">{{ Str::limit(strip_tags($article->content ?? ''), 120) }}</h5>
     <div class="article-meta mb-3">
-        By <strong>Author</strong> | Location | Date | X min read
+        By <strong>{{ $article->artist->name ?? 'Unknown' }}</strong> | 
+        {{ optional($article->created_at)->format('d M Y') }}
     </div>
 
     <!-- Main image -->
     <div class="mb-3">
-        <img src="https://via.placeholder.com/1300x550" class="img-fluid rounded" alt="Main Image">
-        <p class="caption mt-2">Caption text goes here</p>
+        <img src="{{ $article->thumbnail ?? 'https://via.placeholder.com/1300x550' }}" class="img-fluid rounded" alt="{{ $article->title }}">
     </div>
 
     <!-- Social icons -->
@@ -201,43 +76,29 @@
         <!-- Main article -->
         <div class="col-12 col-lg-9 col-article">
             <div class="article-content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel gravida arcu. Vestibulum feugiat,
-                    sapien ultrices fermentum congue, quam velit venenatis sem, id sodales eros lorem eget orci.</p>
-                <p>Vivamus at erat in ligula suscipit imperdiet. Cras imperdiet ligula a magna fermentum, non vestibulum sem
-                    faucibus.</p>
-                <p>Suspendisse potenti. Curabitur faucibus turpis a nisl luctus, sed luctus erat bibendum. Quisque vehicula
-                    dui in tellus tincidunt, at tempus elit eleifend.</p>
+                {!! nl2br(e($article->content ?? '')) !!}
+            </div>
 
-                <!-- Related stories (main content) -->
-                <h5 class="mt-5 fw-bold">Related stories</h5>
-                <div class="row row-cols-1 row-cols-md-3 g-3 mt-2">
-                    <div class="col">
+            <!-- Related stories -->
+            <h5 class="mt-5 fw-bold">Related stories</h5>
+            <div class="row row-cols-1 row-cols-md-3 g-3 mt-2">
+                @foreach($relatedArticles as $related)
+                <div class="col">
+                    <a href="{{ route('articles.show', [$related->id, $related->slug]) }}" class="text-decoration-none">
                         <div class="related-card">
-                            <img src="https://via.placeholder.com/300x180" alt="Story 1">
-                            <h6>Climate summit draws global attention</h6>
-                            <p>Leaders from around the world gather to discuss urgent climate issues.</p>
+                            <img src="{{ $related->thumbnail ?? 'https://via.placeholder.com/300x180' }}" alt="{{ $related->title }}">
+                            <h6>{{ $related->title }}</h6>
+                            <p>{{ Str::limit(strip_tags($related->content ?? ''), 80) }}</p>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="related-card">
-                            <img src="https://via.placeholder.com/300x180" alt="Story 2">
-                            <h6>Economic growth slows in Q3</h6>
-                            <p>New data shows a moderate slowdown, raising questions about next year's outlook.</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="related-card">
-                            <img src="https://via.placeholder.com/300x180" alt="Story 3">
-                            <h6>Breakthrough in medical research</h6>
-                            <p>Scientists report progress in developing a new treatment for chronic diseases.</p>
-                        </div>
-                    </div>
+                    </a>
                 </div>
+                @endforeach
             </div>
         </div>
 
         <!-- Sidebar -->
         <div class="col-12 col-lg-3 col-sidebar sidebar">
+
             <!-- Trending -->
             <div class="border rounded p-3 mb-4 trending">
                 <h6 class="fw-bold">Trending</h6>
@@ -250,17 +111,39 @@
                 </ul>
             </div>
 
-            <!-- Related stories nhỏ -->
-            <div class="border rounded p-3 mb-4">
-                <h6 class="fw-bold">Related stories</h6>
-                <p class="small fw-semibold mb-0">Another related article headline</p>
+            <!-- Comment box nhỏ -->
+            <div class="comments-box">
+                <h6>Leave a Comment</h6>
+
+                @auth('user')
+                <form action="{{ route('articles.comment', $article->id) }}" method="POST">
+                 @csrf
+                    <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." rows="3" required></textarea>
+                    <button class="btn btn-primary btn-sm w-100">Gửi</button>
+                </form>
+                @else
+                    <p><a href="{{ route('user.login') }}">Đăng nhập</a> để bình luận.</p>
+                @endauth
+
+                <!-- Hiển thị các comment đã gửi -->
+                @foreach($article->comments as $comment)
+                <div class="mt-3">
+                    <strong>{{ $comment->user->name ?? 'Unknown' }}</strong>
+                    <small class="text-muted d-block">{{ optional($comment->created_at)->diffForHumans() }}</small>
+                    <p>{{ $comment->content }}</p>
+
+                    <!-- Hiển thị replies nếu có -->
+                    @foreach($comment->replies as $reply)
+                    <div class="comment-reply">
+                        <strong>{{ $reply->user->name ?? 'Unknown' }}</strong>
+                        <small class="text-muted d-block">{{ optional($reply->created_at)->diffForHumans() }}</small>
+                        <p>{{ $reply->content }}</p>
+                    </div>
+                    @endforeach
+                </div>
+                @endforeach
             </div>
 
-            <!-- Comment box tách riêng -->
-            <div class="border rounded p-3 comments-box">
-                <h6 class="fw-bold">Comments</h6>
-                <p class="text-muted mb-0 small">No comments yet. Be the first to comment!</p>
-            </div>
         </div>
     </div>
 </div>
