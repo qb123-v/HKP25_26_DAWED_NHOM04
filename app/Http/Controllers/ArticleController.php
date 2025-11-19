@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
+
+    public function index()
+    {
+        $articles = Article::all();
+        return view('news.index')->with('articles', $articles);
+    }
     // Hiển thị chi tiết bài viết
     public function show($id, $slug)
     {
@@ -24,20 +30,20 @@ class ArticleController extends Controller
     }
 
     // Lưu comment hoặc reply
-   public function storeComment(Request $request, $id)
-{
-    $request->validate([
-        'content' => 'required|string|max:2000',
-        'parent_id' => 'nullable|exists:comments,id',
-    ]);
+    public function storeComment(Request $request, $id)
+    {
+        $request->validate([
+            'content' => 'required|string|max:2000',
+            'parent_id' => 'nullable|exists:comments,id',
+        ]);
 
-    Comment::create([
-        'article_id' => $id,  
-        'user_id' => Auth::id(),
-        'parent_id' => $request->input('parent_id') ?: null,
-        'content' => $request->content,
-    ]);
+        Comment::create([
+            'article_id' => $id,
+            'user_id' => Auth::id(),
+            'parent_id' => $request->input('parent_id') ?: null,
+            'content' => $request->content,
+        ]);
 
-    return redirect()->back()->with('success', 'Bình luận đã được gửi!');
-}
+        return redirect()->back()->with('success', 'Bình luận đã được gửi!');
+    }
 }

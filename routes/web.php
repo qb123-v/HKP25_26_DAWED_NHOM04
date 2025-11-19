@@ -19,9 +19,7 @@ use App\Http\Controllers\NewsletterController;
 Route::get('/', function () {
     return view('index');
 })->name('index');
-Route::get('news', function () {
-    return view('news.index');
-})->name('articles');
+
 Route::get('news-item', function () {
     return view('news.show');
 });
@@ -99,6 +97,9 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
+
+// Trang danh sách bài viết để hiển thị tạm
+Route::get('bai-viet', [ArticleController::class, 'index'])->name('articles');
 
 Route::get('/bai-viet/{id}/{slug}', [ArticleController::class, 'show'])
     ->name('articles.show');
