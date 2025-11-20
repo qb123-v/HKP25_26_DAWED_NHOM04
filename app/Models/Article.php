@@ -10,17 +10,14 @@ class Article extends Model
     use SoftDeletes;
 
     protected $fillable = [
-<<<<<<< HEAD
-        'slug', 'categorie_id', 'artist_id', 'thumbnail', 'title', 'content', 'tag', 'views'
-=======
         'slug',
         'categorie_id',
         'artist_id',
         'thumbnail',
         'title',
         'content',
-        'tag'
->>>>>>> 58cdc6278636300cb1c56d4f159881d0c3faaedc
+        'tag',
+        'views'
     ];
 
     // Quan hệ với nghệ sĩ
