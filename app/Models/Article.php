@@ -10,7 +10,7 @@ class Article extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'slug', 'categorie_id', 'artist_id', 'thumbnail', 'title', 'content', 'tag'
+        'slug', 'categorie_id', 'artist_id', 'thumbnail', 'title', 'content', 'tag', 'views'
     ];
 
     // Quan hệ với nghệ sĩ
