@@ -83,7 +83,7 @@ Route::prefix('admin')->group(function () {
         Route::get('dashboard', function () {
             return view('_admin.dashboard');
         })->name('admin.dashboard');
-        Route::resource('news', ArticleManagementController::class)->names('admin.news');
+        Route::resource('articles', ArticleManagementController::class)->names('admin.articles');
         Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
         Route::resource('comments', CommentManagementController::class)->names('admin.comments');

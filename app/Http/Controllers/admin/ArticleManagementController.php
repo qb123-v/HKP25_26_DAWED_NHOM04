@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class ArticleManagementController extends Controller
@@ -12,7 +13,10 @@ class ArticleManagementController extends Controller
      */
     public function index()
     {
-        return view('_admin.news.index');
+        $articles = Article::with(['artist', 'categorie'])
+            ->latest()
+            ->paginate(10);
+        return view('_admin.articles.index')->with('articles', $articles);
     }
 
     /**
@@ -20,7 +24,7 @@ class ArticleManagementController extends Controller
      */
     public function create()
     {
-        return view('_admin.news.create');
+        return view('_admin.articles.create');
     }
 
     /**
@@ -44,7 +48,7 @@ class ArticleManagementController extends Controller
      */
     public function edit(string $id)
     {
-        return view('_admin.news.edit', compact('id'));
+        return view('_admin.articles.edit');
     }
 
     /**
