@@ -223,44 +223,36 @@ h5 {
 
         <!-- Sidebar -->
         <div class="col-12 col-lg-3 col-sidebar sidebar">
-            <div class="trending">
-                <h6 class="fw-bold">Trending</h6>
-                <ul class="list-unstyled mb-0">
-                    <li><a href="#">Top story 1</a></li>
-                    <li><a href="#">Top story 2</a></li>
-                    <li><a href="#">Top story 3</a></li>
-                    <li><a href="#">Top story 4</a></li>
-                    <li><a href="#">Top story 5</a></li>
-                </ul>
-            </div>
+           
 
             <div class="comments-box">
-                <h6>Leave a Comment</h6>
-                @auth('user')
-                <form action="{{ route('articles.comment', $article->id) }}" method="POST">
-                    @csrf
-                    <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." rows="3" required></textarea>
-                    <button class="btn btn-primary btn-sm w-100">Gửi</button>
-                </form>
-                @else
-                    <p><a href="{{ route('user.login') }}" class="text-primary">Đăng nhập</a> để bình luận.</p>
-                @endauth
+    <h6>Leave a Comment</h6>
+    @auth('user')
+    <form action="{{ route('articles.comment', $article->id) }}" method="POST">
+        @csrf
+        <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." rows="3" required></textarea>
+        <button class="btn btn-primary btn-sm w-100">Gửi</button>
+    </form>
+    @else
+        <p><a href="{{ route('user.login') }}" class="text-primary">Đăng nhập</a> để bình luận.</p>
+    @endauth
 
-                @foreach($article->comments as $comment)
-                <div class="mt-3">
-                    <strong>{{ $comment->user->name ?? 'Unknown' }}</strong>
-                    <small class="text-muted d-block">{{ optional($comment->created_at)->diffForHumans() }}</small>
-                    <p>{{ $comment->content }}</p>
-                    @foreach($comment->replies as $reply)
-                    <div class="comment-reply">
-                        <strong>{{ $reply->user->name ?? 'Unknown' }}</strong>
-                        <small class="text-muted d-block">{{ optional($reply->created_at)->diffForHumans() }}</small>
-                        <p>{{ $reply->content }}</p>
-                    </div>
-                    @endforeach
-                </div>
-                @endforeach
-            </div>
+    @foreach($article->comments->where('status', 1) as $comment) <!-- chỉ hiển thị status=1 -->
+    <div class="mt-3">
+        <strong>{{ $comment->user->name ?? 'Unknown' }}</strong>
+        <small class="text-muted d-block">{{ optional($comment->created_at)->diffForHumans() }}</small>
+        <p>{{ $comment->content }}</p>
+
+        @foreach($comment->replies->where('status', 1) as $reply) <!-- lọc replies status=1 -->
+        <div class="comment-reply">
+            <strong>{{ $reply->user->name ?? 'Unknown' }}</strong>
+            <small class="text-muted d-block">{{ optional($reply->created_at)->diffForHumans() }}</small>
+            <p>{{ $reply->content }}</p>
+        </div>
+        @endforeach
+    </div>
+    @endforeach
+</div>
         </div>
     </div>
 </div>
