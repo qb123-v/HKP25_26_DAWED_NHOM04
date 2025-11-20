@@ -27,14 +27,35 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.news.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.news.*') ? 'active' : '' }}">
+                <li class="nav-item {{ Request::routeIs('admin.articles.*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link active">
                         <i class="nav-icon bi bi-speedometer"></i>
                         <p>
                             Quản lý tin tức
+                            <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.articles.index') }}"
+                                class="nav-link {{ Request::routeIs('admin.articles.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Bài viết</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Nháp</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Đã xóa</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.categories.index') }}"
