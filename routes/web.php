@@ -19,9 +19,7 @@ use App\Http\Controllers\NewsletterController;
 Route::get('/', function () {
     return view('index');
 })->name('index');
-Route::get('news', function () {
-    return view('news.index');
-})->name('articles');
+
 Route::get('news-item', function () {
     return view('news.show');
 });
@@ -85,10 +83,10 @@ Route::prefix('admin')->group(function () {
         Route::get('dashboard', function () {
             return view('_admin.dashboard');
         })->name('admin.dashboard');
-        Route::resource('news', ArticleManagementController::class)->names('admin.news');
+        Route::resource('articles', ArticleManagementController::class)->names('admin.articles');
         Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
-        Route::resource('comments', CommentManagementController::class)->names('admin.comments');
+        // Route::resource('comments', CommentManagementController::class)->names('admin.comments');
         Route::resource('users', UserManagementController::class)->names('admin.users');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
 
@@ -99,6 +97,10 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
+
+//route chi tiết
+// Trang danh sách bài viết để hiển thị tạm
+Route::get('bai-viet', [ArticleController::class, 'index'])->name('articles');
 
 Route::get('/bai-viet/{id}/{slug}', [ArticleController::class, 'show'])
     ->name('articles.show');
@@ -111,3 +113,22 @@ Route::post('/bai-viet/{id}/comment', [ArticleController::class, 'storeComment']
 // Route đăng ký nhận bản tin
 Route::post('/dang-ky-nhan-bao', [NewsletterController::class, 'subscribe'])
     ->name('newsletter.subscribe');
+
+
+
+// route commentadmin
+
+use App\Http\Controllers\Admin\CommentAdminController;
+
+Route::prefix('admin/comments')->group(function () {
+    Route::get('/', [CommentAdminController::class, 'index'])->name('admin.comments.index');
+    Route::get('/approve/{id}', [CommentAdminController::class, 'approve'])->name('admin.comments.approve');
+    Route::get('/hide/{id}', [CommentAdminController::class, 'hide'])->name('admin.comments.hide');
+    Route::get('/show/{id}', [CommentAdminController::class, 'showAgain'])->name('admin.comments.show');
+});
+
+
+
+
+
+

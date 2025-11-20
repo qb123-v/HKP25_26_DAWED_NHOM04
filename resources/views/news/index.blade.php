@@ -21,6 +21,13 @@
 @section('content')
     <!-- viết nội dung cho trang chủ -->
     <div class="container" style="min-height: 80vh;">
-        <h2 class="text-center">Danh sách tin tức</h2>
+        <h2 class="text-center">Danh sách tin tức gọi tạm</h2>
+        <ol>
+            @foreach ($articles as $article)
+                <li>
+                    <a href="{{ route('articles.show', [$article->id, $article->slug]) }}">{{ $article->title }}</a>
+                </li>
+            @endforeach
+        </ol>
     </div>
 @endsection

@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Cookie;
 
 class ArticleController extends Controller
 {
+
+    public function index()
+    {
+        $articles = Article::all();
+        return view('news.index')->with('articles', $articles);
+    }
     // Hiển thị chi tiết bài viết
     public function show($id, $slug)
     {
