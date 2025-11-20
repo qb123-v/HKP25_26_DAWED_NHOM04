@@ -58,3 +58,13 @@ Route::prefix('admin')->group(function () {
         Route::resource('footers', FooterController::class)->names('admin.footers');
     });
 });
+
+// Artists manage page (UI-only)
+Route::get('/artists/manage', function () {
+    return view('artists.manage');
+});
+
+// ArtistsList management (prototype, UI-only)
+Route::get('/artists/list', function () {
+    return view('artistsList.index');
+});
