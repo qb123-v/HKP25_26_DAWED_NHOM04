@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class ArticleController extends Controller
 {
@@ -23,6 +24,8 @@ class ArticleController extends Controller
             'comments.user',
             'comments.replies.user'
         ])->findOrFail($id);
+
+        $article->increment('views');
 
         $relatedArticles = $article->relatedArticles();
 
