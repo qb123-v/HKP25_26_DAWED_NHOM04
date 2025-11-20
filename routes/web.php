@@ -19,9 +19,7 @@ use App\Http\Controllers\NewsletterController;
 Route::get('/', function () {
     return view('index');
 })->name('index');
-Route::get('news', function () {
-    return view('news.index');
-})->name('articles');
+
 Route::get('news-item', function () {
     return view('news.show');
 });
@@ -88,7 +86,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('news', ArticleManagementController::class)->names('admin.news');
         Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
-       // Route::resource('comments', CommentManagementController::class)->names('admin.comments');
+        // Route::resource('comments', CommentManagementController::class)->names('admin.comments');
         Route::resource('users', UserManagementController::class)->names('admin.users');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
 
@@ -101,6 +99,9 @@ Route::prefix('admin')->group(function () {
 });
 
 //route chi tiết
+// Trang danh sách bài viết để hiển thị tạm
+Route::get('bai-viet', [ArticleController::class, 'index'])->name('articles');
+
 Route::get('/bai-viet/{id}/{slug}', [ArticleController::class, 'show'])
     ->name('articles.show');
 
@@ -115,7 +116,7 @@ Route::post('/dang-ky-nhan-bao', [NewsletterController::class, 'subscribe'])
 
 
 
-    // route commentadmin
+// route commentadmin
 
 use App\Http\Controllers\Admin\CommentAdminController;
 
