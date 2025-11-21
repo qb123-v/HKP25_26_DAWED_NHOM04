@@ -89,7 +89,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#"
-                        class="nav-link {{ Request::routeIs('admin.users.*') || Request::routeIs('admin.admins.*') ? 'active' : '' }}">
+                        class="nav-link">
                         <i class="nav-icon bi bi-people-fill"></i>
                         <p>
                             Quản lý tài khoản
