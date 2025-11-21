@@ -39,25 +39,60 @@
                     </div>
                 @endif
 
-                <!-- Nút thêm + Tìm kiếm -->
+                <!-- TÌM KIẾM + SẮP XẾP + NÚT THÊM ADMIN -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-12 col-md-6">
-                                <a href="{{ route('admin.admins.create') }}" class="btn btn-primary">
-                                    <i class="fa-solid fa-plus"></i> Thêm tài khoản Admin
+                        <form method="get" action="{{ route('admin.admins.index') }}" class="row g-3 align-items-center">
+                            <!-- Nút thêm -->
+                            <div class="col-12 col-lg-3">
+                                <a href="{{ route('admin.admins.create') }}" class="btn btn-primary w-100">
+                                    <i class="fa-solid fa-plus"></i> Thêm Admin mới
                                 </a>
                             </div>
-                            <div class="col-12 col-md-6 mt-3 mt-md-0">
-                                <form method="get" action="{{ route('admin.admins.index') }}" class="d-flex">
-                                    <input type="text" name="search" class="form-control me-2"
-                                        placeholder="Nhập username hoặc email..." value="{{ request('search') }}">
+
+                            <!-- Ô tìm kiếm -->
+                            <div class="col-12 col-lg-4">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control"
+                                        placeholder="Tìm username hoặc email..." value="{{ request('search') }}">
                                     <button class="btn btn-outline-secondary" type="submit">
                                         <i class="fa-solid fa-magnifying-glass"></i>
                                     </button>
-                                </form>
+                                </div>
                             </div>
-                        </div>
+
+                            <!-- Sắp xếp theo -->
+                            <div class="col-6 col-lg-2">
+                                <select name="sort" class="form-select" onchange="this.form.submit()">
+                                    <option value="">Sắp xếp</option>
+                                    <option value="username" {{ request('sort') == 'username' ? 'selected' : '' }}>Username
+                                    </option>
+                                    <option value="email" {{ request('sort') == 'email' ? 'selected' : '' }}>Email</option>
+                                    <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Ngày
+                                        tạo</option>
+                                </select>
+                            </div>
+
+                            <!-- Tăng/giảm dần -->
+                            <div class="col-6 col-lg-2">
+                                <select name="direction" class="form-select" onchange="this.form.submit()">
+                                    <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}>Tăng dần ↑
+                                    </option>
+                                    <option value="desc" {{ request('direction', 'desc') == 'desc' ? 'selected' : '' }}>
+                                        Giảm dần ↓</option>
+                                </select>
+                            </div>
+
+                            <!-- Nút reset -->
+                            <div class="col-12 col-lg-1 text-end">
+                                @if (request()->hasAny(['search', 'sort', 'direction']))
+                                    <a href="{{ route('admin.admins.index') }}" class="btn btn-outline-danger"
+                                        title="Xóa bộ lọc">
+                                        <i class="fa-solid fa-rotate-left"></i>
+                                    </a>
+                                @endif
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -71,15 +106,16 @@
                             <thead class="table-light">
                                 <tr>
                                     <th style="width: 10px" class="text-center">STT</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
+                                    <th class="text-center">Username</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Ngày tạo</th>
                                     <th width="140" class="text-center">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($admins as $admin)
                                     <tr
-                                        class="align-middle {{ $admin->id === auth('admin')->id() ? 'table-warning' : '' }}">
+                                        class="align-middle {{ $admin->id === auth('admin')->id() ? 'table-warning' : '' }} text-center">
                                         <td class="text-center fw-bold">
                                             {{ $loop->iteration + ($admins->currentPage() - 1) * $admins->perPage() }}
                                         </td>
@@ -92,6 +128,9 @@
                                             </strong>
                                         </td>
                                         <td>{{ $admin->email }}</td>
+                                        <td class="text-center text-muted">
+                                            {{ $admin->created_at->format('d/m/Y H:i') }}
+                                        </td>
                                         <td class="text-center">
                                             <a href="{{ route('admin.admins.edit', $admin) }}"
                                                 class="text-decoration-none text-warning" title="Sửa">

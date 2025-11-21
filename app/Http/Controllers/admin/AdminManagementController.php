@@ -21,8 +21,16 @@ class AdminManagementController extends Controller
                 ->orWhere('email', 'like', "%$search%");
         }
 
+        // Sắp xếp
+        if ($request->filled('sort') && in_array($request->sort, ['username', 'email', 'created_at'])) {
+            $direction = $request->direction === 'asc' ? 'asc' : 'desc';
+            $query->orderBy($request->sort, $direction);
+        } else {
+            $query->latest();
+        }
+
         $admins = $query->latest()->paginate(15);
-        $admins->appends(['search' => $request->search]); 
+        $admins->appends(['search' => $request->search]);
 
         return view('_admin.admins.index', compact('admins'));
     }
