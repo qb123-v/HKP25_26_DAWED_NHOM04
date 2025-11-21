@@ -97,8 +97,8 @@ Route::prefix('admin')->group(function () {
 
         // route admin management footer
         Route::controller(FooterManagementController::class)->name('admin.footers.')->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::put('/', 'update')->name('update');
+            Route::get('/footers', 'index')->name('index');
+            Route::put('/footers', 'update')->name('update');
         });
     });
 });
