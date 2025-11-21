@@ -9,7 +9,7 @@
                 class="brand-image opacity-75 shadow" />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            <span class="brand-text fw-light">SHOWBIZ</span>
             <!--end::Brand Text-->
         </a>
         <!--end::Brand Link-->
@@ -88,13 +88,33 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.users.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.users.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-pencil-square"></i>
+                    <a href="#"
+                        class="nav-link">
+                        <i class="nav-icon bi bi-people-fill"></i>
                         <p>
-                            Quản lý người dùng
+                            Quản lý tài khoản
+                            <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <!-- Mục con 1: Quản lý người dùng thường -->
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users.index') }}"
+                                class="nav-link {{ Request::routeIs('admin.users.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-circle-fill"></i>
+                                <p>Người dùng ({{ \App\Models\User::count() }})</p>
+                            </a>
+                        </li>
+
+                        <!-- Mục con 2: Quản lý tài khoản Admin -->
+                        <li class="nav-item">
+                            <a href="{{ route('admin.admins.index') }}"
+                                class="nav-link {{ Request::routeIs('admin.admins.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-shield-lock-fill text-danger"></i>
+                                <p>Admin ({{ \App\Models\Admin::count() }})</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item {{ Request::routeIs('admin.media.*') ? 'active' : '' }}">

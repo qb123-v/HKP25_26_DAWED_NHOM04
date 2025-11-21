@@ -11,9 +11,12 @@ use App\Http\Controllers\admin\CommentManagementController;
 use App\Http\Controllers\admin\UserManagementController;
 use App\Http\Controllers\admin\MediaManagementController;
 use App\Http\Controllers\admin\FooterManagementController;
+use App\Http\Controllers\admin\AdminManagementController;
+
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\NewsletterController;
+
 
 // route cho người dùng
 Route::get('/', function () {
@@ -92,8 +95,10 @@ Route::prefix('admin')->group(function () {
         Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
         // Route::resource('comments', CommentManagementController::class)->names('admin.comments');
-        Route::resource('users', UserManagementController::class)->names('admin.users');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
+
+        Route::resource('users', UserManagementController::class)->names('admin.users');
+        Route::resource('admins', AdminManagementController::class)->names('admin.admins');
 
         // route admin management footer
         Route::controller(FooterManagementController::class)->name('admin.footers.')->group(function () {
@@ -119,8 +124,6 @@ Route::post('/bai-viet/{id}/comment', [ArticleController::class, 'storeComment']
 Route::post('/dang-ky-nhan-bao', [NewsletterController::class, 'subscribe'])
     ->name('newsletter.subscribe');
 
-
-
 // route commentadmin
 
 use App\Http\Controllers\Admin\CommentAdminController;
@@ -131,9 +134,3 @@ Route::prefix('admin/comments')->group(function () {
     Route::get('/hide/{id}', [CommentAdminController::class, 'hide'])->name('admin.comments.hide');
     Route::get('/show/{id}', [CommentAdminController::class, 'showAgain'])->name('admin.comments.show');
 });
-
-
-
-
-
-

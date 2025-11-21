@@ -1,22 +1,15 @@
+{{-- resources/views/_admin/users/index.blade.php --}}
 @extends('_admin._layouts.app')
+@section('title', 'Quản lý người dùng')
 
 @push('style')
-    <!-- fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-    <!-- fontawesome -->
 @endpush
 
-@php
-@endphp
-
 @section('content')
-    <!--begin::App Main-->
     <main class="app-main">
-        <!--begin::App Content Header-->
         <div class="app-content-header">
-            <!--begin::Container-->
             <div class="container-fluid">
-                <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-6">
                         <h3 class="mb-0">Quản lý người dùng</h3>
@@ -24,141 +17,138 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Quản lý người dùng
-                            </li>
+                            <li class="breadcrumb-item active">Người dùng</li>
                         </ol>
                     </div>
                 </div>
-                <!--end::Row-->
             </div>
-            <!--end::Container-->
         </div>
-        <!--end::App Content Header-->
-        <!--begin::App Content-->
-        <div class="app-content">
-            <!--begin::Container-->
-            <div class="container-fluid">
 
+        <div class="app-content">
+            <div class="container-fluid">
                 @if (session('message'))
-                    <div class="alert alert-{{ session('alert-type', 'success') }}">
+                    <div class="alert alert-{{ session('alert-type', 'success') }} alert-dismissible fade show">
                         {{ session('message') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
-                <div class="card mb-4">
+
+                <!-- Tìm kiếm + Sắp xếp -->
+                <div class="card mb-3">
                     <div class="card-body">
-                        <div class="row">
-                            <!-- <div class="col-8">
-                                                                                                                </div> -->
-                            <div class="col-12">
-                                <form method="get" action="" class="">
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control me-2" placeholder="Tìm kiếm...">
-                                        <button class="btn btn-outline-secondary">
-                                            <i class="fa-solid fa-magnifying-glass"></i>
-                                        </button>
-                                    </div>
-                                </form>
+                        <form method="get" action="{{ route('admin.users.index') }}" class="row g-3 align-items-center">
+                            <div class="col-12 col-md-5">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control"
+                                        placeholder="Tìm tên hoặc email..." value="{{ request('search') }}">
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="col-6 col-md-3">
+                                <select name="sort" class="form-select" onchange="this.form.submit()">
+                                    <option value="">Sắp xếp theo</option>
+                                    <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Tên</option>
+                                    <option value="email" {{ request('sort') == 'email' ? 'selected' : '' }}>Email</option>
+                                    <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Ngày
+                                        đăng ký</option>
+                                </select>
+                            </div>
+
+                            <div class="col-6 col-md-3">
+                                <select name="direction" class="form-select" onchange="this.form.submit()">
+                                    <option value="asc" {{ request('direction', 'desc') == 'asc' ? 'selected' : '' }}>
+                                        Tăng dần ↑
+                                    </option>
+                                    <option value="desc" {{ request('direction', 'desc') == 'desc' ? 'selected' : '' }}>
+                                        Giảm dần ↓
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-1 text-end">
+                                @if (request()->hasAny(['search', 'sort', 'direction']))
+                                    <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-outline-danger"
+                                        title="Xóa bộ lọc">
+                                        <i class="fa-solid fa-rotate-left"></i>
+                                    </a>
+                                @endif
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="card mb-4"> <!--begin::Header-->
-                    <div class="card-header ">
-                        Danh sách người dùng ({{ $users->total() }} người dùng)
+
+                <!-- Danh sách -->
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        Danh sách người dùng ({{ $users->total() }} người)
                     </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
+                    <div class="card-body p-0">
+                        <table class="table table-hover table-bordered mb-0 align-middle">
+                            <thead class="table-light">
                                 <tr>
-                                    <th style="width: 10px" class="text-center">
-                                        <input type="checkbox" class="form-check-input">
-                                    </th>
-                                    <th style="width: 10px" class="text-center">STT</th>
-                                    <th>Tên người dùng</th>
-                                    <th>Email</th>
-                                    <th width="100" class="text-center">Thao tác</th>
+                                    <th class="text-center" style="width: 30px">STT</th>
+                                    <th class="text-center">Avatar</th>
+                                    <th class="text-center">Họ tên</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Ngày đăng ký</th>
+                                    <th class="text-center">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($users as $user)
-                                    <tr class="align-middle">
-                                        <td>
-                                            <input type="checkbox" class="form-check-input">
-
-                                        </td>
-                                        <td class="text-center">
+                                @forelse($users as $user)
+                                    <tr class="{{ $user->id === auth()->id() ? 'table-info' : '' }} text-center">
+                                        <td class="text-center fw-bold">
                                             {{ $loop->iteration + ($users->currentPage() - 1) * $users->perPage() }}
                                         </td>
                                         <td>
-                                            <a href="" class="text-decoration-none text-black fw-bold">{{ $user->name }}</a>
+                                            <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/img/avatar.png') }}"
+                                                class="rounded-circle" width="40" height="40" alt="Avatar">
                                         </td>
                                         <td>
-                                            {{ $user->email }}
+                                            <strong>{{ $user->name }}</strong>
+                                            @if ($user->id === auth()->id())
+                                                <span class="badge bg-success ms-2">Bạn</span>
+                                            @endif
                                         </td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ $user->created_at->format('d/m/Y') }}</td>
                                         <td class="text-center">
-                                            <a href="" class="text-decoration-none text-secondary"><i
-                                                    class="fa-solid fa-eye"></i></a>
-                                            <a href="" class="text-decoration-none text-secondary"><i
-                                                    class="fa-solid fa-pen-to-square "></i></a>
-                                            <form action="" method="POST" class="d-inline" id="CategorieFormDelete">
-                                                @csrf
-                                                @method('DELETE')
-                                                <a href="#" class="fw-bold text-decoration-none text-secondary"
-                                                    onclick="if (confirm('Bạn có chắc chắn muốn xóa chuyên mục?')) { document.getElementById('CategorieFormDelete').submit(); } return false;">
-                                                    <i class="fa-solid fa-trash "></i>
-                                                </a>
-                                            </form>
+                                            <a href="{{ route('admin.users.edit', $user) }}" class="text-warning">
+                                                <i class="fa-solid fa-pen-to-square fs-5"></i>
+                                            </a>
+                                            @if ($user->id !== auth()->id())
+                                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                                                    class="d-inline">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" class="border-0 bg-transparent text-danger"
+                                                        onclick="return confirm('Xóa người dùng này?')">
+                                                        <i class="fa-solid fa-trash fs-5"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <i class="fa-solid fa-ban text-muted" title="Không thể xóa chính mình"></i>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center">
-                                            Dữ liệu trống. Không có người dùng nào
-                                        </td>
+                                        <td colspan="6" class="text-center py-4 text-muted">Không có người dùng nào</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
-                    </div> <!-- /.card-body -->
-                    <!-- phân trang nếu quá 10 chuyên mục -->
+                    </div>
+
                     @if ($users->lastPage() > 1)
-                        <div class="card-footer clearfix">
-                            <div class="float-start mt-1">
-                                Hiển thị {{ $users->count() }} trên tổng số {{ $users->total() }} chuyên mục
-                            </div>
-                            <ul class="pagination pagination-sm m-0 float-end">
-                                {{-- Nút "Trước" --}}
-                                @if ($users->onFirstPage())
-                                    <li class="page-item disabled"><span class="page-link">«</span></li>
-                                @else
-                                    <li class="page-item"><a class="page-link" href="{{ $users->previousPageUrl() }}">«</a>
-                                    </li>
-                                @endif
-
-                                {{-- Danh sách các trang --}}
-                                @for ($i = 1; $i <= $users->lastPage(); $i++)
-                                    <li class="page-item {{ $i == $users->currentPage() ? 'active' : '' }}">
-                                        <a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a>
-                                    </li>
-                                @endfor
-
-                                {{-- Nút "Sau" --}}
-                                @if ($users->hasMorePages())
-                                    <li class="page-item"><a class="page-link" href="{{ $users->nextPageUrl() }}">»</a></li>
-                                @else
-                                    <li class="page-item disabled"><span class="page-link">»</span></li>
-                                @endif
-                            </ul>
+                        <div class="card-footer">
+                            {{ $users->links() }}
                         </div>
                     @endif
-
                 </div>
-
             </div>
-            <!--end::Container-->
         </div>
-        <!--end::App Content-->
     </main>
-    <!--end::App Main-->
 @endsection
