@@ -83,7 +83,12 @@ Route::prefix('admin')->group(function () {
         Route::get('dashboard', function () {
             return view('_admin.dashboard');
         })->name('admin.dashboard');
+
+        // Liên quan đến bài viết
         Route::resource('articles', ArticleManagementController::class)->names('admin.articles');
+        Route::post('/ckeditor/upload', [ArticleManagementController::class, 'ckeditorUpload'])
+            ->name('admin.ckeditor.upload');
+
         Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
         // Route::resource('comments', CommentManagementController::class)->names('admin.comments');

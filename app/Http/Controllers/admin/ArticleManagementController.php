@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ArticleUpdateRequest;
 use App\Models\Article;
+use App\Models\Artist;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 
 class ArticleManagementController extends Controller
@@ -24,7 +27,9 @@ class ArticleManagementController extends Controller
      */
     public function create()
     {
-        return view('_admin.articles.create');
+        $categories = Categorie::all();
+        $artists = Artist::all();
+        return view('_admin.articles.create', compact('categories', 'artists'));
     }
 
     /**
@@ -48,13 +53,19 @@ class ArticleManagementController extends Controller
      */
     public function edit(string $id)
     {
-        return view('_admin.articles.edit');
+        // Tìm bài viết theo ID, kèm quan hệ
+        $article = Article::with(['artist', 'categorie'])->findOrFail($id);
+
+        // Lấy categories và artists để hiển thị trong form edit
+        $categories = Categorie::all();
+        $artists = Artist::all();
+        return view('_admin.articles.edit', compact('article', 'categories', 'artists'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ArticleUpdateRequest $request, string $id)
     {
         // Xử lý cập nhật tin tức
     }
@@ -65,5 +76,22 @@ class ArticleManagementController extends Controller
     public function destroy(string $id)
     {
         // Xử lý xóa tin tức
+    }
+    public function ckeditorUpload(Request $request)
+    {
+        if ($request->hasFile('upload'))
+        {
+            $file = $request->file('upload');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/ckeditor'), $filename);
+
+            $url = asset('uploads/ckeditor/' . $filename);
+
+            return response()->json([
+                'uploaded' => 1,
+                'fileName' => $filename,
+                'url' => $url
+            ]);
+        }
     }
 }

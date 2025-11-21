@@ -67,6 +67,30 @@
                         </div>
                         <div class="col-md-4">
                             <div class="card mb-4">
+                                <div class="card-header">Các danh mục</div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="artist" class="form-label">Nghệ sĩ</label>
+                                        <select name="artist" id="" class="form-select">
+                                            <option value="">Chọn nghệ sĩ</option>
+                                            @foreach ($artists as $artist)
+                                                <option value="{{ $artist->id }}">{{ $artist->name }}</option>
+
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="categories" class="form-label">Danh mục</label>
+                                        <select name="categories" id="" class="form-select">
+                                            <option value="">Chọn danh mục</option>
+                                            @foreach($categories as $categorie)
+                                                <option value="{{ $categorie->id }}">{{ $categorie->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-4">
                                 <div class="card-header">Hình ảnh</div>
                                 <div class="card-body">
 
