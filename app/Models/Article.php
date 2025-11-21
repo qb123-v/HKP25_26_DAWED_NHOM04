@@ -16,8 +16,8 @@ class Article extends Model
         'thumbnail',
         'title',
         'content',
-        'tag'
-      'views'
+        'tag',
+        'views'
     ];
 
     // Quan hệ với nghệ sĩ

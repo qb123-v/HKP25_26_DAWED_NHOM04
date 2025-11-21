@@ -25,7 +25,7 @@
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Quản lý người dùng
+                                Quản lý tài khoản người dùng
                             </li>
                         </ol>
                     </div>
