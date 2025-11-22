@@ -47,17 +47,17 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Địa chỉ</label>
                                         <input type="text" class="form-control" name="footer[address]"
-                                            value="{{ $footers['address']  }}">
+                                            value="{{ $footers['address'] ?? '' }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Email liên hệ</label>
                                         <input type="email" class="form-control" name="footer[email]"
-                                            value="{{ $footers['email']  }}">
+                                            value="{{ $footers['email'] ?? '' }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại</label>
                                         <input type="text" class="form-control" name="footer[phone_number]"
-                                            value="{{ $footers['phone_number'] }}">
+                                            value="{{ $footers['phone_number'] ?? '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -68,16 +68,16 @@
                                 <div class="mt-4">
                                     <label class="form-label">Về chúng tôi</label>
                                     <input type="text" class="form-control mb-2" name="footer[aboutus]"
-                                        value="{{ $footers['aboutus'] }}">
+                                        value="{{ $footers['aboutus'] ?? '' }}">
                                     <label class="form-label">Tin tức</label>
                                     <input type="text" class="form-control mb-2" name="footer[articles]"
-                                        value="{{ $footers['articles'] }}">
+                                        value="{{ $footers['articles'] ?? '' }}">
                                     <label class="form-label">Dịch vụ</label>
                                     <input type="text" class="form-control mb-2" name="footer[services]"
-                                        value="{{ $footers['services'] }}">
+                                        value="{{ $footers['services'] ?? '' }}">
                                     <label class="form-label">Chính sách</label>
                                     <input type="text" class="form-control mb-2" name="footer[services]"
-                                        value="{{ $footers['services'] }}">
+                                        value="{{ $footers['services'] ?? '' }}">
                                 </div>
                             </div>
 
@@ -88,12 +88,12 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Màu nền Footer</label>
                                         <input type="color" class="form-control form-control-color" name="footer[bg_color]"
-                                            value="{{ $footers['bg_color'] }}">
+                                            value="{{ $footers['bg_color'] ?? ''}}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Màu chữ</label>
                                         <input type="color" class="form-control form-control-color" name="footer[color]"
-                                            value="{{ $footers['color'] }}">
+                                            value="{{ $footers['color'] ?? '' }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Căn chỉnh nội dung</label>
