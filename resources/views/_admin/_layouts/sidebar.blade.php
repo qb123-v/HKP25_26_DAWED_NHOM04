@@ -88,8 +88,10 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li
+                    class="nav-item {{ Request::routeIs('admin.users.*') || Request::routeIs('admin.admins.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ Request::routeIs('admin.users.*') || Request::routeIs('admin.admins.*') ? 'active' : '' }}">
                         <i class="nav-icon bi bi-people-fill"></i>
                         <p>
                             Quản lý tài khoản
