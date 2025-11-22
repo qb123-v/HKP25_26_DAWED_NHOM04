@@ -28,8 +28,9 @@
                     </a>
                 </li>
                 <li class="nav-item {{ Request::routeIs('admin.articles.*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link active">
-                        <i class="nav-icon bi bi-speedometer"></i>
+                    <a href="#" class="nav-link  {{ Request::routeIs('admin.articles.*') ? 'active' : '' }}">
+
+                        <i class="nav-icon bi bi-newspaper"></i>
                         <p>
                             Quản lý tin tức
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -60,7 +61,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.categories.index') }}"
                         class="nav-link {{ Request::routeIs('admin.categories.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-box-seam-fill"></i>
+                        <i class="nav-icon bi bi-list-ul"></i>
                         <p>
                             Quản lý chuyên mục
                         </p>
@@ -70,7 +71,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.artists.index') }}"
                         class="nav-link {{ Request::routeIs('admin.artists.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-clipboard-fill"></i>
+                        <i class="nav-icon bi bi-person-hearts"></i>
                         <p>
                             Quản lý nghệ sĩ
                         </p>
@@ -80,7 +81,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.comments.index') }}"
                         class="nav-link {{ Request::routeIs('admin.comments.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-tree-fill"></i>
+                        <i class="nav-icon bi bi-chat-right-text-fill"></i>
                         <p>
                             Quản lý bình luận
                             <span class="nav-badge badge text-bg-secondary me-3">6</span>
@@ -88,8 +89,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#"
-                        class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-people-fill"></i>
                         <p>
                             Quản lý tài khoản
@@ -119,7 +119,7 @@
 
                 <li class="nav-item {{ Request::routeIs('admin.media.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.media.index') }}" class="nav-link">
-                        <i class="nav-icon bi bi-box-arrow-in-right"></i>
+                        <i class="nav-icon bi bi-images"></i>
                         <p>
                             Quản lý media
                         </p>
@@ -128,7 +128,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.footers.index') }}"
                         class="nav-link {{ Request::routeIs('admin.footers.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-download"></i>
+                        <i class="nav-icon bi bi-ui-checks"></i>
                         <p>Quản lý footer</p>
                     </a>
                 </li>
