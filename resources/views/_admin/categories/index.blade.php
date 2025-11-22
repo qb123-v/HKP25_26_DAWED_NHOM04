@@ -3,16 +3,6 @@
 @section('content')
     <main class="app-main">
 
-        @php
-            // Dummy Categories
-            $categories = [
-                (object) ['id' => 1, 'name' => 'Thể loại 1', 'status' => 'Active'],
-                (object) ['id' => 2, 'name' => 'Thể loại 2', 'status' => 'Inactive'],
-                (object) ['id' => 3, 'name' => 'Thể loại 3', 'status' => 'Active'],
-                (object) ['id' => 4, 'name' => 'Thể loại 4', 'status' => 'Inactive'],
-            ];
-        @endphp
-
         <!-- Content Header -->
         <div class="app-content-header">
             <div class="container-fluid">
@@ -57,7 +47,7 @@
                         <tr>
                             <th style="width:40px;"><input type="checkbox" id="select-all"></th>
                             <th>Tên chuyên mục</th>
-                            <th>Số lượng tin tức</th>
+                            <!-- <th>Số lượng tin tức</th> -->
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
@@ -67,7 +57,7 @@
                             <tr>
                                 <td><input type="checkbox" name="selected[]" value="{{ $category->id }}"></td>
                                 <td>{{ $category->name }}</td>
-                                <td>10</td>git
+
                                 <td>
                                     @if ($category->status == 'Active')
                                         <span class="badge bg-success">Active</span>
@@ -109,7 +99,7 @@
     <!-- Optional: Script select all checkbox -->
     @section('scripts')
         <script>
-            document.getElementById('select-all')?.addEventListener('change', function() {
+            document.getElementById('select-all')?.addEventListener('change', function () {
                 let checkboxes = document.querySelectorAll('input[name="selected[]"]');
                 checkboxes.forEach(cb => cb.checked = this.checked);
             });
