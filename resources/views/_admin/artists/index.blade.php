@@ -1,7 +1,21 @@
 @extends('_admin._layouts.app')
 
-
 @section('content')
+    <style>
+        .artist-row {
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .artist-row:hover {
+            background-color: #f8f9fa !important;
+            transform: scale(1.01);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .artist-row:active {
+            transform: scale(0.99);
+        }
+    </style>
+
     <!--begin::App Main-->
     <main class="app-main">
         <!--begin::App Content Header-->
@@ -31,11 +45,341 @@
         <div class="app-content">
             <!--begin::Container-->
             <div class="container-fluid">
+                <!-- Top Toolbar (Search & Filters) -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Tìm kiếm nghệ sĩ">
+                                    <span class="input-group-text">🔎</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label small text-muted">Thể loại</label>
+                                <select class="form-select">
+                                    <option>Tất cả</option>
+                                    <option>Ca sĩ</option>
+                                    <option>Diễn viên</option>
+                                    <option>Nhạc sĩ</option>
+                                    <option>Người mẫu</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label small text-muted">Trạng thái</label>
+                                <select class="form-select">
+                                    <option>Tất cả</option>
+                                    <option>Đang hoạt động</option>
+                                    <option>Tạm ẩn</option>
+                                    <option>Chờ duyệt</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <button type="button" class="btn btn-secondary">Lọc nâng cao</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Main Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Danh sách nghệ sĩ</strong>
+                                <span class="text-muted">(247 nghệ sĩ)</span>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary me-2">Xuất CSV</button>
+                                <button type="button" class="btn btn-sm btn-primary">+ Thêm nghệ sĩ</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40px;">
+                                            <input type="checkbox" class="form-check-input">
+                                        </th>
+                                        <th>Nghệ sĩ</th>
+                                        <th style="width: 150px;">Thể loại</th>
+                                        <th style="width: 150px;">Liên hệ</th>
+                                        <th style="width: 140px;">Ngày tham gia</th>
+                                        <th style="width: 140px;">Trạng thái</th>
+                                        <th style="width: 140px;">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach([1,2,3,4,5,6,7,8] as $i)
+                                    <tr class="artist-row" data-artist-id="{{ $i }}" data-artist-name="Nghệ sĩ Demo {{ $i }}" data-artist-email="artist{{ $i }}@mail.com">
+                                        <td>
+                                            <input type="checkbox" class="form-check-input">
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #f3f4f6; border: 1px solid #dee2e6; display: flex; align-items: center; justify-content: center;">🎤</div>
+                                                <div>
+                                                    <div class="fw-bold">Nghệ sĩ Demo {{ $i }}</div>
+                                                    <small class="text-muted">artist{{ $i }}@mail.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Ca sĩ</td>
+                                        <td>090{{ 12 + $i }} 3456</td>
+                                        <td>
+                                            <small class="text-muted">01/0{{ ($i%9)+1 }}/2025</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">Đang hoạt động</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="button" class="btn btn-info" title="Xem">
+                                                    <i class="fas fa-eye"></i> Xem
+                                                </button>
+                                                <button type="button" class="btn btn-success" title="Sửa">
+                                                    <i class="fas fa-edit"></i> Sửa
+                                                </button>
+                                                <button type="button" class="btn btn-danger" title="Xóa">
+                                                    <i class="fas fa-trash"></i> Xóa
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-end">
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Trước</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Sau</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!--end::Container-->
         </div>
         <!--end::App Content-->
     </main>
     <!--end::App Main-->
+
+    <!-- Artist Detail Modal -->
+    <div class="modal fade" id="artistDetailModal" tabindex="-1" aria-labelledby="artistDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="artistDetailModalLabel">Hồ sơ nghệ sĩ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Left Sidebar -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div style="width:96px;height:96px;border-radius:50%;background:#f3f4f6;border:1px solid #dee2e6;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2rem;">🧑‍🎤</div>
+                                    <h5 class="mb-1" id="modalArtistName">Nguyễn Văn A</h5>
+                                    <p class="text-muted small" id="modalArtistEmail">artist@example.com</p>
+                                    <button class="btn btn-sm btn-outline-secondary">📷 Thay đổi ảnh</button>
+                                </div>
+                            </div>
+                            <div class="card mt-3">
+                                <div class="list-group list-group-flush">
+                                    <a href="#" class="list-group-item list-group-item-action">🖼️ Avatar</a>
+                                    <a href="#" class="list-group-item list-group-item-action">✉️ Email</a>
+                                    <a href="#" class="list-group-item list-group-item-action active">👤 Hồ sơ cá nhân</a>
+                                    <a href="#" class="list-group-item list-group-item-action">❤️ Yêu thích</a>
+                                    <a href="#" class="list-group-item list-group-item-action">🔔 Thông báo</a>
+                                    <a href="#" class="list-group-item list-group-item-action">⚙️ Cài đặt</a>
+                                    <a href="#" class="list-group-item list-group-item-action text-danger">🚪 Đăng xuất</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Content -->
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Hồ sơ cá nhân</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form>
+                                        <!-- Row 1 -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Họ và tên</label>
+                                                <input type="text" class="form-control" value="Nguyễn Văn A">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" value="artist@example.com">
+                                            </div>
+                                        </div>
+
+                                        <!-- Row 2 -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Số điện thoại</label>
+                                                <input type="text" class="form-control" value="0901 234 567">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Ngày sinh</label>
+                                                <input type="date" class="form-control" value="1995-05-10">
+                                            </div>
+                                        </div>
+
+                                        <!-- Row 3 -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Địa chỉ</label>
+                                            <input type="text" class="form-control" value="123 Lê Lợi, Quận 1, TP. HCM">
+                                        </div>
+
+                                        <!-- Row 4 -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Giới thiệu bản thân</label>
+                                            <textarea class="form-control" rows="4">Xin chào, tôi là ca sĩ/diễn viên yêu thích âm nhạc và điện ảnh.</textarea>
+                                        </div>
+
+                                        <!-- Row 5 -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Sở thích</label>
+                                            <div class="row">
+                                                @php($interests=['Phim Việt','Nhạc Việt','Phim Hollywood','Phim Hàn','Thời trang','Tin tức sao'])
+                                                @foreach($interests as $k=>$label)
+                                                <div class="col-md-4">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" {{ $k % 2 === 0 ? 'checked' : '' }}>
+                                                        <label class="form-check-label">{{ $label }}</label>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        <!-- Row 6 -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Cài đặt thông báo</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked>
+                                                <label class="form-check-label">Nhận thông báo qua email</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                                <label class="form-check-label">Nhận tin tức mới</label>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="button" class="btn btn-primary">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('Script loaded - inline');
+        
+        // Wait for DOM to be fully loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initArtistRows);
+        } else {
+            initArtistRows();
+        }
+        
+        function initArtistRows() {
+            console.log('Initializing artist rows...');
+            console.log('Bootstrap available:', typeof bootstrap !== 'undefined');
+            console.log('jQuery available:', typeof $ !== 'undefined');
+            
+            const rows = document.querySelectorAll('.artist-row');
+            console.log('Found rows:', rows.length);
+            
+            if (rows.length === 0) {
+                console.error('No artist rows found! Check if the table is rendered.');
+                return;
+            }
+            
+            // Handle row clicks
+            rows.forEach((row, index) => {
+                console.log('Attaching listener to row', index + 1);
+                
+                row.addEventListener('click', function(e) {
+                    console.log('========== ROW CLICKED ==========');
+                    console.log('Row index:', index + 1);
+                    console.log('Target element:', e.target);
+                    console.log('Target tagName:', e.target.tagName);
+                    console.log('Closest btn-group:', e.target.closest('.btn-group'));
+                    console.log('Target type:', e.target.type);
+                    
+                    // Don't trigger if clicking on action buttons or checkboxes
+                    if (e.target.closest('.btn-group') || e.target.type === 'checkbox') {
+                        console.log('❌ Click ignored - button or checkbox clicked');
+                        return;
+                    }
+                    
+                    const artistName = this.dataset.artistName;
+                    const artistEmail = this.dataset.artistEmail;
+                    const artistId = this.dataset.artistId;
+                    
+                    console.log('✅ Opening modal for:');
+                    console.log('  - ID:', artistId);
+                    console.log('  - Name:', artistName);
+                    console.log('  - Email:', artistEmail);
+                    
+                    // Update modal content
+                    const nameElement = document.getElementById('modalArtistName');
+                    const emailElement = document.getElementById('modalArtistEmail');
+                    
+                    if (nameElement) nameElement.textContent = artistName;
+                    if (emailElement) emailElement.textContent = artistEmail;
+                    
+                    console.log('Modal content updated');
+                    
+                    // Show modal
+                    const modalElement = document.getElementById('artistDetailModal');
+                    console.log('Modal element found:', modalElement !== null);
+                    
+                    if (typeof bootstrap !== 'undefined') {
+                        try {
+                            const modal = new bootstrap.Modal(modalElement);
+                            modal.show();
+                            console.log('✅ Modal opened successfully!');
+                        } catch (error) {
+                            console.error('❌ Error opening modal:', error);
+                        }
+                    } else if (typeof $ !== 'undefined' && $.fn.modal) {
+                        // Fallback to jQuery if Bootstrap JS not available
+                        console.log('Using jQuery modal...');
+                        $('#artistDetailModal').modal('show');
+                    } else {
+                        console.error('❌ Bootstrap not found! Modal cannot be opened.');
+                        alert('Bootstrap library is not loaded. Cannot open modal.');
+                    }
+                });
+            });
+            
+            console.log('✅ All event listeners attached successfully');
+        }
+    </script>
 @endsection
