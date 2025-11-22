@@ -22,7 +22,16 @@ class ArticleUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'slug' => 'require|unique:articles,slug',
+            'slug' => 'required',
+            'title' => 'required',
+
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'slug.required' => 'Điền vào trường này',
+            'title.required' => 'Điền vào trường này'
 
         ];
     }

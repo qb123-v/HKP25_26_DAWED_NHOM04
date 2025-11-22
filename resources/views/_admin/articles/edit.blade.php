@@ -78,6 +78,9 @@
         <div class="app-content-header">
             <!--begin::Container-->
             <div class="container-fluid">
+                @if(session('success'))
+                    <div class="alert alert-success">{{session('success')}}</div>
+                @endif
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-6">
@@ -101,7 +104,9 @@
         <div class="app-content">
             <!--begin::Container-->
             <div class="container-fluid">
-                <form action="" method="post" novalidate>
+                <form action="{{ route('admin.articles.update', $article->id) }}" method="post" novalidate>
+                    @method('PUT')
+                    @csrf
                     <div class="row">
                         <div class="col-md-8">
                             <div class="card mb-4">
@@ -110,8 +115,12 @@
                                     <div class="mb-3">
                                         <label for="slug" class="form label">Đường dẫn bài viết (được tạo tự động khi nhập
                                             tiêu đề)</label>
-                                        <input type="text" id="slug" class="form-control" name="slug"
-                                            value="{{ $article->slug }}" disabled>
+                                        <input type="text" id="slug"
+                                            class="form-control @error('slug') is-invalid @enderror" name="slug"
+                                            value="{{ old('slug', $article->slug)}}" disabled>
+                                        @error('slug')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                             <label class="form-check-label" for="flexCheckDefault">
@@ -124,6 +133,11 @@
                                         <input type="text" id="tilte" class="form-control" name="title"
                                             value="{{ $article->title }}">
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="tag" class="form label">Tag</label>
+                                        <input type="text" id="tag" class="form-control" name="tag"
+                                            value="{{ $article->tag }}">
+                                    </div>
                                 </div>
                             </div>
                             <div class="card mb-4">
@@ -131,14 +145,8 @@
                                 <div class="card-body">
                                     <div class="mb-3">
                                         <label for="content" class="form label">Nội dung chính</label>
-                                        <textarea id="content" name="content"></textarea>
+                                        <textarea id="content" name="content">{{ $article->content }}</textarea>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="card mb-4">
-                                <div class="card-header">Các tác vụ</div>
-                                <div class="card-body">
-
                                 </div>
                             </div>
                         </div>
@@ -147,8 +155,8 @@
                                 <div class="card-header">Các danh mục</div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="artist" class="form-label">Nghệ sĩ</label>
-                                        <select name="artist" id="" class="form-select">
+                                        <label for="artist_id" class="form-label">Nghệ sĩ</label>
+                                        <select name="artist_id" id="artist_id" class="form-select">
                                             <option value="">Chọn nghệ sĩ</option>
                                             @foreach ($artists as $artist)
                                                 <option value="{{ $artist->id }}" @selected($artist->id == $article->artist_id)>
@@ -159,8 +167,8 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="categories" class="form-label">Danh mục</label>
-                                        <select name="categories" id="" class="form-select">
+                                        <label for="categorie_id" class="form-label">Danh mục</label>
+                                        <select name="categorie_id" id="categorie_id" class="form-select">
                                             <option value="">Chọn danh mục</option>
                                             @foreach($categories as $categorie)
                                                 <option value="{{ $categorie->id }}"
@@ -177,7 +185,7 @@
                                 <div class="card-body">
                                     <div class="mb-3">
                                         <label for="thumbnail" class="form-label">Chọn hình thumbnail</label>
-                                        <input type="file" class="form-control" id="thumbnail">
+                                        <input type="file" class="form-control" id="thumbnail" name="thumbnail">
                                     </div>
                                     <img id="thumbnail-img" class="w-100"
                                         src="{{ asset('images/articles/' . $article->thumbnail) }}" alt="">

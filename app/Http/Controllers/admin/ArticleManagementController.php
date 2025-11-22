@@ -67,7 +67,7 @@ class ArticleManagementController extends Controller
      */
     public function update(ArticleUpdateRequest $request, string $id)
     {
-        // Xử lý cập nhật tin tức
+        return redirect(back());
     }
 
     /**
