@@ -63,7 +63,7 @@
                 </div>
                 <div class="card mb-4"> <!--begin::Header-->
                     <div class="card-header ">
-                        Danh sách chuyên mục ({{ $articles->total() }} chuyên mục)
+                        Danh sách bài viết ({{ $articles->total() }} bài viết)
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">
