@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-
+                <br>
                 <!-- Top 10 bài hot -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-primary text-white">
@@ -95,7 +95,7 @@
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead class="table-light">
+                                <thead class="table-light text-center">
                                     <tr>
                                         <th class="ps-4">STT</th>
                                         <th>Tiêu đề</th>
@@ -103,7 +103,7 @@
                                         <th class="text-end pe-4">Lượt xem</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-center">
                                     @forelse(\App\Models\Article::with('artist')->orderByDesc('views')->take(10)->get() as $index => $item)
                                         <tr>
                                             <td class="ps-4 fw-bold text-gray-600">{{ $index + 1 }}</td>
