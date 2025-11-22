@@ -1,38 +1,74 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\admin\NewController;
-use App\Http\Controllers\admin\AdminAuthController;
-use App\Http\Controllers\admin\CategorieController;
-use App\Http\Controllers\admin\ArtistController;
-use App\Http\Controllers\admin\CommentController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\MediaController;
-use App\Http\Controllers\admin\FooterController;
 
+use App\Http\Controllers\admin\ArticleManagementController;
+use App\Http\Controllers\admin\AdminAuthController;
+use App\Http\Controllers\admin\CategorieManagementController;
+use App\Http\Controllers\admin\ArtistManagementController;
+use App\Http\Controllers\admin\CommentManagementController;
+use App\Http\Controllers\admin\UserManagementController;
+use App\Http\Controllers\admin\MediaManagementController;
+use App\Http\Controllers\admin\FooterManagementController;
+use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\NewsletterController;
 
 // route cho người dùng
 Route::get('/', function () {
     return view('index');
-});
-Route::get('/news', function () {
+})->name('index');
+Route::get('news', function () {
     return view('news.index');
-});
-Route::get('/news-item', function () {
+})->name('articles');
+Route::get('news-item', function () {
     return view('news.show');
 });
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->name('password.request');
-// group route cho admin
 
+// Điều hướng về đường dẫn /tai-khoan/*
+Route::get('tai-khoan', function () {
+
+    return redirect()->route('user.dashboard');
+})->middleware('user.auth')->name('user');
+
+// group route cho user
+Route::prefix('tai-khoan')->name('user.')->middleware('web')->group(function () {
+
+    // Xử lý post đăng nhập
+    Route::post('dang-nhap', [UserAuthController::class, 'login'])->name('login.post');
+
+    // User đã đăng nhập không được phép truy cập các trang dưới đây
+    Route::middleware('user.checkLogin')->group(function () {
+        Route::controller(UserController::class)->group(function () {
+            Route::get('dang-ky', 'create')->name('register');
+            Route::post('dang-ky', 'store')->name('register.post');
+        });
+        Route::get('dang-nhap', [UserAuthController::class, 'showLoginForm'])->name('login');
+        Route::get('/quen-mat-khau', [UserAuthController::class, 'showForgotPasswordForm'])
+            ->name('forgot-password');
+        Route::post('/quen-mat-khau', [UserAuthController::class, 'forgotPassword'])
+            ->name('forgot-password.post');
+    });
+
+    Route::get('/dat-lai-mat-khau/{token}', [UserAuthController::class, 'showResetPasswordForm'])
+        ->name('reset-password');
+    Route::post('/dat-lai-mat-khau', [UserAuthController::class, 'resetPassword'])
+        ->name('reset-password.post');
+
+    // User đã đăng nhập mới truy cập được các đường dẫn sau đây
+    Route::middleware('user.auth')->group(function () {
+        Route::post('dang-xuat', [UserAuthController::class, 'logout'])->name('logout');
+
+        Route::controller(UserController::class)
+            ->group(function () {
+                Route::get('/thong-tin-tai-khoan', 'show')->name('dashboard');
+                Route::get('/cap-nhat-thong-tin', 'edit')->name('edit');
+            });
+    });
+});
+
+// group route cho admin
 Route::get('admin', function () {
     return redirect()->route('admin.dashboard');
 })->middleware('auth.admin');
@@ -44,18 +80,23 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('auth.admin')->group(function () {
 
-        Route::get('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+        Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
         Route::get('dashboard', function () {
             return view('_admin.dashboard');
         })->name('admin.dashboard');
-        Route::resource('news', NewController::class)->names('admin.news');
-        Route::resource('categories', CategorieController::class)->names('admin.categories');
-        Route::resource('artists', ArtistController::class)->names('admin.artists');
-        Route::resource('comments', CommentController::class)->names('admin.comments');
-        Route::resource('users', UserController::class)->names('admin.users');
-        Route::resource('media', MediaController::class)->names('admin.media');
-        Route::resource('footers', FooterController::class)->names('admin.footers');
+        Route::resource('news', ArticleManagementController::class)->names('admin.news');
+        Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
+        Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
+        Route::resource('comments', CommentManagementController::class)->names('admin.comments');
+        Route::resource('users', UserManagementController::class)->names('admin.users');
+        Route::resource('media', MediaManagementController::class)->names('admin.media');
+        Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+        // route admin management footer
+        Route::controller(FooterManagementController::class)->name('admin.footers.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::put('/', 'update')->name('update');
+        });
     });
 });
 

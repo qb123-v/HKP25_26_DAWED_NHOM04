@@ -47,7 +47,7 @@
                         </select>
                     </div>
                     <div class="col-md-3 d-grid">
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <button type="submit" class="btn btn-primary">Sắp xếp</button>
                     </div>
                 </form>
 
@@ -57,6 +57,7 @@
                         <tr>
                             <th style="width:40px;"><input type="checkbox" id="select-all"></th>
                             <th>Tên chuyên mục</th>
+                            <th>Số lượng tin tức</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
@@ -66,6 +67,7 @@
                             <tr>
                                 <td><input type="checkbox" name="selected[]" value="{{ $category->id }}"></td>
                                 <td>{{ $category->name }}</td>
+                                <td>10</td>git
                                 <td>
                                     @if ($category->status == 'Active')
                                         <span class="badge bg-success">Active</span>

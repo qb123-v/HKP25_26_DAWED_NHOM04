@@ -1,5 +1,9 @@
 @extends('_layouts.app')
+<<<<<<< HEAD
 @section('title', 'Tin tức Showbiz')
+=======
+@section('title', 'Quản lý tin tức')
+>>>>>>> 4e034d20a3cb70a18d11f58e9d125cc93fd57d29
 
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -168,6 +172,7 @@
 @endpush
 
 @section('content')
+<<<<<<< HEAD
 <div class="news-container">
     <!-- Top: Headline -->
     <h1 class="headline">Hollywood Stars Shine at Golden Globe Awards 2025</h1>

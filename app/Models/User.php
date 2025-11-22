@@ -12,6 +12,11 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    public function getFirstNameAttribute()
+    {
+        $parts = explode(' ', trim($this->name));
+        return end($parts);
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +25,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar',
         'password',
     ];
 
@@ -44,5 +50,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    public function comments()  
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function articles() 
+    {
+        return $this->hasMany(Article::class);
     }
 }
