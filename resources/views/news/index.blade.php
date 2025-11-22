@@ -19,15 +19,55 @@
 
 
 @section('content')
-    <!-- viết nội dung cho trang chủ -->
-    <div class="container" style="min-height: 80vh;">
-        <h2 class="text-center">Danh sách tin tức gọi tạm</h2>
-        <ol>
+    <div class="p-5 row">
+        <div class="col-md-8">
+            <h3>Danh sách bài viết</h3>
             @foreach ($articles as $article)
-                <li>
-                    <a href="{{ route('articles.show', [$article->id, $article->slug]) }}">{{ $article->title }}</a>
-                </li>
+                <div class="card mb-3 w-100">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ asset('images/articles/' . $article->thumbnail) }}" class="img-fluid rounded-start"
+                                alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a href="{{ route('articles.show', [$article->id, $article->slug])  }}"
+                                    class="text-decoration-none">
+                                    <h5 class="card-title">{{ $article->title }}</h5>
+                                </a>
+                                <p class="card-text">{{ $article->content }}</p>
+                                <p class="card-text"><small
+                                        class="text-muted">{{ optional($article->created_at)->diffForHumans() }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endforeach
-        </ol>
+
+        </div>
+        <div class="col-md-4">
+            <h3 class="text-center">Tin gợi ý</h3>
+            @foreach ($articles as $article)
+                <div class="card mb-3 w-100">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ asset('images/articles/' . $article->thumbnail) }}" class="img-fluid rounded-start"
+                                alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a href="{{ route('articles.show', [$article->id, $article->slug])  }}"
+                                    class="text-decoration-none">
+                                    <h5 class="card-title">{{ $article->title }}</h5>
+                                </a>
+                                <p class="card-text">{{ $article->content }}</p>
+                                <p class="card-text"><small
+                                        class="text-muted">{{ optional($article->created_at)->diffForHumans() }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 @endsection
