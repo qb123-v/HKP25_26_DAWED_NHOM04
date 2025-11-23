@@ -138,6 +138,12 @@
                                         <input type="text" id="tag" class="form-control" name="tag"
                                             value="{{ $article->tag }}">
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Mô tả (một phần bài viết hoặc mô tả bài
+                                            viết)</label>
+                                        <textarea name="" id="description"
+                                            class="form-control">{{ old('description') }}</textarea>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card mb-4">
@@ -162,7 +168,6 @@
                                                 <option value="{{ $artist->id }}" @selected($artist->id == $article->artist_id)>
                                                     {{ $artist->name }}
                                                 </option>
-
                                             @endforeach
                                         </select>
                                     </div>

@@ -26,8 +26,8 @@
                 <div class="card mb-3 w-100">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img src="{{ asset('images/articles/' . $article->thumbnail) }}" class="img-fluid rounded-start"
-                                alt="...">
+                            <img src="{{ asset('storage/images/articles/' . $article->thumbnail) }}"
+                                class="img-fluid rounded-start" alt="...">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -51,8 +51,8 @@
                 <div class="card mb-3 w-100">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img src="{{ asset('images/articles/' . $article->thumbnail) }}" class="img-fluid rounded-start"
-                                alt="...">
+                            <img src="{{ asset('storage/images/articles/' . $article->thumbnail) }}"
+                                class="img-fluid rounded-start" alt="...">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
