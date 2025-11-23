@@ -89,6 +89,18 @@ Route::prefix('admin')->group(function () {
 
         // Liên quan đến bài viết
         Route::resource('articles', ArticleManagementController::class)->names('admin.articles');
+        Route::prefix('articles')
+            ->name('admin.articles.')
+            ->controller(ArticleController::class)
+            ->group(function () {
+                // Cho bản nháp
+                Route::get('/drafts', 'drafts')->name('drafts');
+                Route::patch('/{article}/publish', 'publish')->name('publish');
+                // Cho thùng rác
+                Route::get('/articles/trash', 'trash')->name('trash');
+                Route::patch('/articles/{id}/restore', 'restore')->name('restore');
+                Route::delete('/articles/{id}/force-delete', 'forceDelete')->name('forceDelete');
+            });
         Route::post('/ckeditor/upload', [ArticleManagementController::class, 'ckeditorUpload'])
             ->name('admin.ckeditor.upload');
 
