@@ -1,5 +1,76 @@
 @extends('_admin._layouts.app')
 
+@push('style')
+    <style>
+        /* chỉnh chiều cao tối thiểu của khung soạn thảo */
+        .ck-editor__editable_inline {
+            min-height: 300px;
+            /* bạn muốn 400px hay 500px cũng được */
+        }
+    </style>
+@endpush
+@push('stylejs')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+
+
+    <script>
+        function slugify(str) {
+            return str
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-');
+        }
+
+        $(document).ready(function () {
+            const $titleInput = $("#tilte");
+            const $slugInput = $("#slug");
+            const $check = $("#flexCheckDefault");
+
+            $titleInput.on("input", function () {
+                if (!$check.is(":checked")) {
+                    $slugInput.val(slugify($(this).val()));
+                }
+            });
+
+            $check.on("change", function () {
+                if ($(this).is(":checked")) {
+                    $slugInput.prop("readonly", false);
+                } else {
+                    $slugInput.prop("readonly", true)
+                        .val(slify($titleInput.val()));
+                }
+            });
+
+            // Preview thumbnail image
+            $("#thumbnail").on("change", function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (evt) {
+                        $("#thumbnail-img").attr("src", evt.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+        ClassicEditor
+            .create(document.querySelector('#content'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('admin.ckeditor.upload') . '?_token=' . csrf_token() }}"
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+@endpush
+
 
 @section('content')
     <!--begin::App Main-->
@@ -31,31 +102,64 @@
         <div class="app-content">
             <!--begin::Container-->
             <div class="container-fluid">
-                <form action="" method="post" novalidate>
+                <form action="{{ route('admin.articles.store') }}" method="post" novalidate enctype="multipart/form-data">
+                    @csrf
                     <div class="row">
                         <div class="col-md-8">
                             <div class="card mb-4">
                                 <div class="card-header">Thông tin chung</div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="slug" class="form label">Đường dẫn bài viết</label>
-                                        <input type="text" id="slug" class="form-control" name="slug">
+                                        <label for="slug" class="form-label">Đường dẫn bài viết (được tạo tự động khi nhập
+                                            tiêu đề)</label>
+                                        <input type="text" id="slug"
+                                            class="form-control @error('slug') is-invalid @enderror" name="slug"
+                                            value="{{ old('slug') }}" readonly>
+                                        @error('slug')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                Chỉnh sửa đường dẫn
+                                            </label>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="tilte" class="form label">Tiêu đề bài viết</label>
-                                        <input type="text" id="tilte" class="form-control" name="title">
+                                        <label for="tilte" class="form-label">Tiêu đề bài viết</label>
+                                        <input type="text" id="tilte"
+                                            class="form-control @error('title') is-invalid @enderror" name="title"
+                                            value="{{ old('title') }}">
+                                        @error('title')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="description" class="form label">Mô tả bài viết</label>
-                                        <textarea type="text" id="description" class="form-control"
-                                            name="description"></textarea>
+                                        <label for="tag" class="form-label">Tag</label>
+                                        <input type="text" id="tag" class="form-control @error('tag') is-invalid @enderror"
+                                            name="tag" value="{{ old('tag') }}">
+                                        @error('tag')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Mô tả (một phần bài viết hoặc mô tả bài
+                                            viết)</label>
+                                        <textarea name="" id="description"
+                                            class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
+                                        @error('description')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
                             <div class="card mb-4">
                                 <div class="card-header">Nội dung chính</div>
                                 <div class="card-body">
-
+                                    <div class="mb-3">
+                                        <label for="content" class="form label">Nội dung chính</label>
+                                        <textarea id="content" name="content">{!! old('content') !!}</textarea>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card mb-4">
@@ -70,18 +174,22 @@
                                 <div class="card-header">Các danh mục</div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="artist" class="form-label">Nghệ sĩ</label>
-                                        <select name="artist" id="" class="form-select">
+                                        <label for="artist_id" class="form-label">Nghệ sĩ</label>
+                                        <select name="artist_id" id="artist_id"
+                                            class="form-select @error('artist_id') is-invalid @enderror">
                                             <option value="">Chọn nghệ sĩ</option>
                                             @foreach ($artists as $artist)
                                                 <option value="{{ $artist->id }}">{{ $artist->name }}</option>
-
                                             @endforeach
                                         </select>
+                                        @error('artist_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="categories" class="form-label">Danh mục</label>
-                                        <select name="categories" id="" class="form-select">
+                                        <label for="categories"
+                                            class="form-label @error('categories') is-invalid @enderror">Danh mục</label>
+                                        <select name="categories" id="categories" class="form-select">
                                             <option value="">Chọn danh mục</option>
                                             @foreach($categories as $categorie)
                                                 <option value="{{ $categorie->id }}">{{ $categorie->name }}</option>
@@ -93,7 +201,16 @@
                             <div class="card mb-4">
                                 <div class="card-header">Hình ảnh</div>
                                 <div class="card-body">
-
+                                    <div class="mb-3">
+                                        <label for="thumbnail" class="form-label">Chọn hình thumbnail</label>
+                                        <input type="file" class="form-control @error('thumbnail') is-invalid @enderror"
+                                            id="thumbnail" name="thumbnail">
+                                        @error('thumbnail')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <img id="thumbnail-img" class="w-100" src=""
+                                        onerror="this.src='{{ asset('assets/img/imageerror.jpg') }}'">
                                 </div>
                             </div>
                         </div>

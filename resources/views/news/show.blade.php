@@ -232,9 +232,10 @@
 
         <!-- Main Image -->
         <div class="mb-3">
-            <img src="{{ asset('images/articles/' . $article->thumbnail) }}" class="img-fluid rounded"
+            <img src="{{ asset('storage/images/articles/' . $article->thumbnail) }}" class="img-fluid rounded"
                 alt="{{ $article->title }}">
         </div>
+
 
         <!-- Social Icons -->
         <div class="social-icons mb-4">
@@ -257,7 +258,7 @@
             <!-- Article -->
             <div class="col-12 col-lg-9 col-article">
                 <div class="article-content">
-                    {!! nl2br(e($article->content ?? '')) !!}
+                    {!! $article->content !!}
                 </div>
 
                 <!-- Related Stories -->
@@ -274,7 +275,7 @@
                             <a href="{{ route('articles.show', [$related->id, $related->slug]) }}" class="text-decoration-none">
 >>>>>>> d8ce05a526154321c28f5e2502ec7d4142fc0aea
                                 <div class="related-card">
-                                    <img src="{{ asset('images/articles/' . $related->thumbnail) }}"
+                                    <img src="{{ asset('storage/images/articles/' . $related->thumbnail) }}"
                                         alt="{{ $related->title }}">
                                     <h6>{{ $related->title }}</h6>
                                     <p>{{ Str::limit(strip_tags($related->content ?? ''), 80) }}</p>
