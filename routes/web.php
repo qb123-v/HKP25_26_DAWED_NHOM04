@@ -104,7 +104,16 @@ Route::prefix('admin')->group(function () {
         Route::post('/ckeditor/upload', [ArticleManagementController::class, 'ckeditorUpload'])
             ->name('admin.ckeditor.upload');
 
+        // liên quan chuyên mục
         Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
+        Route::prefix('categories')
+            ->name('admin.categories.')
+            ->controller(CategorieManagementController::class)
+            ->group(function () {
+                Route::put('{id}/status', 'status')->name('status');
+            });
+
+
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
         // Route::resource('comments', CommentManagementController::class)->names('admin.comments');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
