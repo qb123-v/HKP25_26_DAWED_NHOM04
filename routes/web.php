@@ -16,7 +16,7 @@ use App\Http\Controllers\admin\AdminManagementController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\NewsletterController;
-
+use App\Http\Controllers\Admin\CommentAdminController;
 
 // route cho người dùng
 Route::get('/', function () {
@@ -29,7 +29,6 @@ Route::get('news-item', function () {
 
 // Điều hướng về đường dẫn /tai-khoan/*
 Route::get('tai-khoan', function () {
-
     return redirect()->route('user.dashboard');
 })->middleware('user.auth')->name('user');
 
@@ -65,6 +64,7 @@ Route::prefix('tai-khoan')->name('user.')->middleware('web')->group(function () 
             ->group(function () {
                 Route::get('/thong-tin-tai-khoan', 'show')->name('dashboard');
                 Route::get('/cap-nhat-thong-tin', 'edit')->name('edit');
+                Route::put('/cap-nhat-thong-tin', 'update')->name('update');
             });
     });
 });
@@ -113,9 +113,7 @@ Route::prefix('admin')->group(function () {
                 Route::put('{id}/status', 'status')->name('status');
             });
 
-
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
-        // Route::resource('comments', CommentManagementController::class)->names('admin.comments');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
 
         Route::resource('users', UserManagementController::class)->names('admin.users');
@@ -126,32 +124,28 @@ Route::prefix('admin')->group(function () {
             Route::get('/footers', 'index')->name('index');
             Route::put('/footers', 'update')->name('update');
         });
+
+        // route comment admin
+        Route::prefix('comments')->name('comments.')->group(function () {
+            Route::get('/', [CommentAdminController::class, 'index'])->name('index');
+            Route::get('/approve/{id}', [CommentAdminController::class, 'approve'])->name('approve');
+            Route::get('/hide/{id}', [CommentAdminController::class, 'hide'])->name('hide');
+            Route::get('/show/{id}', [CommentAdminController::class, 'showAgain'])->name('show');
+        });
     });
 });
 
-//route chi tiết
+// route chi tiết
 // Trang danh sách bài viết để hiển thị tạm
 Route::get('bai-viet', [ArticleController::class, 'index'])->name('articles');
 
 Route::get('/bai-viet/{id}/{slug}', [ArticleController::class, 'show'])
     ->name('articles.show');
 
-// Gửi comment chỉ cho user đã đăng nhập (guard 'user')
 Route::post('/bai-viet/{id}/comment', [ArticleController::class, 'storeComment'])
-    ->middleware('auth:user')  // <- dùng guard 'user'
+    ->middleware('auth:user')
     ->name('articles.comment');
 
 // Route đăng ký nhận bản tin
 Route::post('/dang-ky-nhan-bao', [NewsletterController::class, 'subscribe'])
     ->name('newsletter.subscribe');
-
-// route commentadmin
-
-use App\Http\Controllers\Admin\CommentAdminController;
-
-Route::prefix('admin/comments')->group(function () {
-    Route::get('/', [CommentAdminController::class, 'index'])->name('admin.comments.index');
-    Route::get('/approve/{id}', [CommentAdminController::class, 'approve'])->name('admin.comments.approve');
-    Route::get('/hide/{id}', [CommentAdminController::class, 'hide'])->name('admin.comments.hide');
-    Route::get('/show/{id}', [CommentAdminController::class, 'showAgain'])->name('admin.comments.show');
-});

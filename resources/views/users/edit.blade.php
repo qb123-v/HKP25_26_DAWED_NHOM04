@@ -24,6 +24,13 @@
     <div class="container" style="min-height: 80vh;">
         <h2 class="text-center">Cập nhật thông tin tài khoản</h2>
 
+        {{-- Hiển thị thông báo thành công --}}
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         {{-- Hiển thị lỗi chung --}}
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -98,9 +105,8 @@
                 @endif
             </div>
 
-            <button class="btn btn-success">Cập nhật</button>
+            <button type="submit" class="btn btn-success">Cập nhật</button>
         </form>
-
 
     </div>
 @endsection
