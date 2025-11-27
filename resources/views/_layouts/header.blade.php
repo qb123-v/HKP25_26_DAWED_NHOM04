@@ -16,7 +16,7 @@
                 <a class="header-nav-link" href="{{ route('categories.index') }}">Chuyên mục</a>
             </li>
             <li class="header-nav-item">
-                <a class="header-nav-link" href="#">Nghệ sĩ</a>
+                <a class="header-nav-link" href="{{ route('artists.index') }}">Nghệ sĩ</a>
             </li>
         </ul>
         <div class="header-user">

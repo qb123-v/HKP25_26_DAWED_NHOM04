@@ -28,7 +28,7 @@
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <img src="{{ asset('storage/images/articles/' . $article->thumbnail) }}"
-                                    class="img-fluid rounded-start" alt="...">
+                                    class="img-fluid rounded-start w-100 " style="height: 200px; object-fit: cover;" alt="...">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
@@ -80,7 +80,7 @@
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <img src="{{ asset('storage/images/articles/' . $goi_y->thumbnail) }}"
-                                    class="img-fluid rounded-start" alt="...">
+                                    class="img-fluid rounded-start w-100" style=" height: 150px; object-fit: cover;" alt="...">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
