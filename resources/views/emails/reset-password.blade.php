@@ -23,7 +23,7 @@
         .btn {
             display: inline-block;
             background: #007bff;
-            color: white !important;    
+            color: white !important;
             padding: 12px 24px;
             text-decoration: none;
             border-radius: 50px;

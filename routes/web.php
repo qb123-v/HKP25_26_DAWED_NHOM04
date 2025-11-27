@@ -11,17 +11,18 @@ use App\Http\Controllers\admin\CommentManagementController;
 use App\Http\Controllers\admin\UserManagementController;
 use App\Http\Controllers\admin\MediaManagementController;
 use App\Http\Controllers\admin\FooterManagementController;
+use App\Http\Controllers\admin\AdminManagementController;
+
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\NewsletterController;
+
 
 // route cho người dùng
 Route::get('/', function () {
     return view('index');
 })->name('index');
-Route::get('news', function () {
-    return view('news.index');
-})->name('articles');
+
 Route::get('news-item', function () {
     return view('news.show');
 });
@@ -85,27 +86,72 @@ Route::prefix('admin')->group(function () {
         Route::get('dashboard', function () {
             return view('_admin.dashboard');
         })->name('admin.dashboard');
-        Route::resource('news', ArticleManagementController::class)->names('admin.news');
+
+        // Liên quan đến bài viết
+        Route::resource('articles', ArticleManagementController::class)->names('admin.articles');
+        Route::prefix('articles')
+            ->name('admin.articles.')
+            ->controller(ArticleController::class)
+            ->group(function () {
+                // Cho bản nháp
+                Route::get('/drafts', 'drafts')->name('drafts');
+                Route::patch('/{article}/publish', 'publish')->name('publish');
+                // Cho thùng rác
+                Route::get('/articles/trash', 'trash')->name('trash');
+                Route::patch('/articles/{id}/restore', 'restore')->name('restore');
+                Route::delete('/articles/{id}/force-delete', 'forceDelete')->name('forceDelete');
+            });
+        Route::post('/ckeditor/upload', [ArticleManagementController::class, 'ckeditorUpload'])
+            ->name('admin.ckeditor.upload');
+
+        // liên quan chuyên mục
         Route::resource('categories', CategorieManagementController::class)->names('admin.categories');
+        Route::prefix('categories')
+            ->name('admin.categories.')
+            ->controller(CategorieManagementController::class)
+            ->group(function () {
+                Route::put('{id}/status', 'status')->name('status');
+            });
+
+
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
-        Route::resource('comments', CommentManagementController::class)->names('admin.comments');
-        Route::resource('users', UserManagementController::class)->names('admin.users');
+        // Route::resource('comments', CommentManagementController::class)->names('admin.comments');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
-        Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+        Route::resource('users', UserManagementController::class)->names('admin.users');
+        Route::resource('admins', AdminManagementController::class)->names('admin.admins');
+
         // route admin management footer
         Route::controller(FooterManagementController::class)->name('admin.footers.')->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::put('/', 'update')->name('update');
+            Route::get('/footers', 'index')->name('index');
+            Route::put('/footers', 'update')->name('update');
         });
     });
 });
 
-// Artists manage page (UI-only)
-Route::get('/artists/manage', function () {
-    return view('artists.manage');
-});
+//route chi tiết
+// Trang danh sách bài viết để hiển thị tạm
+Route::get('bai-viet', [ArticleController::class, 'index'])->name('articles');
 
-// ArtistsList management (prototype, UI-only)
-Route::get('/artists/list', function () {
-    return view('artistsList.index');
+Route::get('/bai-viet/{id}/{slug}', [ArticleController::class, 'show'])
+    ->name('articles.show');
+
+// Gửi comment chỉ cho user đã đăng nhập (guard 'user')
+Route::post('/bai-viet/{id}/comment', [ArticleController::class, 'storeComment'])
+    ->middleware('auth:user')  // <- dùng guard 'user'
+    ->name('articles.comment');
+
+// Route đăng ký nhận bản tin
+Route::post('/dang-ky-nhan-bao', [NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe');
+
+// route commentadmin
+
+use App\Http\Controllers\Admin\CommentAdminController;
+
+Route::prefix('admin/comments')->group(function () {
+    Route::get('/', [CommentAdminController::class, 'index'])->name('admin.comments.index');
+    Route::get('/approve/{id}', [CommentAdminController::class, 'approve'])->name('admin.comments.approve');
+    Route::get('/hide/{id}', [CommentAdminController::class, 'hide'])->name('admin.comments.hide');
+    Route::get('/show/{id}', [CommentAdminController::class, 'showAgain'])->name('admin.comments.show');
 });

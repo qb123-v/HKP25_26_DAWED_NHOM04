@@ -30,30 +30,34 @@
                     </div>
                 @endif
                 <div class="bg-white rounded shadow p-4">
-                    <form id="footerForm" class="row" method="POST" action="{{ route('admin.footers.update') }}">
+                    <form id="footerForm" class="row" method="POST" action="{{ route('admin.footers.update') }}" novalidate>
                         @csrf
                         @method('PUT')
                         <!-- Cột trái -->
                         <div class="col-md-6 border-end pe-4">
                             <!-- Thông tin chung -->
-                            <div class="mb-4">
+                            <div class="mb-4 ">
                                 <h5 class="fw-semibold border-bottom pb-2">Thông tin chung</h5>
                                 <div class="row g-3 mt-2">
                                     <div class="col-md-6">
                                         <label class="form-label">Tên công ty</label>
-                                        <input type="text" class="form-control" name="company_name">
+                                        <input type="text" class="form-control" name="footer[company_name]"
+                                            value="{{ $footers['company_name'] ?? ''  }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Địa chỉ</label>
-                                        <input type="text" class="form-control" name="address">
+                                        <input type="text" class="form-control" name="footer[address]"
+                                            value="{{ $footers['address'] ?? '' }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Email liên hệ</label>
-                                        <input type="email" class="form-control" name="email">
+                                        <input type="email" class="form-control" name="footer[email]"
+                                            value="{{ $footers['email'] ?? '' }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" name="phone">
+                                        <input type="text" class="form-control" name="footer[phone_number]"
+                                            value="{{ $footers['phone_number'] ?? '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -61,15 +65,19 @@
                             <!-- Liên kết điều hướng -->
                             <div class="mb-4">
                                 <h5 class="fw-semibold border-bottom pb-2">Liên kết điều hướng</h5>
-                                <div class="mt-2">
-                                    <label class="form-label">About</label>
-                                    <input type="text" class="form-control mb-2" name="link_about">
-                                    <label class="form-label">News</label>
-                                    <input type="text" class="form-control mb-2" name="link_news">
-                                    <label class="form-label">Services</label>
-                                    <input type="text" class="form-control mb-2" name="link_services">
-                                    <label class="form-label">Policies</label>
-                                    <input type="text" class="form-control mb-2" name="link_policies">
+                                <div class="mt-4">
+                                    <label class="form-label">Về chúng tôi</label>
+                                    <input type="text" class="form-control mb-2" name="footer[aboutus]"
+                                        value="{{ $footers['aboutus'] ?? '' }}">
+                                    <label class="form-label">Tin tức</label>
+                                    <input type="text" class="form-control mb-2" name="footer[articles]"
+                                        value="{{ $footers['articles'] ?? '' }}">
+                                    <label class="form-label">Dịch vụ</label>
+                                    <input type="text" class="form-control mb-2" name="footer[services]"
+                                        value="{{ $footers['services'] ?? '' }}">
+                                    <label class="form-label">Chính sách</label>
+                                    <input type="text" class="form-control mb-2" name="footer[services]"
+                                        value="{{ $footers['services'] ?? '' }}">
                                 </div>
                             </div>
 
@@ -79,28 +87,29 @@
                                 <div class="row g-3 mt-2">
                                     <div class="col-md-6">
                                         <label class="form-label">Màu nền Footer</label>
-                                        <input type="color" class="form-control form-control-color" name="bg_color"
-                                            value="#f8f9fa">
+                                        <input type="color" class="form-control form-control-color" name="footer[bg_color]"
+                                            value="{{ $footers['bg_color'] ?? ''}}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Màu chữ</label>
-                                        <input type="color" class="form-control form-control-color" name="text_color"
-                                            value="#000000">
+                                        <input type="color" class="form-control form-control-color" name="footer[color]"
+                                            value="{{ $footers['color'] ?? '' }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Căn chỉnh nội dung</label>
-                                        <select class="form-select" name="align">
-                                            <option value="center">Center</option>
-                                            <option value="left">Left</option>
-                                            <option value="right">Right</option>
+                                        <select class="form-select" name="footer[align]">
+                                            <option value="center" {{ ($footers['align'] ?? '') == 'center' ? 'selected' : '' }}>Center</option>
+                                            <option value="left" {{ ($footers['align'] ?? '') == 'left' ? 'selected' : '' }}>
+                                                Left</option>
+                                            <option value="right" {{ ($footers['align'] ?? '') == 'right' ? 'selected' : '' }}>Right</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Kích thước chữ</label>
-                                        <select class="form-select" name="font_size">
-                                            <option value="standard">Standard</option>
-                                            <option value="small">Small</option>
-                                            <option value="large">Large</option>
+                                        <select class="form-select" name="footer[font_size]">
+                                            <option value="standard" {{ ($footers['font_size'] ?? '') == 'standard' ? 'selected' : '' }}>Standard</option>
+                                            <option value="small" {{ ($footers['font_size'] ?? '') == 'small' ? 'selected' : '' }}>Small</option>
+                                            <option value="large" {{ ($footers['font_size'] ?? '') == 'large' ? 'selected' : '' }}>Large</option>
                                         </select>
                                     </div>
                                 </div>

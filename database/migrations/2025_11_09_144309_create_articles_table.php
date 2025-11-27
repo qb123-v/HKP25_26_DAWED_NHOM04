@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('title');
             $table->text('content');
             $table->string('tag')->nullable();
+            $table->unsignedBigInteger('views')->default(0);
             $table->timestamps();
         });
     }

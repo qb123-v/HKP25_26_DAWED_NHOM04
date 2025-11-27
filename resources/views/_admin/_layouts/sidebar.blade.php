@@ -9,7 +9,7 @@
                 class="brand-image opacity-75 shadow" />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            <span class="brand-text fw-light">SHOWBIZ</span>
             <!--end::Brand Text-->
         </a>
         <!--end::Brand Link-->
@@ -27,19 +27,41 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.news.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.news.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-speedometer"></i>
+                <li class="nav-item {{ Request::routeIs('admin.articles.*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link  {{ Request::routeIs('admin.articles.*') ? 'active' : '' }}">
+
+                        <i class="nav-icon bi bi-newspaper"></i>
                         <p>
                             Quản lý tin tức
+                            <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.articles.index') }}"
+                                class="nav-link {{ Request::routeIs('admin.articles.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Bài viết</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Nháp</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Đã xóa</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.categories.index') }}"
                         class="nav-link {{ Request::routeIs('admin.categories.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-box-seam-fill"></i>
+                        <i class="nav-icon bi bi-list-ul"></i>
                         <p>
                             Quản lý chuyên mục
                         </p>
@@ -49,7 +71,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.artists.index') }}"
                         class="nav-link {{ Request::routeIs('admin.artists.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-clipboard-fill"></i>
+                        <i class="nav-icon bi bi-person-hearts"></i>
                         <p>
                             Quản lý nghệ sĩ
                         </p>
@@ -59,26 +81,47 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.comments.index') }}"
                         class="nav-link {{ Request::routeIs('admin.comments.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-tree-fill"></i>
+                        <i class="nav-icon bi bi-chat-right-text-fill"></i>
                         <p>
                             Quản lý bình luận
                             <span class="nav-badge badge text-bg-secondary me-3">6</span>
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.users.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.users.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-pencil-square"></i>
+                <li
+                    class="nav-item {{ Request::routeIs('admin.users.*') || Request::routeIs('admin.admins.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ Request::routeIs('admin.users.*') || Request::routeIs('admin.admins.*') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-people-fill"></i>
                         <p>
-                            Quản lý người dùng
+                            Quản lý tài khoản
+                            <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <!-- Mục con 1: Quản lý người dùng thường -->
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users.index') }}"
+                                class="nav-link {{ Request::routeIs('admin.users.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-circle-fill"></i>
+                                <p>Người dùng ({{ \App\Models\User::count() }})</p>
+                            </a>
+                        </li>
+
+                        <!-- Mục con 2: Quản lý tài khoản Admin -->
+                        <li class="nav-item">
+                            <a href="{{ route('admin.admins.index') }}"
+                                class="nav-link {{ Request::routeIs('admin.admins.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-shield-lock-fill text-danger"></i>
+                                <p>Admin ({{ \App\Models\Admin::count() }})</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item {{ Request::routeIs('admin.media.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.media.index') }}" class="nav-link">
-                        <i class="nav-icon bi bi-box-arrow-in-right"></i>
+                        <i class="nav-icon bi bi-images"></i>
                         <p>
                             Quản lý media
                         </p>
@@ -87,7 +130,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.footers.index') }}"
                         class="nav-link {{ Request::routeIs('admin.footers.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-download"></i>
+                        <i class="nav-icon bi bi-ui-checks"></i>
                         <p>Quản lý footer</p>
                     </a>
                 </li>

@@ -172,138 +172,82 @@
 @endpush
 
 @section('content')
-<<<<<<< HEAD
-<div class="news-container">
-    <!-- Top: Headline -->
-    <h1 class="headline">Hollywood Stars Shine at Golden Globe Awards 2025</h1>
-    <h2 class="subheadline">A night of glamour and celebration as the biggest names in entertainment gather for the prestigious ceremony</h2>
-    <div class="article-meta">
-        By <strong>Sarah Johnson</strong> | Los Angeles, CA | January 15, 2025 | 5 min read
-    </div>
-
-    <div class="row">
-        <!-- Left Column: Main Content -->
-        <div class="col-lg-8">
-            <!-- Area 1: Big Image + Trending -->
-            <div class="row mb-4">
-                <div class="col-md-7">
-                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=700&h=500&fit=crop" class="main-image" alt="Golden Globe Awards">
-                    <p class="caption">Stars walk the red carpet at the 82nd Annual Golden Globe Awards in Beverly Hills</p>
-                </div>
-                <div class="col-md-5">
-                    <div class="trending-box">
-                        <h5><i class="bi bi-fire"></i> Trending Now</h5>
-                        <ul>
-                            <li><a href="#">Taylor Swift announces surprise album release</a></li>
-                            <li><a href="#">Brad Pitt and George Clooney reunite for new film</a></li>
-                            <li><a href="#">Beyoncé breaks Grammy records</a></li>
-                            <li><a href="#">Marvel reveals Phase 6 movie lineup</a></li>
-                            <li><a href="#">Jennifer Lawrence expecting second child</a></li>
-                        </ul>
+    <div class="p-5 row">
+        <div class="col-md-8">
+            <h3>Danh sách bài viết</h3>
+            @forelse ($articles as $article)
+                <div class="card mb-3 w-100">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ asset('storage/images/articles/' . $article->thumbnail) }}"
+                                class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a href="{{ route('articles.show', [$article->id, $article->slug])  }}"
+                                    class="text-decoration-none">
+                                    <h5 class="card-title">{{ $article->title }}</h5>
+                                </a>
+                                <p class="card-text">{{ $article->content }}</p>
+                                <p class="card-text"><small
+                                        class="text-muted">{{ optional($article->created_at)->diffForHumans() }}</small></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @empty
+                <div class="alert alert-warning">Không có kết quả cho tìm kiếm {{ request('search') }}</div>
+            @endforelse
+            <!-- phân trang nếu quá 10 chuyên mục -->
+            @if ($articles->lastPage() > 1)
+                <ul class="pagination pagination-sm m-0 float-end">
+                    {{-- Nút "Trước" --}}
+                    @if ($articles->onFirstPage())
+                        <li class="page-item disabled"><span class="page-link">«</span></li>
+                    @else
+                        <li class="page-item"><a class="page-link" href="{{ $articles->previousPageUrl() }}">«</a>
+                        </li>
+                    @endif
 
-            <!-- Area 2: News Details -->
-            <div class="article-content">
-                <p>The 82nd Annual Golden Globe Awards brought together Hollywood's elite for a spectacular evening of recognition and celebration. The ceremony, held at the Beverly Hilton Hotel, showcased outstanding achievements in film and television from the past year.</p>
+                    {{-- Danh sách các trang --}}
+                    @for ($i = 1; $i <= $articles->lastPage(); $i++)
+                        <li class="page-item {{ $i == $articles->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $articles->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
 
-                <p>Leading the pack with multiple wins was "Oppenheimer," which took home Best Motion Picture - Drama and Best Director for Christopher Nolan. Cillian Murphy delivered an emotional acceptance speech as he received the award for Best Actor in a Drama.</p>
-
-                <p>"This is beyond my wildest dreams," Murphy said, visibly moved. "To work with Christopher Nolan and this incredible cast has been the highlight of my career."</p>
-
-                <p>The television categories saw "Succession" dominating once again, with its final season earning critical acclaim and multiple awards. Sarah Snook's powerful performance earned her the award for Best Actress in a Television Drama.</p>
-
-                <p>Fashion was another highlight of the evening, with celebrities showcasing stunning designer gowns and sharp tuxedos. Margot Robbie turned heads in a vintage-inspired Chanel piece, while Timothée Chalamet made a bold statement in custom Haider Ackermann.</p>
-
-                <p>The night also featured memorable musical performances and heartfelt tributes to industry legends. Meryl Streep received the Cecil B. DeMille Award for her outstanding contributions to entertainment.</p>
-
-                <h4 class="mt-4 mb-3">Key Winners:</h4>
-                <ul>
-                    <li><strong>Best Motion Picture - Drama:</strong> Oppenheimer</li>
-                    <li><strong>Best Motion Picture - Musical or Comedy:</strong> Poor Things</li>
-                    <li><strong>Best Director:</strong> Christopher Nolan (Oppenheimer)</li>
-                    <li><strong>Best Actor - Drama:</strong> Cillian Murphy (Oppenheimer)</li>
-                    <li><strong>Best Actress - Drama:</strong> Lily Gladstone (Killers of the Flower Moon)</li>
-                    <li><strong>Best Television Series - Drama:</strong> Succession</li>
+                    {{-- Nút "Sau" --}}
+                    @if ($articles->hasMorePages())
+                        <li class="page-item"><a class="page-link" href="{{ $articles->nextPageUrl() }}">»</a></li>
+                    @else
+                        <li class="page-item disabled"><span class="page-link">»</span></li>
+                    @endif
                 </ul>
-            </div>
-
-            <!-- Bottom: Comments Section -->
-            <div class="comments-section">
-                <h4 class="fw-bold mb-3"><i class="bi bi-chat-dots"></i> Comments (24)</h4>
-                <div class="comments-box">
-                    <p class="mb-3"><strong>John Davis:</strong> What an incredible night! Cillian Murphy absolutely deserved that award.</p>
-                    <p class="mb-3"><strong>Emma Wilson:</strong> The fashion was on point this year! Margot Robbie looked stunning.</p>
-                    <p class="mb-0"><strong>Michael Brown:</strong> Succession's final season was a masterpiece. Well-deserved wins!</p>
-                </div>
-                <div class="mt-3">
-                    <button class="btn btn-primary">Add Comment</button>
-                </div>
-            </div>
-
-            <!-- More Related Stories -->
-            <div class="mt-5">
-                <h4 class="fw-bold mb-3">More Showbiz News</h4>
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="related-card">
-                            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300&h=150&fit=crop" alt="Story 1">
-                            <h6>Met Gala 2025: The Most Daring Looks</h6>
-                            <p>Fashion's biggest night returns with bold statements</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="related-card">
-                            <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=300&h=150&fit=crop" alt="Story 2">
-                            <h6>Netflix Announces Star-Studded Series</h6>
-                            <p>A-list cast confirmed for upcoming drama</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="related-card">
-                            <img src="https://images.unsplash.com/photo-1574267432644-f74f8ec512ac?w=300&h=150&fit=crop" alt="Story 3">
-                            <h6>Oscar Nominations Predictions 2025</h6>
-                            <p>Who will compete for the coveted awards?</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
-
-        <!-- Right Sidebar: Related Stories -->
-        <div class="col-lg-4">
-            <div class="sidebar-sticky">
-                <div class="trending-box mb-4">
-                    <h5>Related Stories</h5>
-                    <div class="related-card mb-3">
-                        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300&h=150&fit=crop" alt="Related">
-                        <h6>Behind the Scenes at the Golden Globes</h6>
-                        <p>Exclusive photos from backstage</p>
-                    </div>
-                    <div class="related-card mb-3">
-                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=150&fit=crop" alt="Related">
-                        <h6>Red Carpet Fashion Breakdown</h6>
-                        <p>Designer details and style analysis</p>
-                    </div>
-                    <div class="related-card">
-                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=300&h=150&fit=crop" alt="Related">
-                        <h6>Winners' Press Room Highlights</h6>
-                        <p>What the stars said after their wins</p>
+        <div class="col-md-4">
+            <h3 class="text-center">Tin gợi ý</h3>
+            @foreach ($goi_ys as $goi_y)
+                <div class="card mb-3 w-100">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ asset('storage/images/articles/' . $goi_y->thumbnail) }}"
+                                class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a href="{{ route('articles.show', [$goi_y->id, $goi_y->slug])  }}"
+                                    class="text-decoration-none">
+                                    <h5 class="card-title">{{ $goi_y->title }}</h5>
+                                </a>
+                                <p class="card-text">{{ $goi_y->content }}</p>
+                                <p class="card-text"><small
+                                        class="text-muted">{{ optional($goi_y->created_at)->diffForHumans() }}</small></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="trending-box">
-                    <h5>Most Popular</h5>
-                    <ul>
-                        <li><a href="#">Celebrity Breakups of 2025</a></li>
-                        <li><a href="#">Upcoming Blockbuster Movies</a></li>
-                        <li><a href="#">Inside Celebrity Mansions</a></li>
-                        <li><a href="#">Hollywood Power Couples</a></li>
-                    </ul>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
-</div>
 @endsection

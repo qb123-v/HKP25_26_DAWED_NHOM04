@@ -13,7 +13,7 @@ class Artist extends Model
         'slug',
         'name',
         'bio',
-        'avatar',
+        'avatar', // dùng asset để hiển thị ảnh
     ];
 
     // Một nghệ sĩ có nhiều bài viết
@@ -21,4 +21,5 @@ class Artist extends Model
     {
         return $this->hasMany(Article::class);
     }
+
 }

@@ -6,9 +6,28 @@ use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class ArticleController extends Controller
 {
+
+    public function index(Request $request)
+    {
+
+        $query = Article::query();
+        // Lọc theo search title
+        if ($request->filled('search'))
+        {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        } else
+        {
+            $query->orderBy('created_at', 'desc');
+        }
+        $articles = $query->paginate(10)->withQueryString();
+
+        $goi_ys = Article::mostViewed()->get();
+        return view('news.index', compact('articles', 'goi_ys'));
+    }
     // Hiển thị chi tiết bài viết
     public function show($id, $slug)
     {
@@ -18,26 +37,28 @@ class ArticleController extends Controller
             'comments.replies.user'
         ])->findOrFail($id);
 
+        $article->increment('views');
+
         $relatedArticles = $article->relatedArticles();
 
         return view('news.show', compact('article', 'relatedArticles'));
     }
 
     // Lưu comment hoặc reply
-   public function storeComment(Request $request, $id)
-{
-    $request->validate([
-        'content' => 'required|string|max:2000',
-        'parent_id' => 'nullable|exists:comments,id',
-    ]);
+    public function storeComment(Request $request, $id)
+    {
+        $data = $request->validate([
+            'content' => 'required|string|max:2000',
+            'parent_id' => 'nullable|exists:comments,id',
+        ]);
 
-    Comment::create([
-        'article_id' => $id,  // dùng $id từ route
-        'user_id' => Auth::id(),
-        'parent_id' => $request->input('parent_id') ?: null,
-        'content' => $request->content,
-    ]);
+        Comment::create([
+            'article_id' => $id,
+            'user_id' => Auth::id(),
+            'parent_id' => $data['parent_id'] ?: null,
+            'content' => $data['content'],
+        ]);
 
-    return redirect()->back()->with('success', 'Bình luận đã được gửi!');
-}
+        return redirect()->back()->with('success', 'Bình luận đã được gửi!');
+    }
 }
