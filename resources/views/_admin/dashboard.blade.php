@@ -35,7 +35,8 @@
                                 </div>
                                 <div>
                                     <div class="fs-3 fw-bold text-gray-800">
-                                        {{ number_format(\App\Models\Article::count()) }}</div>
+                                        {{ number_format(\App\Models\Article::count()) }}
+                                    </div>
                                     <div class="text-gray-600 fw-medium">Tổng bài viết</div>
                                 </div>
                             </div>
@@ -50,7 +51,8 @@
                                 </div>
                                 <div>
                                     <div class="fs-3 fw-bold text-gray-800">
-                                        {{ number_format(\App\Models\Article::sum('views')) }}</div>
+                                        {{ number_format(\App\Models\Article::sum('views')) }}
+                                    </div>
                                     <div class="text-gray-600 fw-medium">Tổng lượt xem</div>
                                 </div>
                             </div>
@@ -65,7 +67,8 @@
                                 </div>
                                 <div>
                                     <div class="fs-3 fw-bold text-gray-800">
-                                        {{ \App\Models\Article::whereDate('created_at', today())->count() }}</div>
+                                        {{ \App\Models\Article::whereDate('created_at', today())->count() }}
+                                    </div>
                                     <div class="text-gray-600 fw-medium">Bài viết hôm nay</div>
                                 </div>
                             </div>
@@ -110,9 +113,9 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     @if ($item->thumbnail)
-                                                        <img src="{{ asset('images/articles/' . $item->thumbnail ?? 'images/no-image.jpg') }}"
-                                                            class="rounded me-3" width="60" height="60"
-                                                            style="object-fit: cover;" alt="{{ $item->title }}">
+                                                        <img src="{{ asset('storage/images/articles/' . $item->thumbnail ?? 'images/no-image.jpg') }}"
+                                                            class="rounded me-3" width="60" height="60" style="object-fit: cover;"
+                                                            alt="{{ $item->title }}">
                                                     @else
                                                         <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center"
                                                             style="width:60px;height:60px;">
@@ -127,7 +130,8 @@
                                             </td>
                                             <td class="text-gray-700">{{ $item->artist?->name ?? '—' }}</td>
                                             <td class="text-end pe-4 fw-bold text-success">
-                                                {{ number_format($item->views) }}</td>
+                                                {{ number_format($item->views) }}
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
