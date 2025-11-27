@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateArticleRequest extends FormRequest
+class CreateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,9 @@ class CreateArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'slug' => 'required|string|unique:articles,slug',
-            'title' => 'required|string',
-            'tag' => 'nullable|string',
+            'slug' => 'required|string|unique:categories,slug',
+            'name' => 'required|string',
             'description' => 'nullable|string',
-            'content' => 'nullable|string',
-            'categorie_id' => 'nullable|integer|min:1|exists:categories,id',
-            'artist_id' => 'nullable|integer|min:1|exists:artists,id',
             'thumbnail' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048'
         ];
     }
@@ -37,22 +33,11 @@ class CreateArticleRequest extends FormRequest
         return [
             'slug.required' => 'Không bỏ trống đường dẫn',
             'slug.string' => 'Ký tự nhập không hợp lệ',
-            'slug.unique' => 'Dường dẫn cho bài viết này đã tồn tại',
+            'slug.unique' => 'Đường dẫn cho chuyên mục này đã tồn tại',
 
-            'title.required' => 'Không bỏ trống tiêu đề',
-            'title.string' => 'Ký tự nhập không hợp lệ',
+            'name.required' => 'Không bỏ trống tiêu đề',
+            'name.string' => 'Ký tự nhập không hợp lệ',
 
-            'tag.string' => 'Ký tự nhập không hợp lệ',
-
-            'description.string' => 'Ký tự nhập không hợp lệ',
-
-            'categorie_id.exists' => 'Danh mục không tồn tại',
-            'categorie_id.integer' => 'Danh mục không tồn tại',
-            'categorie_id.min' => 'Danh mục không tồn tại',
-
-            'artist_id.exists' => 'Nghệ sĩ không tồn tại',
-            'artist_id.integer' => 'Nghệ sĩ không tồn tại',
-            'artist_id.min' => 'Nghệ sĩ không tồn tại',
 
             'thumbnail.required' => 'Chưa chọn thumbnail cho bài viết',
             'thumbnail.image' => 'Tải lên không hợp lệ, vui lòng upload hình ảnh',
