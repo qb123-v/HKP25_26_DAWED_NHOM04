@@ -129,8 +129,14 @@ Route::prefix('admin')->group(function () {
     });
 });
 // chuyên mục
-Route::get('chuyen-muc/{slug}', [CategorieController::class, 'index'])
-    ->name('categories');
+
+Route::prefix('chuyen-muc')
+    ->name('categories.')
+    ->controller(CategorieController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'show')->name('show');
+    });
 
 //route chi tiết
 // Trang danh sách bài viết để hiển thị tạm

@@ -15,7 +15,7 @@ class PageIndexController extends Controller
         $goi_ys = Article::mostViewed()->get();
         $topCategories = Categorie::withSum('articles', 'views')
             ->orderBy('articles_sum_views', 'desc')
-            ->take(5)
+            ->take(4)
             ->get();
         return view('index', compact('categories', 'articles', 'goi_ys', 'topCategories'));
     }

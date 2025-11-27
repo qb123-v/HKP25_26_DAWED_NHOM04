@@ -110,9 +110,9 @@
         </div>
         <div class="row mb-5">
             <h3 class="mb-3">Các chuyên mục</h3>
-            @foreach($categories as $category)
+            @foreach($topCategories as $category)
                 <div class="col-md-3 mb-3">
-                    <a href="{{ route('categories', $category->slug) }}">
+                    <a href="{{ route('categories.show', $category->slug) }}">
                         <div class="card text-bg-dark">
                             <img onerror="this.src='{{ asset('assets/img/imageerror.jpg') }}'"
                                 style="height: 200px; object-fit: cover;"
@@ -127,6 +127,8 @@
                     </a>
                 </div>
             @endforeach
+            <a style="width: 200px;" href="{{ route('categories.index') }}" class="btn btn-dark mx-auto">Xem tất
+                cả</a>
         </div>
     </div>
 @endsection

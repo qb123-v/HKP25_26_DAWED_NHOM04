@@ -13,7 +13,7 @@
                 <a class="header-nav-link" href="{{ route('articles') }}">Tin tức</a>
             </li>
             <li class="header-nav-item">
-                <a class="header-nav-link" href="#">Chuyên mục</a>
+                <a class="header-nav-link" href="{{ route('categories.index') }}">Chuyên mục</a>
             </li>
             <li class="header-nav-item">
                 <a class="header-nav-link" href="#">Nghệ sĩ</a>
