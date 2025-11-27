@@ -243,17 +243,8 @@
             <a href="#"><i class="bi bi-twitter"></i></a>
             <a href="#"><i class="bi bi-envelope"></i></a>
             <a href="#"><i class="bi bi-printer"></i></a>
-<<<<<<< HEAD
         </div>
 
-=======
-            <a id="copyLink" href="{{ route('articles.show', [$article->id, $article->slug]) }}">
-                <i class="bi bi-link-45deg"></i>
-            </a>
-
-        </div>
-
->>>>>>> d8ce05a526154321c28f5e2502ec7d4142fc0aea
         <div class="row">
             <!-- Article -->
             <div class="col-12 col-lg-9 col-article">
@@ -264,16 +255,9 @@
                 <!-- Related Stories -->
                 <h5 class="mt-5 fw-bold">Related stories</h5>
                 <div class="row row-cols-1 row-cols-md-3 g-3 mt-2">
-<<<<<<< HEAD
-                    @foreach ($relatedArticles as $related)
-                        <div class="col">
-                            <a href="{{ route('articles.show', [$related->id, $related->slug]) }}"
-                                class="text-decoration-none">
-=======
                     @foreach($relatedArticles as $related)
                         <div class="col">
                             <a href="{{ route('articles.show', [$related->id, $related->slug]) }}" class="text-decoration-none">
->>>>>>> d8ce05a526154321c28f5e2502ec7d4142fc0aea
                                 <div class="related-card">
                                     <img src="{{ asset('storage/images/articles/' . $related->thumbnail) }}"
                                         alt="{{ $related->title }}">
@@ -295,42 +279,23 @@
                     @auth('user')
                         <form action="{{ route('articles.comment', $article->id) }}" method="POST">
                             @csrf
-<<<<<<< HEAD
                             <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." rows="3" required></textarea>
-=======
-                            <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." rows="3"
-                                required></textarea>
->>>>>>> d8ce05a526154321c28f5e2502ec7d4142fc0aea
                             <button class="btn btn-primary btn-sm w-100">Gửi</button>
                         </form>
                     @else
                         <p><a href="{{ route('user.login') }}" class="text-primary">Đăng nhập</a> để bình luận.</p>
                     @endauth
 
-<<<<<<< HEAD
-                    @foreach ($article->comments->where('status', 1) as $comment)
-                        <!-- chỉ hiển thị status=1 -->
-=======
                     @foreach($article->comments->where('status', 1) as $comment) <!-- chỉ hiển thị status=1 -->
->>>>>>> d8ce05a526154321c28f5e2502ec7d4142fc0aea
                         <div class="mt-3">
                             <strong>{{ $comment->user->name ?? 'Unknown' }}</strong>
                             <small class="text-muted d-block">{{ optional($comment->created_at)->diffForHumans() }}</small>
                             <p>{{ $comment->content }}</p>
 
-<<<<<<< HEAD
-                            @foreach ($comment->replies->where('status', 1) as $reply)
-                                <!-- lọc replies status=1 -->
-                                <div class="comment-reply">
-                                    <strong>{{ $reply->user->name ?? 'Unknown' }}</strong>
-                                    <small
-                                        class="text-muted d-block">{{ optional($reply->created_at)->diffForHumans() }}</small>
-=======
                             @foreach($comment->replies->where('status', 1) as $reply) <!-- lọc replies status=1 -->
                                 <div class="comment-reply">
                                     <strong>{{ $reply->user->name ?? 'Unknown' }}</strong>
                                     <small class="text-muted d-block">{{ optional($reply->created_at)->diffForHumans() }}</small>
->>>>>>> d8ce05a526154321c28f5e2502ec7d4142fc0aea
                                     <p>{{ $reply->content }}</p>
                                 </div>
                             @endforeach
@@ -340,9 +305,4 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
 @endsection
-=======
-
-@endsection
->>>>>>> d8ce05a526154321c28f5e2502ec7d4142fc0aea

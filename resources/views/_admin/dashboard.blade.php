@@ -110,7 +110,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     @if ($item->thumbnail)
-                                                        <img src="{{ asset('images/articles/' . $item->thumbnail ?? 'images/no-image.jpg') }}"
+                                                        <img src="{{ asset('storage/images/articles/' . $item->thumbnail ?? 'images/no-image.jpg') }}"
                                                             class="rounded me-3" width="60" height="60"
                                                             style="object-fit: cover;" alt="{{ $item->title }}">
                                                     @else
