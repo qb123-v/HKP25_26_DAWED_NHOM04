@@ -11,10 +11,22 @@ use Illuminate\Support\Facades\Cookie;
 class ArticleController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $articles = Article::all();
-        return view('news.index')->with('articles', $articles);
+
+        $query = Article::query();
+        // Lọc theo search title
+        if ($request->filled('search'))
+        {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        } else
+        {
+            $query->orderBy('created_at', 'desc');
+        }
+        $articles = $query->paginate(10)->withQueryString();
+
+        $goi_ys = Article::mostViewed()->get();
+        return view('news.index', compact('articles', 'goi_ys'));
     }
     // Hiển thị chi tiết bài viết
     public function show($id, $slug)
@@ -35,7 +47,7 @@ class ArticleController extends Controller
     // Lưu comment hoặc reply
     public function storeComment(Request $request, $id)
     {
-        $request->validate([
+        $data = $request->validate([
             'content' => 'required|string|max:2000',
             'parent_id' => 'nullable|exists:comments,id',
         ]);
@@ -43,8 +55,8 @@ class ArticleController extends Controller
         Comment::create([
             'article_id' => $id,
             'user_id' => Auth::id(),
-            'parent_id' => $request->input('parent_id') ?: null,
-            'content' => $request->content,
+            'parent_id' => $data['parent_id'] ?: null,
+            'content' => $data['content'],
         ]);
 
         return redirect()->back()->with('success', 'Bình luận đã được gửi!');

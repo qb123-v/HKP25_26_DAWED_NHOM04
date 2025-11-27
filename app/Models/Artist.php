@@ -17,7 +17,9 @@ class Artist extends Model
     ];
 
     // Một nghệ sĩ có nhiều bài viết
-    public function articles() {
+    public function articles()
+    {
         return $this->hasMany(Article::class);
     }
+
 }
