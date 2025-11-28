@@ -243,10 +243,6 @@
             <a href="#"><i class="bi bi-twitter"></i></a>
             <a href="#"><i class="bi bi-envelope"></i></a>
             <a href="#"><i class="bi bi-printer"></i></a>
-            <a id="copyLink" href="{{ route('articles.show', [$article->id, $article->slug]) }}">
-                <i class="bi bi-link-45deg"></i>
-            </a>
-
         </div>
 
         <div class="row">
@@ -283,8 +279,7 @@
                     @auth('user')
                         <form action="{{ route('articles.comment', $article->id) }}" method="POST">
                             @csrf
-                            <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." rows="3"
-                                required></textarea>
+                            <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." rows="3" required></textarea>
                             <button class="btn btn-primary btn-sm w-100">Gửi</button>
                         </form>
                     @else
@@ -310,5 +305,4 @@
             </div>
         </div>
     </div>
-
 @endsection
