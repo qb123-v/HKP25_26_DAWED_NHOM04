@@ -126,7 +126,7 @@ Route::prefix('admin')->group(function () {
         });
 
         // route comment admin
-        Route::prefix('comments')->name('comments.')->group(function () {
+        Route::prefix('comments')->name('admin.comments.')->group(function () {
             Route::get('/', [CommentAdminController::class, 'index'])->name('index');
             Route::get('/approve/{id}', [CommentAdminController::class, 'approve'])->name('approve');
             Route::get('/hide/{id}', [CommentAdminController::class, 'hide'])->name('hide');

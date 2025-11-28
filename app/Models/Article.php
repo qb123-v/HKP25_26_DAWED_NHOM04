@@ -48,6 +48,7 @@ class Article extends Model
             ->take(3)
             ->get();
     }
+
     /**
      * Scope tìm bài viết xem nhiều nhất
      * @param $query
@@ -56,5 +57,10 @@ class Article extends Model
     public function scopeMostViewed($query, $limit = 10)
     {
         return $query->orderBy('views', 'desc')->take($limit);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 }

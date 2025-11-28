@@ -6,15 +6,15 @@ use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 
 class ArticleController extends Controller
 {
 
     public function index(Request $request)
     {
-
-        $query = Article::query();
+        $query = Article::with(['artist'])
+            ->withCount('likes');
+        
         // Lọc theo search title
         if ($request->filled('search'))
         {
@@ -23,9 +23,16 @@ class ArticleController extends Controller
         {
             $query->orderBy('created_at', 'desc');
         }
+        
         $articles = $query->paginate(10)->withQueryString();
 
-        $goi_ys = Article::mostViewed()->get();
+        // Tin gợi ý với số lượt thích
+        $goi_ys = Article::with(['artist'])
+            ->withCount('likes')
+            ->orderBy('views', 'desc')
+            ->take(5)
+            ->get();
+            
         return view('news.index', compact('articles', 'goi_ys'));
     }
     // Hiển thị chi tiết bài viết
