@@ -146,6 +146,8 @@ Route::post('/bai-viet/{id}/comment', [ArticleController::class, 'storeComment']
     ->middleware('auth:user')
     ->name('articles.comment');
 
+Route::post('/bai-viet/{id}/like', [ArticleController::class, 'toggleLike'])->middleware('auth:user')->name('articles.like');
+
 // Route đăng ký nhận bản tin
 Route::post('/dang-ky-nhan-bao', [NewsletterController::class, 'subscribe'])
     ->name('newsletter.subscribe');

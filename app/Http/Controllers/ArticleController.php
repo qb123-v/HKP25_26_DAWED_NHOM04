@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 class ArticleController extends Controller
 {
@@ -67,5 +68,35 @@ class ArticleController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Bình luận đã được gửi!');
+    }
+
+    // Toggle like for an article
+    public function toggleLike(Request $request, $id)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $article = Article::findOrFail($id);
+
+        // Assuming 'likes' is a many-to-many relationship on Article model
+        if ($article->likes()->where('user_id', $user->id)->exists()) {
+            $article->likes()->detach($user->id);
+            $liked = false;
+        } else {
+            $article->likes()->attach($user->id);
+            $liked = true;
+        }
+
+        $likeCount = $article->likes()->count();
+
+        // For debugging
+        \Log::info("User {$user->id} toggled like for article {$id}. Liked: " . ($liked ? 'yes' : 'no'));
+
+        return response()->json([
+            'liked' => $liked,
+            'like_count' => $likeCount,
+        ]);
     }
 }

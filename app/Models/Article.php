@@ -61,6 +61,7 @@ class Article extends Model
 
     public function likes()
     {
-        return $this->hasMany(Like::class);
+        // Adjust 'article_user' and foreign keys if your table/columns are named differently
+        return $this->belongsToMany(\App\Models\User::class, 'article_user', 'article_id', 'user_id');
     }
 }

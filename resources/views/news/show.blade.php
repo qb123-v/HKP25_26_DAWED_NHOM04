@@ -343,13 +343,22 @@
 
                 <!-- Like and Comment Count -->
                 <div class="like-area mt-4 mb-4">
-                    <form method="POST" action="#" class="d-inline">
-                        {{-- TODO: Add like logic --}}
-                        <button type="button" class="like-btn" title="Thích bài viết">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                    </form>
-                    <span class="like-count">{{ $article->likes()->count() }} lượt thích</span>
+                    @php
+                        $user = auth('user')->user();
+                        $liked = $user ? $article->likes->contains($user->id) : false;
+                        $likeCount = $article->likes_count ?? $article->likes()->count();
+                    @endphp
+                    <button
+                        type="button"
+                        class="like-btn"
+                        id="like-btn"
+                        data-liked="{{ $liked ? '1' : '0' }}"
+                        @guest('user') disabled title="Vui lòng đăng nhập để thích bài viết" @endguest
+                    >
+                        <i id="like-icon" class="bi {{ $liked ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                        <span id="like-btn-text">{{ $liked ? 'Bỏ thích' : 'Thích' }}</span>
+                    </button>
+                    <span class="like-count" id="like-count">{{ $likeCount }}</span> lượt thích
                     <span class="ms-3"><i class="bi bi-chat-dots text-primary"></i> {{ $article->comments->count() }} bình luận</span>
                 </div>
 
@@ -426,5 +435,57 @@
             </div>
         </div>
     </div>
+
+    @auth('user')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeBtn = document.getElementById('like-btn');
+            const likeBtnText = document.getElementById('like-btn-text');
+            const likeIcon = document.getElementById('like-icon');
+            const likeCountSpan = document.getElementById('like-count');
+            if (likeBtn) {
+                likeBtn.addEventListener('click', function() {
+                    console.log('Like button clicked');
+                    fetch("{{ route('articles.like', $article->id) }}", {
+                        method: 'POST',
+                        credentials: 'same-origin', // <-- add this line
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Server response:', data);
+                        if (data.liked !== undefined) {
+                            likeBtn.setAttribute('data-liked', data.liked ? '1' : '0');
+                            likeBtnText.textContent = data.liked ? 'Bỏ thích' : 'Thích';
+                            likeIcon.className = data.liked ? 'bi bi-heart-fill' : 'bi bi-heart';
+                        }
+                        if (data.like_count !== undefined) {
+                            likeCountSpan.textContent = data.like_count;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            }
+        });
+    </script>
+    @else
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeBtn = document.getElementById('like-btn');
+            if (likeBtn) {
+                likeBtn.addEventListener('click', function() {
+                    alert('Vui lòng đăng nhập để thích bài viết!');
+                });
+            }
+        });
+    </script>
+    @endauth
 
 @endsection
