@@ -92,7 +92,7 @@
                                 <div class="col-md-8">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $goi_y->title }}</h5>
-                                        <p class="card-text">Mô tả: {{ $goi_y->description }}</p>
+                                        <p class="card-text">{{ $goi_y->content }}</p>
                                         <p class="card-text">
                                             <small class="text-body-secondary">{{ $goi_y->created_at->diffForHumans() }}</small>
                                         </p>

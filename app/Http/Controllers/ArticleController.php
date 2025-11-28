@@ -60,5 +60,5 @@ class ArticleController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Bình luận đã được gửi!');
-    }
+    }           
 }
