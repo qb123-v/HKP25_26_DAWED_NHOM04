@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ArtistSeeder::class,
             ArticleSeeder::class,
-            FooterSeeder::class,
         ]);
     }
 }
