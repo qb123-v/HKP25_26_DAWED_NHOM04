@@ -15,6 +15,7 @@ use App\Http\Controllers\admin\UserManagementController;
 use App\Http\Controllers\admin\MediaManagementController;
 use App\Http\Controllers\admin\FooterManagementController;
 use App\Http\Controllers\admin\AdminManagementController;
+use App\Http\Controllers\Admin\DashboardController;
 
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\ArticleController;
@@ -84,9 +85,11 @@ Route::prefix('admin')->group(function () {
 
         Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-        Route::get('dashboard', function () {
-            return view('_admin.dashboard');
-        })->name('admin.dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])
+            ->name('admin.dashboard');
+
+        Route::get('dashboard/export-pdf', [DashboardController::class, 'exportPdf'])
+            ->name('admin.dashboard.export-pdf');
 
         // Liên quan đến bài viết
         Route::resource('articles', ArticleManagementController::class)->names('admin.articles');
