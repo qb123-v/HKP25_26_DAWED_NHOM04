@@ -114,6 +114,8 @@ Route::prefix('admin')->group(function () {
             });
 
         Route::resource('artists', ArtistManagementController::class)->names('admin.artists');
+        // Add this route for CSV export
+        Route::get('artists/export-csv', [ArtistManagementController::class, 'exportCsv'])->name('admin.artists.exportCsv');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
 
         Route::resource('users', UserManagementController::class)->names('admin.users');

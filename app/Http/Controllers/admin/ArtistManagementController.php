@@ -32,7 +32,8 @@ class ArtistManagementController extends Controller
         // Validate input
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:artists,email',
+            // Remove email validation if 'email' column does not exist
+            // 'email' => 'required|email|unique:artists,email',
             // Add other fields as needed
         ]);
 
@@ -40,8 +41,15 @@ class ArtistManagementController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Create artist
-        Artist::create($request->only(['name', 'email'])); // Add other fields as needed
+        // Generate slug from name
+        $slug = \Str::slug($request->input('name'));
+
+        // Only use fields that exist in the artists table
+        Artist::create([
+            'name' => $request->input('name'),
+            'slug' => $slug,
+            // Add other fields as needed
+        ]);
 
         return redirect()->route('admin.artists.index')->with('success', 'Artist added successfully.');
     }
