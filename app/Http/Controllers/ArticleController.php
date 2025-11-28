@@ -25,14 +25,30 @@ class ArticleController extends Controller
             $query->orderBy('created_at', 'desc');
         }
         
-        $articles = $query->paginate(10)->withQueryString();
+        // Change from paginate(10) to paginate(5)
+        $articles = $query->paginate(5)->withQueryString();
 
-        // Tin gợi ý với số lượt thích
-        $goi_ys = Article::with(['artist'])
+        // Tin gợi ý với số lượt thích - apply filters
+        $goiYQuery = Article::with(['artist'])
             ->withCount('likes')
-            ->orderBy('views', 'desc')
-            ->take(5)
-            ->get();
+            ->orderBy('views', 'desc');
+
+        // Filter by tag
+        if ($request->filled('suggest_tag')) {
+            $goiYQuery->where('tag', 'like', '%' . $request->suggest_tag . '%');
+        }
+
+        // Filter by slug
+        if ($request->filled('suggest_slug')) {
+            $goiYQuery->where('slug', 'like', '%' . $request->suggest_slug . '%');
+        }
+
+        // Filter by thumbnail existence
+        if ($request->has('suggest_has_thumbnail')) {
+            $goiYQuery->whereNotNull('thumbnail')->where('thumbnail', '!=', '');
+        }
+
+        $goi_ys = $goiYQuery->take(5)->get();
             
         return view('news.index', compact('articles', 'goi_ys'));
     }

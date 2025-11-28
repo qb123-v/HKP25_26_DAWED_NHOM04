@@ -273,6 +273,25 @@
         <div class="col-md-4">
             <div class="sidebar-sticky">
                 <h4 class="mb-3"><i class="bi bi-fire text-danger"></i> Tin gợi ý</h4>
+                
+                <!-- Suggestion Filter UI -->
+                <form method="GET" action="" class="mb-3">
+                    <div class="mb-2">
+                        <input type="text" name="suggest_tag" class="form-control form-control-sm" placeholder="Lọc theo tag..." value="{{ request('suggest_tag') }}">
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" name="suggest_slug" class="form-control form-control-sm" placeholder="Lọc theo slug..." value="{{ request('suggest_slug') }}">
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="suggest_has_thumbnail" value="1" id="suggest_has_thumbnail" {{ request('suggest_has_thumbnail') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="suggest_has_thumbnail">
+                            Chỉ bài có thumbnail
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-outline-primary w-100">Lọc gợi ý</button>
+                </form>
+                <!-- End Suggestion Filter UI -->
+
                 @forelse ($goi_ys as $goi_y)
                     <div class="suggested-article">
                         <a href="{{ route('articles.show', [$goi_y->id, $goi_y->slug]) }}" class="text-decoration-none">
