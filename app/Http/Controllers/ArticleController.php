@@ -62,7 +62,7 @@ class ArticleController extends Controller
         Comment::create([
             'article_id' => $id,
             'user_id' => Auth::id(),
-            'parent_id' => $data['parent_id'] ?: null,
+            'parent_id' => $data['parent_id'] ?? null,
             'content' => $data['content'],
         ]);
 
