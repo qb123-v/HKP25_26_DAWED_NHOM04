@@ -7,6 +7,7 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Arr;
 
 class ArticleController extends Controller
 {
@@ -16,11 +17,9 @@ class ArticleController extends Controller
 
         $query = Article::query();
         // Lọc theo search title
-        if ($request->filled('search'))
-        {
+        if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
-        } else
-        {
+        } else {
             $query->orderBy('created_at', 'desc');
         }
         $articles = $query->paginate(10)->withQueryString();
@@ -55,10 +54,10 @@ class ArticleController extends Controller
         Comment::create([
             'article_id' => $id,
             'user_id' => Auth::id(),
-            'parent_id' => $data['parent_id'] ?: null,
+            'parent_id'  => Arr::get($data, 'parent_id'),
             'content' => $data['content'],
         ]);
 
         return redirect()->back()->with('success', 'Bình luận đã được gửi!');
-    }           
+    }
 }
