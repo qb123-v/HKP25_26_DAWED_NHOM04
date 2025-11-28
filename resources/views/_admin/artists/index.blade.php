@@ -48,36 +48,26 @@
                 <!-- Top Toolbar (Search & Filters) -->
                 <div class="card mb-3">
                     <div class="card-body">
-                        <div class="row g-3 align-items-end">
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Tìm kiếm nghệ sĩ">
-                                    <span class="input-group-text">🔎</span>
+                        <form method="GET" action="{{ route('admin.artists.index') }}">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" name="name" class="form-control" placeholder="Tìm kiếm nghệ sĩ theo tên" value="{{ request('name') }}">
+                                        <span class="input-group-text">🔎</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" name="email" class="form-control" placeholder="Tìm kiếm theo email" value="{{ request('email') }}">
+                                        <span class="input-group-text">@</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <button type="submit" class="btn btn-primary">Lọc</button>
+                                    <a href="{{ route('admin.artists.index') }}" class="btn btn-secondary">Xoá lọc</a>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <label class="form-label small text-muted">Thể loại</label>
-                                <select class="form-select">
-                                    <option>Tất cả</option>
-                                    <option>Ca sĩ</option>
-                                    <option>Diễn viên</option>
-                                    <option>Nhạc sĩ</option>
-                                    <option>Người mẫu</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label small text-muted">Trạng thái</label>
-                                <select class="form-select">
-                                    <option>Tất cả</option>
-                                    <option>Đang hoạt động</option>
-                                    <option>Tạm ẩn</option>
-                                    <option>Chờ duyệt</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 text-end">
-                                <button type="button" class="btn btn-secondary">Lọc nâng cao</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
@@ -87,11 +77,11 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <strong>Danh sách nghệ sĩ</strong>
-                                <span class="text-muted">(247 nghệ sĩ)</span>
+                                <span class="text-muted">({{ $artists->total() }} nghệ sĩ)</span>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-sm btn-outline-secondary me-2">Xuất CSV</button>
-                                <button type="button" class="btn btn-sm btn-primary">+ Thêm nghệ sĩ</button>
+                                <a href="{{ route('admin.artists.exportCsv', request()->query()) }}" class="btn btn-sm btn-outline-secondary me-2">Xuất CSV</a>
+                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addArtistModal">+ Thêm nghệ sĩ</button>
                             </div>
                         </div>
                     </div>
@@ -104,16 +94,15 @@
                                             <input type="checkbox" class="form-check-input">
                                         </th>
                                         <th>Nghệ sĩ</th>
-                                        <th style="width: 150px;">Thể loại</th>
-                                        <th style="width: 150px;">Liên hệ</th>
+                                        <th style="width: 150px;">Email</th>
                                         <th style="width: 140px;">Ngày tham gia</th>
                                         <th style="width: 140px;">Trạng thái</th>
                                         <th style="width: 140px;">Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach([1,2,3,4,5,6,7,8] as $i)
-                                    <tr class="artist-row" data-artist-id="{{ $i }}" data-artist-name="Nghệ sĩ Demo {{ $i }}" data-artist-email="artist{{ $i }}@mail.com">
+                                    @forelse($artists as $artist)
+                                    <tr class="artist-row" data-artist-id="{{ $artist->id }}" data-artist-name="{{ $artist->name }}" data-artist-email="{{ $artist->email }}">
                                         <td>
                                             <input type="checkbox" class="form-check-input">
                                         </td>
@@ -121,15 +110,14 @@
                                             <div class="d-flex align-items-center gap-2">
                                                 <div style="width: 40px; height: 40px; border-radius: 50%; background: #f3f4f6; border: 1px solid #dee2e6; display: flex; align-items: center; justify-content: center;">🎤</div>
                                                 <div>
-                                                    <div class="fw-bold">Nghệ sĩ Demo {{ $i }}</div>
-                                                    <small class="text-muted">artist{{ $i }}@mail.com</small>
+                                                    <div class="fw-bold">{{ $artist->name }}</div>
+                                                    <small class="text-muted">{{ $artist->email }}</small>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>Ca sĩ</td>
-                                        <td>090{{ 12 + $i }} 3456</td>
+                                        <td>{{ $artist->email }}</td>
                                         <td>
-                                            <small class="text-muted">01/0{{ ($i%9)+1 }}/2025</small>
+                                            <small class="text-muted">{{ $artist->created_at ? $artist->created_at->format('d/m/Y') : '' }}</small>
                                         </td>
                                         <td>
                                             <span class="badge bg-success">Đang hoạt động</span>
@@ -148,26 +136,18 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    @endforeach
+                                    @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Không có nghệ sĩ nào.</td>
+                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="card-footer">
                         <div class="d-flex justify-content-end">
-                            <nav>
-                                <ul class="pagination pagination-sm mb-0">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#">Trước</a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Sau</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            {{ $artists->withQueryString()->links('pagination::bootstrap-4') }}
                         </div>
                     </div>
                 </div>
@@ -177,6 +157,45 @@
         <!--end::App Content-->
     </main>
     <!--end::App Main-->
+
+    <!-- Add Artist Modal -->
+    <div class="modal fade" id="addArtistModal" tabindex="-1" aria-labelledby="addArtistModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="{{ route('admin.artists.store') }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addArtistModalLabel">Thêm nghệ sĩ mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <div class="mb-3">
+                            <label class="form-label">Tên nghệ sĩ</label>
+                            <input type="text" name="name" class="form-control" required value="{{ old('name') }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" required value="{{ old('email') }}">
+                        </div>
+                        <!-- Add more fields as needed -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" class="btn btn-primary">Thêm</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Artist Detail Modal -->
     <div class="modal fade" id="artistDetailModal" tabindex="-1" aria-labelledby="artistDetailModalLabel" aria-hidden="true">
