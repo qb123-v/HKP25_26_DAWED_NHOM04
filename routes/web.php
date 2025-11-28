@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\PageIndexController;
 use App\Http\Controllers\UserController;
+use App\Models\Artist;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\admin\ArticleManagementController;
@@ -19,9 +22,7 @@ use App\Http\Controllers\NewsletterController;
 
 
 // route cho người dùng
-Route::get('/', function () {
-    return view('index');
-})->name('index');
+Route::get('/', [PageIndexController::class, 'index'])->name('index');
 
 Route::get('news-item', function () {
     return view('news.show');
@@ -128,6 +129,19 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
+// chuyên mục
+Route::prefix('chuyen-muc')
+    ->name('categories.')
+    ->controller(CategorieController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'show')->name('show');
+    });
+// nghệ sĩ
+Route::get('nghe-si', function () {
+    $artists = Artist::all();
+    return view('artists.index', compact('artists'));
+})->name('artists.index');
 
 //route chi tiết
 // Trang danh sách bài viết để hiển thị tạm
