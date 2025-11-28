@@ -27,7 +27,7 @@
 
                 <!-- 4 ô thống kê lớn -->
                 <div class="row g-4 mb-7">
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body d-flex align-items-center">
                                 <div class="flex-shrink-0 bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-4">
@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body d-flex align-items-center">
                                 <div class="flex-shrink-0 bg-success bg-opacity-10 text-success rounded-3 p-3 me-4">
@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body d-flex align-items-center">
                                 <div class="flex-shrink-0 bg-warning bg-opacity-10 text-warning rounded-3 p-3 me-4">
@@ -75,7 +75,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body d-flex align-items-center">
                                 <div class="flex-shrink-0 bg-info bg-opacity-10 text-info rounded-3 p-3 me-4">
@@ -84,6 +84,23 @@
                                 <div>
                                     <div class="fs-3 fw-bold text-gray-800">{{ \App\Models\Comment::count() }}</div>
                                     <div class="text-gray-600 fw-medium">Tổng bình luận</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="flex-shrink-0 bg-danger bg-opacity-10 text-danger rounded-3 p-3 me-4">
+                                    <i class="ki-outline ki-sms fs-2qx"></i>
+                                    <!-- hoặc dùng icon: ki-envelope, ki-bell, ki-notification-2 -->
+                                </div>
+                                <div>
+                                    <div class="fs-3 fw-bold text-gray-800">
+                                        {{ number_format(\App\Models\Subscription::count()) }}
+                                    </div>
+                                    <div class="text-gray-600 fw-medium">Đăng ký nhận tin</div>
                                 </div>
                             </div>
                         </div>
@@ -114,8 +131,8 @@
                                                 <div class="d-flex align-items-center">
                                                     @if ($item->thumbnail)
                                                         <img src="{{ asset('storage/images/articles/' . $item->thumbnail ?? 'images/no-image.jpg') }}"
-                                                            class="rounded me-3" width="60" height="60" style="object-fit: cover;"
-                                                            alt="{{ $item->title }}">
+                                                            class="rounded me-3" width="60" height="60"
+                                                            style="object-fit: cover;" alt="{{ $item->title }}">
                                                     @else
                                                         <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center"
                                                             style="width:60px;height:60px;">
