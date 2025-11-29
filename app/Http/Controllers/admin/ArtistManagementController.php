@@ -136,4 +136,32 @@ class ArtistManagementController extends Controller
             'intro'   => $artist->intro,
         ]]);
     }
+
+    public function updateAvatar(Request $request, $id)
+    {
+        $artist = Artist::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        if ($request->hasFile('avatar')) {
+            // Remove old avatar if exists
+            if ($artist->avatar && \Storage::disk('public')->exists($artist->avatar)) {
+                \Storage::disk('public')->delete($artist->avatar);
+            }
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $artist->avatar = $path;
+            $artist->save();
+        }
+
+        return response()->json([
+            'success' => true,
+            'avatar_url' => $artist->avatar ? \Storage::url($artist->avatar) : null,
+        ]);
+    }
 }

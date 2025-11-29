@@ -117,6 +117,7 @@ Route::prefix('admin')->group(function () {
         Route::get('artists/{artist}', [ArtistManagementController::class, 'show'])->name('admin.artists.show');
         Route::post('artists/{artist}/update', [ArtistManagementController::class, 'update'])->name('admin.artists.update');
         Route::get('artists/export-csv', [ArtistManagementController::class, 'exportCsv'])->name('admin.artists.exportCsv');
+        Route::post('artists/{id}/avatar', [ArtistManagementController::class, 'updateAvatar'])->name('admin.artists.updateAvatar');
         Route::resource('media', MediaManagementController::class)->names('admin.media');
 
         Route::resource('users', UserManagementController::class)->names('admin.users');

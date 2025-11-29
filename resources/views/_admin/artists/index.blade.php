@@ -14,6 +14,17 @@
         .artist-row:active {
             transform: scale(0.99);
         }
+
+        .avatar-img {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #dee2e6;
+            background: #f3f4f6;
+            display: block;
+            margin: 0 auto 1rem;
+        }
     </style>
 
     <!--begin::App Main-->
@@ -212,10 +223,13 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body text-center">
-                                    <div style="width:96px;height:96px;border-radius:50%;background:#f3f4f6;border:1px solid #dee2e6;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2rem;">🧑‍🎤</div>
+                                    <!-- Avatar image preview -->
+                                    <img id="modalArtistAvatar" class="avatar-img" src="" alt="Avatar" style="display:none;">
+                                    <div id="modalArtistAvatarFallback" style="width:96px;height:96px;border-radius:50%;background:#f3f4f6;border:1px solid #dee2e6;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2rem;">🧑‍🎤</div>
                                     <h5 class="mb-1" id="modalArtistName">Nguyễn Văn A</h5>
                                     <p class="text-muted small" id="modalArtistEmail">artist@example.com</p>
-                                    <button class="btn btn-sm btn-outline-secondary">📷 Thay đổi ảnh</button>
+                                    <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="changeAvatarBtn">📷 Thay đổi ảnh</button>
                                 </div>
                             </div>
                             <div class="card mt-3">
@@ -334,6 +348,46 @@
                 return;
             }
             
+            // Avatar change logic
+            const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+            const avatarInput = document.getElementById('avatarInput');
+            const avatarImg = document.getElementById('modalArtistAvatar');
+            const avatarFallback = document.getElementById('modalArtistAvatarFallback');
+            let currentArtistId = null;
+
+            // Show file dialog on button click
+            changeAvatarBtn.addEventListener('click', function() {
+                avatarInput.value = '';
+                avatarInput.click();
+            });
+
+            // Handle file selection and upload
+            avatarInput.addEventListener('change', function() {
+                if (!avatarInput.files.length || !currentArtistId) return;
+                const file = avatarInput.files[0];
+                const formData = new FormData();
+                formData.append('avatar', file);
+
+                fetch(`{{ url('admin/artists') }}/${currentArtistId}/avatar`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.avatar_url) {
+                        avatarImg.src = data.avatar_url + '?t=' + Date.now();
+                        avatarImg.style.display = '';
+                        avatarFallback.style.display = 'none';
+                    }
+                })
+                .catch(err => {
+                    alert('Lỗi khi tải ảnh lên!');
+                });
+            });
+
             // Handle row clicks
             rows.forEach((row, index) => {
                 console.log('Attaching listener to row', index + 1);
@@ -354,6 +408,7 @@
 
                     // Always get artistId from the clicked row, not from a reused variable
                     const artistId = this.getAttribute('data-artist-id');
+                    currentArtistId = artistId;
 
                     fetch('{{ url('admin/artists') }}/' + artistId)
                         .then(response => response.json())
@@ -369,6 +424,16 @@
                             document.getElementById('artistDetailDob').value = data.dob || '';
                             document.getElementById('artistDetailAddress').value = data.address || '';
                             document.getElementById('artistDetailIntro').value = data.intro || '';
+
+                            // Avatar preview logic
+                            if (data.avatar) {
+                                avatarImg.src = data.avatar.startsWith('http') ? data.avatar : '{{ url('/') }}/storage/' + data.avatar;
+                                avatarImg.style.display = '';
+                                avatarFallback.style.display = 'none';
+                            } else {
+                                avatarImg.style.display = 'none';
+                                avatarFallback.style.display = '';
+                            }
                         })
                         .catch(() => {
                             // fallback
