@@ -95,11 +95,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('articles', ArticleManagementController::class)->names('admin.articles');
         Route::prefix('articles')
             ->name('admin.articles.')
-            ->controller(ArticleController::class)
+            ->controller(ArticleManagementController::class)
             ->group(function () {
-                // Cho bản nháp
-                Route::get('/drafts', 'drafts')->name('drafts');
-                Route::patch('/{article}/publish', 'publish')->name('publish');
                 // Cho thùng rác
                 Route::get('/articles/trash', 'trash')->name('trash');
                 Route::patch('/articles/{id}/restore', 'restore')->name('restore');

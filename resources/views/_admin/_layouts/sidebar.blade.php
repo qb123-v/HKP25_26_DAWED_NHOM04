@@ -39,19 +39,14 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('admin.articles.index') }}"
-                                class="nav-link {{ Request::routeIs('admin.articles.*') ? 'active' : '' }}">
+                                class="nav-link {{ Request::routeIs('admin.articles.index') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Bài viết</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Nháp</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.articles.trash') }}"
+                                class="nav-link {{ Request::routeIs('admin.articles.trash') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Đã xóa</p>
                             </a>
