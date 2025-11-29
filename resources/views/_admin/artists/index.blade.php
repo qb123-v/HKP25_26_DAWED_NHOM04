@@ -188,7 +188,7 @@
     <!-- Add Artist Modal -->
     <div class="modal fade" id="addArtistModal" tabindex="-1" aria-labelledby="addArtistModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="{{ route('admin.artists.store') }}">
+            <form method="POST" action="{{ route('admin.artists.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
@@ -213,7 +213,26 @@
                             <label class="form-label">Email</label>
                             <input type="email" name="email" class="form-control" required value="{{ old('email') }}">
                         </div>
-                        <!-- Add more fields as needed -->
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ngày sinh</label>
+                            <input type="date" name="dob" class="form-control" value="{{ old('dob') }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ</label>
+                            <input type="text" name="address" class="form-control" value="{{ old('address') }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Giới thiệu bản thân</label>
+                            <textarea name="intro" class="form-control" rows="3">{{ old('intro') }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ảnh đại diện</label>
+                            <input type="file" name="avatar" class="form-control" accept="image/*">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>

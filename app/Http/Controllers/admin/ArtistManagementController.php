@@ -22,7 +22,7 @@ class ArtistManagementController extends Controller
             $query->where('email', 'like', '%' . $request->email . '%');
         }
 
-        $artists = $query->paginate(15);
+        $artists = $query->paginate(10); // Changed from 15 to 10
 
         return view('_admin.artists.index', compact('artists'));
     }
@@ -31,10 +31,13 @@ class ArtistManagementController extends Controller
     {
         // Validate input
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            // Remove email validation if 'email' column does not exist
-            // 'email' => 'required|email|unique:artists,email',
-            // Add other fields as needed
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email|unique:artists,email',
+            'phone'   => 'nullable|string|max:50',
+            'dob'     => 'nullable|date',
+            'address' => 'nullable|string|max:255',
+            'intro'   => 'nullable|string',
+            'avatar'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -44,11 +47,22 @@ class ArtistManagementController extends Controller
         // Generate slug from name
         $slug = \Str::slug($request->input('name'));
 
-        // Only use fields that exist in the artists table
+        // Handle avatar upload
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        // Save artist
         Artist::create([
-            'name' => $request->input('name'),
-            'slug' => $slug,
-            // Add other fields as needed
+            'name'    => $request->input('name'),
+            'slug'    => $slug,
+            'email'   => $request->input('email'),
+            'phone'   => $request->input('phone'),
+            'dob'     => $request->input('dob'),
+            'address' => $request->input('address'),
+            'intro'   => $request->input('intro'),
+            'avatar'  => $avatarPath,
         ]);
 
         return redirect()->route('admin.artists.index')->with('success', 'Artist added successfully.');
