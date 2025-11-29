@@ -84,3 +84,22 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: 0.3s;
 }
+.footer-container {
+    padding: 20px 100px;
+}
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.footer-info p a {
+    text-decoration: none;
+    color: #fff;
+}
+.footer-info p a:hover {
+    text-decoration: underline;
+}
+.footer-copy {
+    text-align: center;
+    margin-top: 20px;
+}
