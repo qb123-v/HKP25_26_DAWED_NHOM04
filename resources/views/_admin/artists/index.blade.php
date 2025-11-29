@@ -151,10 +151,10 @@
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <button type="button" class="btn btn-info" title="Xem">
+                                                <button type="button" class="btn btn-info btn-view-artist" data-id="{{ $artist->id }}" title="Xem">
                                                     <i class="fas fa-eye"></i> Xem
                                                 </button>
-                                                <button type="button" class="btn btn-success" title="Sửa">
+                                                <button type="button" class="btn btn-success btn-edit-artist" data-id="{{ $artist->id }}" title="Sửa">
                                                     <i class="fas fa-edit"></i> Sửa
                                                 </button>
                                                 <button type="button" class="btn btn-danger btn-delete-artist" data-id="{{ $artist->id }}" title="Xóa">
@@ -547,6 +547,55 @@
                     })
                     .catch(() => alert('Lỗi khi xóa nghệ sĩ!'));
                 }
+            }
+        });
+
+        // Open artist detail modal on Xem/Sửa click
+        document.addEventListener('click', function(e) {
+            let btn = null;
+            if (e.target.closest('.btn-view-artist')) {
+                btn = e.target.closest('.btn-view-artist');
+            } else if (e.target.closest('.btn-edit-artist')) {
+                btn = e.target.closest('.btn-edit-artist');
+            }
+            if (btn) {
+                e.stopPropagation();
+                const artistId = btn.getAttribute('data-id');
+                // Reuse the logic from row click to open and fill the modal
+                fetch(`{{ url('admin/artists') }}/${artistId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('modalArtistName').textContent = data.name || '';
+                        document.getElementById('modalArtistEmail').textContent = data.email || '';
+                        document.getElementById('artistDetailId').value = data.id;
+                        document.getElementById('artistDetailName').value = data.name || '';
+                        document.getElementById('artistDetailEmail').value = data.email || '';
+                        document.getElementById('artistDetailPhone').value = data.phone || '';
+                        document.getElementById('artistDetailDob').value = data.dob || '';
+                        document.getElementById('artistDetailAddress').value = data.address || '';
+                        document.getElementById('artistDetailIntro').value = data.intro || '';
+                        // Avatar preview logic
+                        const avatarImg = document.getElementById('modalArtistAvatar');
+                        const avatarFallback = document.getElementById('modalArtistAvatarFallback');
+                        if (data.avatar) {
+                            avatarImg.src = data.avatar.startsWith('http') ? data.avatar : '{{ url('/') }}/storage/' + data.avatar;
+                            avatarImg.style.display = '';
+                            avatarFallback.style.display = 'none';
+                        } else {
+                            avatarImg.style.display = 'none';
+                            avatarFallback.style.display = '';
+                        }
+                    })
+                    .catch(() => {})
+                    .finally(() => {
+                        const modalElement = document.getElementById('artistDetailModal');
+                        if (typeof bootstrap !== 'undefined') {
+                            const modal = new bootstrap.Modal(modalElement);
+                            modal.show();
+                        } else if (typeof $ !== 'undefined' && $.fn.modal) {
+                            $('#artistDetailModal').modal('show');
+                        }
+                    });
             }
         });
     </script>
