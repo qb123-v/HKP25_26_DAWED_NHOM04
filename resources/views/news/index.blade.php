@@ -233,10 +233,12 @@
                                     <span><i class="bi bi-eye"></i>{{ $article->views ?? 0 }} lượt xem</span>
                                     <span><i class="bi bi-heart"></i>{{ $article->likes_count ?? 0 }} thích</span>
                                     <span><i class="bi bi-clock"></i>{{ optional($article->created_at)->diffForHumans() }}</span>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             @empty
                 <div class="alert alert-warning">Không có kết quả cho tìm kiếm "{{ request('search') }}"</div>
@@ -253,12 +255,14 @@
                         </li>
                     @endif
 
-                    {{-- Danh sách các trang --}}
-                    @for ($i = 1; $i <= $articles->lastPage(); $i++)
-                        <li class="page-item {{ $i == $articles->currentPage() ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $articles->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
+
+                        {{-- Danh sách các trang --}}
+                        @for ($i = 1; $i <= $articles->lastPage(); $i++)
+                            <li class="page-item {{ $i == $articles->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $articles->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+
 
                     {{-- Nút "Sau" --}}
                     @if ($articles->hasMorePages())
@@ -300,13 +304,17 @@
                             <div class="article-stats">
                                 <span><i class="bi bi-eye"></i>{{ $goi_y->views ?? 0 }}</span>
                                 <span><i class="bi bi-heart-fill text-danger"></i>{{ $goi_y->likes_count ?? 0 }}</span>
+
                             </div>
                         </a>
                     </div>
+
                 @empty
                     <p class="text-muted">Chưa có tin gợi ý</p>
                 @endforelse
+
             </div>
         </div>
+
     </div>
 @endsection

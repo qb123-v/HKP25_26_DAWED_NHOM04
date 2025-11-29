@@ -85,8 +85,10 @@
         <div class="app-content">
             <!--begin::Container-->
             <div class="container-fluid">
-                <form action="{{ route('admin.categories.store') }}" method="post" novalidate enctype="multipart/form-data">
+                <form action="{{ route('admin.categories.update', $categorie->id) }}" method="post" novalidate
+                    enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-8">
                             <div class="card mb-4">
@@ -125,9 +127,21 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label">Trạng thái</label>
+                                        <select class="form-select @error('status') is-invalid @enderror" id="status"
+                                            name="status">
+                                            <option value="1" {{ old('status', $categorie->status) == '1' ? 'selected' : '' }}>
+                                                Kích hoạt</option>
+                                            <option value="0" {{ old('status', $categorie->status) == '0' ? 'selected' : '' }}>
+                                                Vô hiệu hóa</option>
+                                        </select>
+                                        @error('status')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="col-md-4">
                             <div class="card mb-4">

@@ -40,9 +40,9 @@
 
             $check.on("change", function () {
                 if ($(this).is(":checked")) {
-                    $slugInput.prop("disabled", false);
+                    $slugInput.prop("readonly", false);
                 } else {
-                    $slugInput.prop("disabled", true)
+                    $slugInput.prop("readonly", true)
                         .val(slify($titleInput.val()));
                 }
             });
@@ -104,6 +104,18 @@
         <div class="app-content">
             <!--begin::Container-->
             <div class="container-fluid">
+                @if(session('message'))
+                    <div class="alert alert-success">{{ session('message') }}</div>
+                @endif
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form action="{{ route('admin.articles.update', $article->id) }}" method="post" novalidate>
                     @method('PUT')
                     @csrf
@@ -117,7 +129,7 @@
                                             tiêu đề)</label>
                                         <input type="text" id="slug"
                                             class="form-control @error('slug') is-invalid @enderror" name="slug"
-                                            value="{{ old('slug', $article->slug)}}" disabled>
+                                            value="{{ old('slug', $article->slug)}}" readonly>
                                         @error('slug')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -131,18 +143,18 @@
                                     <div class="mb-3">
                                         <label for="tilte" class="form label">Tiêu đề bài viết</label>
                                         <input type="text" id="tilte" class="form-control" name="title"
-                                            value="{{ $article->title }}">
+                                            value="{{old('title', $article->title)}}">
                                     </div>
                                     <div class="mb-3">
                                         <label for="tag" class="form label">Tag</label>
                                         <input type="text" id="tag" class="form-control" name="tag"
-                                            value="{{ $article->tag }}">
+                                            value="{{ old('tag', $article->tag) }}">
                                     </div>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Mô tả (một phần bài viết hoặc mô tả bài
                                             viết)</label>
-                                        <textarea name="" id="description"
-                                            class="form-control">{{ old('description') }}</textarea>
+                                        <textarea name="description" id="description"
+                                            class="form-control">{{ old('description', $article->description) }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +163,8 @@
                                 <div class="card-body">
                                     <div class="mb-3">
                                         <label for="content" class="form label">Nội dung chính</label>
-                                        <textarea id="content" name="content">{{ $article->content }}</textarea>
+                                        <textarea id="content"
+                                            name="content">{{ old('content', $article->content) }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +178,7 @@
                                         <select name="artist_id" id="artist_id" class="form-select">
                                             <option value="">Chọn nghệ sĩ</option>
                                             @foreach ($artists as $artist)
-                                                <option value="{{ $artist->id }}" @selected($artist->id == $article->artist_id)>
+                                                <option value="{{ $artist->id }}" @selected($artist->id == old('artist_id', $article->artist_id))>
                                                     {{ $artist->name }}
                                                 </option>
                                             @endforeach
@@ -177,7 +190,7 @@
                                             <option value="">Chọn danh mục</option>
                                             @foreach($categories as $categorie)
                                                 <option value="{{ $categorie->id }}"
-                                                    @selected($categorie->id == $article->categorie_id)>
+                                                    @selected($categorie->id == old('categorie_id', $article->categorie_id))>
                                                     {{ $categorie->name }}
                                                 </option>
                                             @endforeach
@@ -190,9 +203,11 @@
                                 <div class="card-body">
                                     <div class="mb-3">
                                         <label for="thumbnail" class="form-label">Chọn hình thumbnail</label>
-                                        <input type="file" class="form-control" id="thumbnail" name="thumbnail">
+                                        <input type="file" class="form-control" id="thumbnail" name="thumbnail"
+                                            value="{{ old('thumbnail', $article->thumbnail) }}">
                                     </div>
                                     <img id="thumbnail-img" class="w-100"
+                                        onerror="this.src='{{ asset('assets/img/imageerror.jpg') }}'"
                                         src="{{ asset('images/articles/' . $article->thumbnail) }}" alt="">
                                 </div>
                             </div>

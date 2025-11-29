@@ -159,7 +159,45 @@ class ArticleManagementController extends Controller
      */
     public function update(ArticleUpdateRequest $request, string $id)
     {
-        return redirect(back());
+        $article = Article::findOrFail($id);
+        // Chuẩn bị dữ liệu lưu
+        $data = $request->only([
+            'slug',
+            'title',
+            'tag',
+            'description',
+            'content',
+            'categorie_id',
+            'artist_id'
+        ]);
+
+        // Xử lý thumbnail nếu có upload
+        if ($request->hasFile('thumbnail'))
+        {
+            $file = $request->file('thumbnail');
+
+            // Đổi tên file: timestamp + slug + extension
+            $filename = time() . '_' . \Str::slug($data['slug']) . '.' . $file->getClientOriginalExtension();
+
+            // Lưu file vào storage/app/public/images/articles
+            $path = $file->storeAs('images/articles', $filename, 'public');
+
+            $data['thumbnail'] = $filename;
+        }
+        // Xóa các trường trống
+        foreach ($data as $key => $value)
+        {
+            if (is_null($value))
+            {
+                unset($data[$key]);
+            }
+        }
+        // Tạo bài viết mới
+        $article->update($data);
+
+        return redirect()
+            ->route('admin.articles.index')
+            ->with('message', 'Cập nhật bài viết thành công!');
     }
 
     /**
@@ -211,13 +249,23 @@ class ArticleManagementController extends Controller
         return view('_admin.articles.trash', compact('articles'));
     }
     // khôi phục bài đã xóa
-    public function restore()
+    public function restore($id)
     {
+        $article = Article::onlyTrashed()->findOrFail($id);
+        $article->restore();
 
+        return redirect()
+            ->route('admin.articles.trash')
+            ->with('message', 'Đã khôi phục bài viết thành công!');
     }
     // Xóa luôn
-    public function forceDelete()
+    public function forceDelete($id)
     {
+        $article = Article::onlyTrashed()->findOrFail($id);
+        $article->forceDelete();
 
+        return redirect()
+            ->route('admin.articles.trash')
+            ->with('message', 'Đã xóa vĩnh viễn bài viết thành công!');
     }
 }

@@ -16,7 +16,7 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-6">
-                        <h3 class="mb-0">Quản lý tin tức</h3>
+                        <h3 class="mb-0">Bài viết đã xóa</h3>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-end">
@@ -41,63 +41,7 @@
                         {{ session('message') }}
                     </div>
                 @endif
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <form method="get" action="{{ route('admin.articles.index') }}">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <a href="{{ route('admin.articles.create') }}" class="btn btn-dark w-100">
-                                        + Bài viết mới</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="artist" id="" class="form-select" onchange="this.form.submit()">
-                                        <option value="">Nghệ sĩ</option>
-                                        @foreach($artists as $artist)
-                                            <option value="{{ $artist->slug }}" {{ request('artist') == $artist->slug ? 'selected' : '' }}>{{ $artist->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="categorie" id="" class="form-select" onchange="this.form.submit()">
-                                        <option value="">Chuyên mục</option>
-                                        @foreach($categories as $categorie)
-                                            <option value=" {{ $categorie->slug }}" {{ request('categorie') == $categorie->slug ? 'selected' : '' }}>{{ $categorie->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="view" id="" class="form-select" onchange="this.form.submit()">
-                                        <option value="">Lượt xem</option>
-                                        <option value="increase" {{ request('view') == 'increase' ? 'selected' : '' }}>Tăng
-                                            dần</option>
-                                        <option value="decrease" {{ request('view') == 'decrease' ? 'selected' : '' }}>Giảm
-                                            dần</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="posting_date" id="" class="form-select" onchange="this.form.submit()">
-                                        <option value="">Ngày đăng</option>
-                                        <option value="latest" {{ request('posting_date') == 'latest' ? 'selected' : '' }}>Mới
-                                            nhất
-                                        </option>
-                                        <option value="oldest" {{ request('posting_date') == 'oldest' ? 'selected' : '' }}>Cũ
-                                            nhất
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control me-2" placeholder="Tìm kiếm..." name="search"
-                                            value="{{ request('search') }}">
-                                        <button class="btn btn-outline-secondary">
-                                            <i class="fa-solid fa-magnifying-glass"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+
                 <div class="card mb-4"> <!--begin::Header-->
                     <div class="card-header ">
                         Danh sách bài viết ({{ $articles->total() }} bài viết)
@@ -123,8 +67,7 @@
                                             {{ $loop->iteration + ($articles->currentPage() - 1) * $articles->perPage() }}
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.articles.edit', $article->id) }}"
-                                                class="text-decoration-none text-black fw-bold">{{ $article->title }}</a>
+                                            {{ $article->title }}
                                         </td>
                                         <td>
                                             {{ $article->categorie->name ?? '-' }}
@@ -143,13 +86,16 @@
                                             {{ $article->updated_at->format("H:i d/m/Y") }}
                                         </td>
                                         <td class="text-center">
-                                            <a target="_blank"
-                                                href="{{ route('articles.show', [$article->id, $article->slug]) }}"
-                                                class="text-decoration-none text-secondary"><i class="fa-solid fa-eye"></i></a>
-                                            <a href="{{ route('admin.articles.edit', $article->id) }}"
-                                                class="text-decoration-none text-secondary"><i
-                                                    class="fa-solid fa-pen-to-square "></i></a>
-                                            <form action="{{ route('admin.articles.destroy', [$article]) }}" method="POST"
+                                            <form action="{{ route('admin.articles.restore', [$article->id]) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('PATCH')
+                                                <a href="#" class="fw-bold text-decoration-none text-secondary me-3"
+                                                    onclick="if (confirm('Bạn có chắc chắn muốn khôi phục bài viết?')) { this.closest('form').submit(); } return false;">
+                                                    <i class="fa-solid fa-recycle"></i>
+                                                </a>
+                                            </form>
+                                            <form action="{{ route('admin.articles.forceDelete', [$article]) }}" method="POST"
                                                 class="d-inline">
                                                 @csrf
                                                 @method('DELETE')

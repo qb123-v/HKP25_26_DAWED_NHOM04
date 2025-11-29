@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\PageIndexController;
 use App\Http\Controllers\UserController;
+use App\Models\Artist;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\admin\ArticleManagementController;
@@ -12,6 +15,7 @@ use App\Http\Controllers\admin\UserManagementController;
 use App\Http\Controllers\admin\MediaManagementController;
 use App\Http\Controllers\admin\FooterManagementController;
 use App\Http\Controllers\admin\AdminManagementController;
+use App\Http\Controllers\Admin\DashboardController;
 
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\ArticleController;
@@ -19,9 +23,7 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\Admin\CommentAdminController;
 
 // route cho người dùng
-Route::get('/', function () {
-    return view('index');
-})->name('index');
+Route::get('/', [PageIndexController::class, 'index'])->name('index');
 
 Route::get('news-item', function () {
     return view('news.show');
@@ -83,19 +85,18 @@ Route::prefix('admin')->group(function () {
 
         Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-        Route::get('dashboard', function () {
-            return view('_admin.dashboard');
-        })->name('admin.dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])
+            ->name('admin.dashboard');
+
+        Route::get('dashboard/export-pdf', [DashboardController::class, 'exportPdf'])
+            ->name('admin.dashboard.export-pdf');
 
         // Liên quan đến bài viết
         Route::resource('articles', ArticleManagementController::class)->names('admin.articles');
         Route::prefix('articles')
             ->name('admin.articles.')
-            ->controller(ArticleController::class)
+            ->controller(ArticleManagementController::class)
             ->group(function () {
-                // Cho bản nháp
-                Route::get('/drafts', 'drafts')->name('drafts');
-                Route::patch('/{article}/publish', 'publish')->name('publish');
                 // Cho thùng rác
                 Route::get('/articles/trash', 'trash')->name('trash');
                 Route::patch('/articles/{id}/restore', 'restore')->name('restore');
@@ -138,6 +139,19 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
+// chuyên mục
+Route::prefix('chuyen-muc')
+    ->name('categories.')
+    ->controller(CategorieController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{slug}', 'show')->name('show');
+    });
+// nghệ sĩ
+Route::get('nghe-si', function () {
+    $artists = Artist::all();
+    return view('artists.index', compact('artists'));
+})->name('artists.index');
 
 // route chi tiết
 // Trang danh sách bài viết để hiển thị tạm

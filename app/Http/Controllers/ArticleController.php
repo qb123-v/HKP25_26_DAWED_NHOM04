@@ -6,7 +6,9 @@ use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\JsonResponse;
+
 
 class ArticleController extends Controller
 {
@@ -17,11 +19,9 @@ class ArticleController extends Controller
             ->withCount('likes');
         
         // Lọc theo search title
-        if ($request->filled('search'))
-        {
+        if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
-        } else
-        {
+        } else {
             $query->orderBy('created_at', 'desc');
         }
         
@@ -79,9 +79,9 @@ class ArticleController extends Controller
         Comment::create([
             'article_id' => $id,
             'user_id' => Auth::id(),
+
             'parent_id' => $data['parent_id'] ?? null,
-            'content' => $data['content'],
-        ]);
+
 
         return redirect()->back()->with('success', 'Bình luận đã được gửi!');
     }

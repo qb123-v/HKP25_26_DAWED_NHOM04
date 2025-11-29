@@ -66,6 +66,14 @@ php artisan db:seed
 
 ---
 
+## 🧩 Cài đặt link cho thư mục storage ra public
+
+```bash
+php artisan storage:link
+```
+
+---
+
 ## 🧩 Cài Đặt Frontend
 
 ```bash
@@ -104,7 +112,6 @@ chmod -R 775 storage bootstrap/cache
 ---
 
 ## 🏃‍♂️ Truy cập vào trang quản trị
-
 
 Truy cập trình duyệt tại:  
 👉 [http://localhost:8000/admin](http://localhost:8000/admin)

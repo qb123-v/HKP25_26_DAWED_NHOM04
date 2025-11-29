@@ -6,14 +6,39 @@
         <!--begin::App Content Header-->
         <div class="app-content-header">
             <div class="container-fluid">
-                <div class="row">
+                <div class="row align-items-center">
+                    <!-- Tiêu đề + Nút Xuất PDF -->
                     <div class="col-sm-6">
-                        <h3 class="mb-0">Thống kê</h3>
+                        <div class="d-flex align-items-center flex-wrap gap-3">
+                            <!-- Tiêu đề -->
+                            <h3 class="mb-0 text-gray-800">Thống kê hệ thống</h3>
+
+                            <!-- Nút Xuất PDF - ĐẸP NHƯ METRONIC -->
+                            <a href="{{ route('admin.dashboard.export-pdf') }}"
+                                class="btn btn-danger btn-sm shadow-sm d-flex align-items-center gap-2 transition-all hover-scale"
+                                title="Xuất báo cáo thống kê ra file PDF" target="_blank">
+                                <i class="ki-outline ki-file-down fs-5"></i>
+                                <span class="d-none d-md-inline fw-medium">Xuất PDF</span>
+                                <span class="d-md-none">PDF</span>
+                            </a>
+                            <span class="text-gray-500 mt-1 d-block">
+                                Cập nhật lúc: {{ now()->format('H:i, d/m/Y') }}
+                            </span>
+                        </div>
+
                     </div>
+
+                    <!-- Breadcrumb -->
                     <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-end">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
+                        <ol class="breadcrumb float-sm-end mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
+                                    <i class="ki-outline ki-home fs-6"></i> Home
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active text-gray-700" aria-current="page">
+                                Dashboard
+                            </li>
                         </ol>
                     </div>
                 </div>
@@ -27,7 +52,7 @@
 
                 <!-- 4 ô thống kê lớn -->
                 <div class="row g-4 mb-7">
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body d-flex align-items-center">
                                 <div class="flex-shrink-0 bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-4">
@@ -43,7 +68,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body d-flex align-items-center">
                                 <div class="flex-shrink-0 bg-success bg-opacity-10 text-success rounded-3 p-3 me-4">
@@ -59,7 +84,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body d-flex align-items-center">
                                 <div class="flex-shrink-0 bg-warning bg-opacity-10 text-warning rounded-3 p-3 me-4">
@@ -75,7 +100,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body d-flex align-items-center">
                                 <div class="flex-shrink-0 bg-info bg-opacity-10 text-info rounded-3 p-3 me-4">
@@ -88,8 +113,25 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
+                    <div class="col-12 col-sm-6 col-xl">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="flex-shrink-0 bg-danger bg-opacity-10 text-danger rounded-3 p-3 me-4">
+                                    <i class="ki-outline ki-sms fs-2qx"></i>
+                                    <!-- hoặc dùng icon: ki-envelope, ki-bell, ki-notification-2 -->
+                                </div>
+                                <div>
+                                    <div class="fs-3 fw-bold text-gray-800">
+                                        {{ number_format(\App\Models\Subscription::count()) }}
+                                    </div>
+                                    <div class="text-gray-600 fw-medium">Đăng ký nhận tin</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
                 <!-- Top 10 bài hot -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-primary text-white">
@@ -98,24 +140,26 @@
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead class="table-light">
+                                <thead class="table-light text-center">
                                     <tr>
                                         <th class="ps-4">STT</th>
                                         <th>Tiêu đề</th>
                                         <th>Nghệ sĩ</th>
-                                        <th class="text-end pe-4">Lượt xem</th>
+                                        <th>Bình luận</th>
+                                        <th class="text-center pe-4">Lượt xem</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @forelse(\App\Models\Article::with('artist')->orderByDesc('views')->take(10)->get() as $index => $item)
+                                <tbody class="text-center">
+                                    @forelse($topArticles as $index => $item)
                                         <tr>
-                                            <td class="ps-4 fw-bold text-gray-600">{{ $index + 1 }}</td>
+                                            <td class="ps-4 fw-bold text-gray-600 text-center align-middle">
+                                                {{ $index + 1 }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     @if ($item->thumbnail)
                                                         <img src="{{ asset('storage/images/articles/' . $item->thumbnail ?? 'images/no-image.jpg') }}"
-                                                            class="rounded me-3" width="60" height="60" style="object-fit: cover;"
-                                                            alt="{{ $item->title }}">
+                                                            class="rounded me-3" width="60" height="60"
+                                                            style="object-fit: cover;" alt="{{ $item->title }}">
                                                     @else
                                                         <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center"
                                                             style="width:60px;height:60px;">
@@ -128,8 +172,12 @@
                                                     </a>
                                                 </div>
                                             </td>
-                                            <td class="text-gray-700">{{ $item->artist?->name ?? '—' }}</td>
-                                            <td class="text-end pe-4 fw-bold text-success">
+                                            <td class="text-gray-700 text-center align-middle">
+                                                {{ $item->artist?->name ?? '—' }}</td>
+                                            <td class="text-gray-700 text-center align-middle">
+                                                {{ number_format($item->comments_count) }}
+                                            </td>
+                                            <td class="text-end pe-4 fw-bold text-success text-center align-middle">
                                                 {{ number_format($item->views) }}
                                             </td>
                                         </tr>

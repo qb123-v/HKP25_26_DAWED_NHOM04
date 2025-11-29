@@ -14,7 +14,8 @@ class Categorie extends Model
         'name',
         'slug',
         'description',
-        'thumbnail'
+        'thumbnail',
+        'status',
     ];
     public function articles()
     {

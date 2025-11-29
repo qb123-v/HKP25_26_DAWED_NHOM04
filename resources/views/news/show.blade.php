@@ -328,10 +328,6 @@
             <a href="#"><i class="bi bi-twitter"></i></a>
             <a href="#"><i class="bi bi-envelope"></i></a>
             <a href="#"><i class="bi bi-printer"></i></a>
-            <a id="copyLink" href="{{ route('articles.show', [$article->id, $article->slug]) }}">
-                <i class="bi bi-link-45deg"></i>
-            </a>
-
         </div>
 
         <div class="row">
@@ -487,5 +483,4 @@
         });
     </script>
     @endauth
-
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\UpdateCatecorieRequest;
 use App\Models\Categorie;
 use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
@@ -93,6 +94,57 @@ class CategorieManagementController extends Controller
     {
         $categorie = Categorie::findOrFail($id);
         return view('_admin.categories.edit')->with('categorie', $categorie);
+    }
+    public function update(UpdateCatecorieRequest $request, $id)
+    {
+        // Tìm chuyên mục hoặc báo lỗi nếu không có
+        $category = Categorie::findOrFail($id);
+
+        // Chuẩn bị dữ liệu cập nhật
+        $data = $request->only([
+            'slug',
+            'name',
+            'description',
+            'status',
+        ]);
+
+        // Xử lý thumbnail nếu có upload
+        if ($request->hasFile('thumbnail'))
+        {
+            $file = $request->file('thumbnail');
+
+            // Đổi tên file: timestamp + slug + extension
+            $filename = time() . '_' . \Str::slug($data['slug']) . '.' . $file->getClientOriginalExtension();
+
+            // Lưu file vào storage/app/public/images/categories
+            $path = $file->storeAs('images/categories', $filename, 'public');
+
+            $data['thumbnail'] = $filename;
+
+            // Xóa file thumbnail cũ nếu có
+            if ($category->thumbnail)
+            {
+                $oldFilePath = 'images/categories/' . $category->thumbnail;
+                if (\Storage::disk('public')->exists($oldFilePath))
+                {
+                    \Storage::disk('public')->delete($oldFilePath);
+                }
+            }
+        }
+
+        // Xóa các trường trống
+        foreach ($data as $key => $value)
+        {
+            if (is_null($value))
+            {
+                unset($data[$key]);
+            }
+        }
+
+        // Cập nhật chuyên mục
+        $category->update($data);
+
+        return redirect()->route('admin.categories.index')->with('message', 'Cập nhật chuyên mục thành công');
     }
     public function destroy($id)
     {

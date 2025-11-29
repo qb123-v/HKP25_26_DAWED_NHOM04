@@ -19,7 +19,7 @@ return new class extends Migration {
             // cột comment
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->text('content');
-            $table->tinyInteger('status')->default(1)->comment('1: active, 0: hidden, -1: reported');
+            $table->tinyInteger('status')->default(0)->comment('1: active, 0: hidden, -1: reported');
             $table->timestamps();
 
             // Đệ quy chính nó cho chức năng trả lời comment
