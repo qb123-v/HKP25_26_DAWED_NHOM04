@@ -157,7 +157,7 @@
                                                 <button type="button" class="btn btn-success" title="Sửa">
                                                     <i class="fas fa-edit"></i> Sửa
                                                 </button>
-                                                <button type="button" class="btn btn-danger" title="Xóa">
+                                                <button type="button" class="btn btn-danger btn-delete-artist" data-id="{{ $artist->id }}" title="Xóa">
                                                     <i class="fas fa-trash"></i> Xóa
                                                 </button>
                                             </div>
@@ -521,5 +521,33 @@
                 });
             };
         }
+
+        // Handle delete artist
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.btn-delete-artist')) {
+                e.stopPropagation();
+                const btn = e.target.closest('.btn-delete-artist');
+                const artistId = btn.getAttribute('data-id');
+                if (confirm('Bạn có chắc chắn muốn xóa nghệ sĩ này?')) {
+                    fetch(`{{ url('admin/artists') }}/${artistId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove row from table
+                            btn.closest('tr').remove();
+                        } else {
+                            alert('Xóa thất bại!');
+                        }
+                    })
+                    .catch(() => alert('Lỗi khi xóa nghệ sĩ!'));
+                }
+            }
+        });
     </script>
 @endsection

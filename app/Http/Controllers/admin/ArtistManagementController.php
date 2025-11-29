@@ -178,4 +178,15 @@ class ArtistManagementController extends Controller
             'avatar_url' => $artist->avatar ? \Storage::url($artist->avatar) : null,
         ]);
     }
+
+    public function destroy($id)
+    {
+        $artist = Artist::findOrFail($id);
+        // Optionally delete avatar file
+        if ($artist->avatar && \Storage::disk('public')->exists($artist->avatar)) {
+            \Storage::disk('public')->delete($artist->avatar);
+        }
+        $artist->delete();
+        return response()->json(['success' => true]);
+    }
 }
