@@ -98,4 +98,42 @@ class ArtistManagementController extends Controller
         $artist = Artist::findOrFail($id);
         return response()->json($artist);
     }
+
+    public function update(Request $request, $id)
+    {
+        $artist = Artist::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'name'    => 'required|string|max:255',
+            'email'   => 'nullable|email|unique:artists,email,' . $artist->id,
+            'phone'   => 'nullable|string|max:50',
+            'dob'     => 'nullable|date',
+            'address' => 'nullable|string|max:255',
+            'intro'   => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Only update fields that exist in the table
+        $artist->name    = $request->input('name');
+        $artist->email   = $request->input('email');
+        $artist->phone   = $request->input('phone');
+        $artist->dob     = $request->input('dob');
+        $artist->address = $request->input('address');
+        $artist->intro   = $request->input('intro');
+        $artist->save();
+
+        // Return the updated values (not nulls)
+        return response()->json(['success' => true, 'artist' => [
+            'id'      => $artist->id,
+            'name'    => $artist->name,
+            'email'   => $artist->email,
+            'phone'   => $artist->phone,
+            'dob'     => $artist->dob,
+            'address' => $artist->address,
+            'intro'   => $artist->intro,
+        ]]);
+    }
 }

@@ -201,6 +201,7 @@
     <div class="modal fade" id="artistDetailModal" tabindex="-1" aria-labelledby="artistDetailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
+                <form id="artistDetailForm">
                 <div class="modal-header">
                     <h5 class="modal-title" id="artistDetailModalLabel">Hồ sơ nghệ sĩ</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -237,81 +238,75 @@
                                     <h6 class="mb-0">Hồ sơ cá nhân</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form>
-                                        <!-- Row 1 -->
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <label class="form-label">Họ và tên</label>
-                                                <input type="text" class="form-control" value="Nguyễn Văn A">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Email</label>
-                                                <input type="email" class="form-control" value="artist@example.com">
-                                            </div>
+                                    <input type="hidden" id="artistDetailId" name="id">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Họ và tên</label>
+                                            <input type="text" class="form-control" name="name" id="artistDetailName">
                                         </div>
-
-                                        <!-- Row 2 -->
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <label class="form-label">Số điện thoại</label>
-                                                <input type="text" class="form-control" value="0901 234 567">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Ngày sinh</label>
-                                                <input type="date" class="form-control" value="1995-05-10">
-                                            </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" name="email" id="artistDetailEmail">
                                         </div>
-
-                                        <!-- Row 3 -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Địa chỉ</label>
-                                            <input type="text" class="form-control" value="123 Lê Lợi, Quận 1, TP. HCM">
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Số điện thoại</label>
+                                            <input type="text" class="form-control" name="phone" id="artistDetailPhone">
                                         </div>
-
-                                        <!-- Row 4 -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Giới thiệu bản thân</label>
-                                            <textarea class="form-control" rows="4">Xin chào, tôi là ca sĩ/diễn viên yêu thích âm nhạc và điện ảnh.</textarea>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Ngày sinh</label>
+                                            <input type="date" class="form-control" name="dob" id="artistDetailDob">
                                         </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Địa chỉ</label>
+                                        <input type="text" class="form-control" name="address" id="artistDetailAddress">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Giới thiệu bản thân</label>
+                                        <textarea class="form-control" rows="4" name="intro" id="artistDetailIntro"></textarea>
+                                    </div>
 
-                                        <!-- Row 5 -->
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Sở thích</label>
-                                            <div class="row">
-                                                @php($interests=['Phim Việt','Nhạc Việt','Phim Hollywood','Phim Hàn','Thời trang','Tin tức sao'])
-                                                @foreach($interests as $k=>$label)
-                                                <div class="col-md-4">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" {{ $k % 2 === 0 ? 'checked' : '' }}>
-                                                        <label class="form-check-label">{{ $label }}</label>
-                                                    </div>
+                                    <!-- Row 5 -->
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Sở thích</label>
+                                        <div class="row">
+                                            @php($interests=['Phim Việt','Nhạc Việt','Phim Hollywood','Phim Hàn','Thời trang','Tin tức sao'])
+                                            @foreach($interests as $k=>$label)
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" {{ $k % 2 === 0 ? 'checked' : '' }}>
+                                                    <label class="form-check-label">{{ $label }}</label>
                                                 </div>
-                                                @endforeach
                                             </div>
+                                            @endforeach
                                         </div>
+                                    </div>
 
-                                        <!-- Row 6 -->
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Cài đặt thông báo</label>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" checked>
-                                                <label class="form-check-label">Nhận thông báo qua email</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox">
-                                                <label class="form-check-label">Nhận tin tức mới</label>
-                                            </div>
+                                    <!-- Row 6 -->
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Cài đặt thông báo</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" checked>
+                                            <label class="form-check-label">Nhận thông báo qua email</label>
                                         </div>
-                                    </form>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox">
+                                            <label class="form-check-label">Nhận tin tức mới</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <span id="artistDetailMsg" class="me-auto text-success"></span>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-                    <button type="button" class="btn btn-primary">Lưu thay đổi</button>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -366,36 +361,17 @@
                             document.getElementById('modalArtistName').textContent = data.name || '';
                             document.getElementById('modalArtistEmail').textContent = data.email || '';
 
-                            // Update "Hồ sơ cá nhân" fields
-                            // Name
-                            let profileName = document.querySelector('#artistDetailModal input[type="text"][class*="form-control"]');
-                            if (profileName) profileName.value = data.name || '';
-
-                            // Email
-                            let profileEmail = document.querySelector('#artistDetailModal input[type="email"][class*="form-control"]');
-                            if (profileEmail) profileEmail.value = data.email || '';
-
-                            // Phone (if exists)
-                            let profilePhone = document.querySelector('#artistDetailModal input[type="text"][class*="form-control"]:not([name="name"])');
-                            if (profilePhone && data.phone) profilePhone.value = data.phone;
-
-                            // Date of birth (if exists)
-                            let profileDob = document.querySelector('#artistDetailModal input[type="date"][class*="form-control"]');
-                            if (profileDob && data.dob) profileDob.value = data.dob;
-
-                            // Address (if exists)
-                            let profileAddress = document.querySelector('#artistDetailModal input[type="text"][class*="form-control"]:not([name="name"]):not([name="phone"])');
-                            if (profileAddress && data.address) profileAddress.value = data.address;
-
-                            // Introduction (if exists)
-                            let profileIntro = document.querySelector('#artistDetailModal textarea.form-control');
-                            if (profileIntro && data.intro) profileIntro.value = data.intro;
-
-                            // You can add more fields as needed, matching your Artist model
+                            // Fill form fields
+                            document.getElementById('artistDetailId').value = data.id;
+                            document.getElementById('artistDetailName').value = data.name || '';
+                            document.getElementById('artistDetailEmail').value = data.email || '';
+                            document.getElementById('artistDetailPhone').value = data.phone || '';
+                            document.getElementById('artistDetailDob').value = data.dob || '';
+                            document.getElementById('artistDetailAddress').value = data.address || '';
+                            document.getElementById('artistDetailIntro').value = data.intro || '';
                         })
                         .catch(() => {
-                            document.getElementById('modalArtistName').textContent = this.getAttribute('data-artist-name');
-                            document.getElementById('modalArtistEmail').textContent = this.getAttribute('data-artist-email');
+                            // fallback
                         })
                         .finally(() => {
                             const modalElement = document.getElementById('artistDetailModal');
@@ -408,8 +384,42 @@
                         });
                 });
             });
-            
-            console.log('✅ All event listeners attached successfully');
+
+            // Handle update submit
+            document.getElementById('artistDetailForm').onsubmit = function(e) {
+                e.preventDefault();
+                const id = document.getElementById('artistDetailId').value;
+                const formData = new FormData(this);
+
+                // Debug: log all form data
+                console.log('Submitting update for artist ID:', id);
+                for (let [key, value] of formData.entries()) {
+                    console.log('Form field:', key, '=>', value);
+                }
+
+                fetch('{{ url('admin/artists') }}/' + id + '/update', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: formData
+                })
+                .then(res => {
+                    console.log('Fetch response status:', res.status);
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('Response JSON:', data);
+                    if (data.success) {
+                        document.getElementById('artistDetailMsg').textContent = 'Cập nhật thành công!';
+                    } else if (data.errors) {
+                        document.getElementById('artistDetailMsg').textContent = Object.values(data.errors).join(', ');
+                    }
+                })
+                .catch(err => {
+                    console.error('Update AJAX error:', err);
+                });
+            };
         }
     </script>
 @endsection
