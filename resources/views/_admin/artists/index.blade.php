@@ -25,6 +25,18 @@
             display: block;
             margin: 0 auto 1rem;
         }
+        .avatar-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #dee2e6;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
     </style>
 
     <!--begin::App Main-->
@@ -119,7 +131,11 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
-                                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #f3f4f6; border: 1px solid #dee2e6; display: flex; align-items: center; justify-content: center;">🎤</div>
+                                                @if(!empty($artist->avatar))
+                                                    <img src="{{ \Illuminate\Support\Str::startsWith($artist->avatar, ['http://', 'https://']) ? $artist->avatar : asset('storage/' . $artist->avatar) }}" alt="avatar" class="avatar-thumb" />
+                                                @else
+                                                    <div class="avatar-thumb">🎤</div>
+                                                @endif
                                                 <div>
                                                     <div class="fw-bold">{{ $artist->name }}</div>
                                                     <small class="text-muted">{{ $artist->email }}</small>
