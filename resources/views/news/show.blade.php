@@ -171,6 +171,91 @@
             margin-top: 0.5rem;
         }
 
+        .like-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .like-btn {
+            border: none;
+            background: none;
+            color: #e74c3c;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .like-btn:hover {
+            color: #c0392b;
+        }
+
+        .like-count {
+            font-size: 1.1rem;
+            color: #e74c3c;
+            font-weight: 500;
+        }
+
+        .comment-card {
+            margin-bottom: 1.2rem;
+            border-radius: 10px;
+            border: 1px solid #e5e5e5;
+            background: #fafbfc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .comment-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            background: #eee;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .comment-date {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .comment-content {
+            font-size: 1.08rem;
+            color: #222;
+            margin-bottom: 0.2rem;
+        }
+
+        .reply-btn {
+            font-size: 0.95rem;
+            color: #0d6efd;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .reply-card {
+            margin-left: 60px;
+            background: #f4f8fb;
+            border-left: 3px solid #0d6efd;
+        }
+
+        .comment-form textarea {
+            border-radius: 8px;
+            resize: vertical;
+        }
+
         /* Responsive */
         @media (min-width: 1200px) {
             .col-article {
@@ -252,6 +337,81 @@
                     {!! $article->content !!}
                 </div>
 
+                <!-- Like and Comment Count -->
+                <div class="like-area mt-4 mb-4">
+                    @php
+                        $user = auth('user')->user();
+                        $liked = $user ? $article->likes->contains($user->id) : false;
+                        $likeCount = $article->likes_count ?? $article->likes()->count();
+                    @endphp
+                    <button
+                        type="button"
+                        class="like-btn"
+                        id="like-btn"
+                        data-liked="{{ $liked ? '1' : '0' }}"
+                        @guest('user') disabled title="Vui lòng đăng nhập để thích bài viết" @endguest
+                    >
+                        <i id="like-icon" class="bi {{ $liked ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                        <span id="like-btn-text">{{ $liked ? 'Bỏ thích' : 'Thích' }}</span>
+                    </button>
+                    <span class="like-count" id="like-count">{{ $likeCount }}</span> lượt thích
+                    <span class="ms-3"><i class="bi bi-chat-dots text-primary"></i> {{ $article->comments->count() }} bình luận</span>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section mt-5">
+                    @auth('user')
+                    <div class="mb-4">
+                        <form action="{{ route('articles.comment', $article->id) }}" method="POST" class="comment-form">
+                            @csrf
+                            <div class="mb-2">
+                                <textarea name="content" rows="3" class="form-control" placeholder="Viết bình luận..." required></textarea>
+                            </div>
+                            <input type="hidden" name="parent_id" value="">
+                            <button type="submit" class="btn btn-primary btn-sm">Gửi bình luận</button>
+                        </form>
+                    </div>
+                    @else
+                    <div class="alert alert-info">Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận.</div>
+                    @endauth
+
+                    <h4 class="mb-4"><i class="bi bi-chat-dots text-primary"></i> Bình luận ({{ $article->comments->count() }})</h4>
+                    @forelse ($article->comments as $comment)
+                        <div class="card comment-card">
+                            <div class="card-body">
+                                <div class="comment-header">
+                                    <img src="{{ $comment->user->avatar ?? asset('images/default-avatar.png') }}" class="comment-avatar" alt="avatar">
+                                    <span class="comment-author">{{ $comment->user->name ?? 'Ẩn danh' }}</span>
+                                    <span class="comment-date">{{ $comment->created_at->diffForHumans() }}</span>
+                                </div>
+                                <div class="comment-content">{{ $comment->content }}</div>
+                                {{-- Reply button (UI only) --}}
+                                <button class="reply-btn" type="button">Trả lời</button>
+                            </div>
+                            {{-- Replies --}}
+                            @if ($comment->replies->count())
+                                @foreach ($comment->replies as $reply)
+                                    <div class="card-body reply-card">
+                                        <div class="comment-header">
+                                            <img src="{{ $reply->user->avatar ?? asset('images/default-avatar.png') }}" class="comment-avatar" alt="avatar">
+                                            <span class="comment-author">{{ $reply->user->name ?? 'Ẩn danh' }}</span>
+                                            <span class="comment-date">{{ $reply->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <div class="comment-content">{{ $reply->content }}</div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    @empty
+                        <div class="alert alert-secondary">Chưa có bình luận nào.</div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-12 col-lg-3 col-sidebar sidebar">
+
+
                 <!-- Related Stories -->
                 <h5 class="mt-5 fw-bold">Related stories</h5>
                 <div class="row row-cols-1 row-cols-md-3 g-3 mt-2">
@@ -269,40 +429,58 @@
                     @endforeach
                 </div>
             </div>
-
-            <!-- Sidebar -->
-            <div class="col-12 col-lg-3 col-sidebar sidebar">
-
-
-                <div class="comments-box">
-                    <h6>Leave a Comment</h6>
-                    @auth('user')
-                        <form action="{{ route('articles.comment', $article->id) }}" method="POST">
-                            @csrf
-                            <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." rows="3" required></textarea>
-                            <button class="btn btn-primary btn-sm w-100">Gửi</button>
-                        </form>
-                    @else
-                        <p><a href="{{ route('user.login') }}" class="text-primary">Đăng nhập</a> để bình luận.</p>
-                    @endauth
-
-                    @foreach($article->comments->where('status', 1) as $comment) <!-- chỉ hiển thị status=1 -->
-                        <div class="mt-3">
-                            <strong>{{ $comment->user->name ?? 'Unknown' }}</strong>
-                            <small class="text-muted d-block">{{ optional($comment->created_at)->diffForHumans() }}</small>
-                            <p>{{ $comment->content }}</p>
-
-                            @foreach($comment->replies->where('status', 1) as $reply) <!-- lọc replies status=1 -->
-                                <div class="comment-reply">
-                                    <strong>{{ $reply->user->name ?? 'Unknown' }}</strong>
-                                    <small class="text-muted d-block">{{ optional($reply->created_at)->diffForHumans() }}</small>
-                                    <p>{{ $reply->content }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endforeach
-                </div>
-            </div>
         </div>
     </div>
+
+    @auth('user')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeBtn = document.getElementById('like-btn');
+            const likeBtnText = document.getElementById('like-btn-text');
+            const likeIcon = document.getElementById('like-icon');
+            const likeCountSpan = document.getElementById('like-count');
+            if (likeBtn) {
+                likeBtn.addEventListener('click', function() {
+                    console.log('Like button clicked');
+                    fetch("{{ route('articles.like', $article->id) }}", {
+                        method: 'POST',
+                        credentials: 'same-origin', // <-- add this line
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Server response:', data);
+                        if (data.liked !== undefined) {
+                            likeBtn.setAttribute('data-liked', data.liked ? '1' : '0');
+                            likeBtnText.textContent = data.liked ? 'Bỏ thích' : 'Thích';
+                            likeIcon.className = data.liked ? 'bi bi-heart-fill' : 'bi bi-heart';
+                        }
+                        if (data.like_count !== undefined) {
+                            likeCountSpan.textContent = data.like_count;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            }
+        });
+    </script>
+    @else
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeBtn = document.getElementById('like-btn');
+            if (likeBtn) {
+                likeBtn.addEventListener('click', function() {
+                    alert('Vui lòng đăng nhập để thích bài viết!');
+                });
+            }
+        });
+    </script>
+    @endauth
 @endsection

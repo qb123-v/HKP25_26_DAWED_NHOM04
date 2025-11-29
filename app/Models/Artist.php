@@ -10,10 +10,14 @@ class Artist extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'slug',
         'name',
-        'bio',
-        'avatar', // dùng asset để hiển thị ảnh
+        'slug',
+        'email',
+        'phone',
+        'dob',
+        'address',
+        'intro',
+        'avatar',
     ];
 
     // Một nghệ sĩ có nhiều bài viết

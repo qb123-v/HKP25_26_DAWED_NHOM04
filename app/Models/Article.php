@@ -48,6 +48,7 @@ class Article extends Model
             ->take(3)
             ->get();
     }
+
     /**
      * Scope tìm bài viết xem nhiều nhất
      * @param $query
@@ -56,5 +57,11 @@ class Article extends Model
     public function scopeMostViewed($query, $limit = 10)
     {
         return $query->orderBy('views', 'desc')->take($limit);
+    }
+
+    public function likes()
+    {
+        // Adjust 'article_user' and foreign keys if your table/columns are named differently
+        return $this->belongsToMany(\App\Models\User::class, 'article_user', 'article_id', 'user_id');
     }
 }
