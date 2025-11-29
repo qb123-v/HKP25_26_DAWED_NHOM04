@@ -91,4 +91,11 @@ class ArtistManagementController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+
+    public function show($id)
+    {
+        // Ensure correct artist is returned by ID
+        $artist = Artist::findOrFail($id);
+        return response()->json($artist);
+    }
 }

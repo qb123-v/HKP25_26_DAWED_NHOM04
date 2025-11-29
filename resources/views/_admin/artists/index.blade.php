@@ -356,45 +356,56 @@
                         console.log('❌ Click ignored - button or checkbox clicked');
                         return;
                     }
-                    
-                    const artistName = this.dataset.artistName;
-                    const artistEmail = this.dataset.artistEmail;
-                    const artistId = this.dataset.artistId;
-                    
-                    console.log('✅ Opening modal for:');
-                    console.log('  - ID:', artistId);
-                    console.log('  - Name:', artistName);
-                    console.log('  - Email:', artistEmail);
-                    
-                    // Update modal content
-                    const nameElement = document.getElementById('modalArtistName');
-                    const emailElement = document.getElementById('modalArtistEmail');
-                    
-                    if (nameElement) nameElement.textContent = artistName;
-                    if (emailElement) emailElement.textContent = artistEmail;
-                    
-                    console.log('Modal content updated');
-                    
-                    // Show modal
-                    const modalElement = document.getElementById('artistDetailModal');
-                    console.log('Modal element found:', modalElement !== null);
-                    
-                    if (typeof bootstrap !== 'undefined') {
-                        try {
-                            const modal = new bootstrap.Modal(modalElement);
-                            modal.show();
-                            console.log('✅ Modal opened successfully!');
-                        } catch (error) {
-                            console.error('❌ Error opening modal:', error);
-                        }
-                    } else if (typeof $ !== 'undefined' && $.fn.modal) {
-                        // Fallback to jQuery if Bootstrap JS not available
-                        console.log('Using jQuery modal...');
-                        $('#artistDetailModal').modal('show');
-                    } else {
-                        console.error('❌ Bootstrap not found! Modal cannot be opened.');
-                        alert('Bootstrap library is not loaded. Cannot open modal.');
-                    }
+
+                    // Always get artistId from the clicked row, not from a reused variable
+                    const artistId = this.getAttribute('data-artist-id');
+
+                    fetch('{{ url('admin/artists') }}/' + artistId)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('modalArtistName').textContent = data.name || '';
+                            document.getElementById('modalArtistEmail').textContent = data.email || '';
+
+                            // Update "Hồ sơ cá nhân" fields
+                            // Name
+                            let profileName = document.querySelector('#artistDetailModal input[type="text"][class*="form-control"]');
+                            if (profileName) profileName.value = data.name || '';
+
+                            // Email
+                            let profileEmail = document.querySelector('#artistDetailModal input[type="email"][class*="form-control"]');
+                            if (profileEmail) profileEmail.value = data.email || '';
+
+                            // Phone (if exists)
+                            let profilePhone = document.querySelector('#artistDetailModal input[type="text"][class*="form-control"]:not([name="name"])');
+                            if (profilePhone && data.phone) profilePhone.value = data.phone;
+
+                            // Date of birth (if exists)
+                            let profileDob = document.querySelector('#artistDetailModal input[type="date"][class*="form-control"]');
+                            if (profileDob && data.dob) profileDob.value = data.dob;
+
+                            // Address (if exists)
+                            let profileAddress = document.querySelector('#artistDetailModal input[type="text"][class*="form-control"]:not([name="name"]):not([name="phone"])');
+                            if (profileAddress && data.address) profileAddress.value = data.address;
+
+                            // Introduction (if exists)
+                            let profileIntro = document.querySelector('#artistDetailModal textarea.form-control');
+                            if (profileIntro && data.intro) profileIntro.value = data.intro;
+
+                            // You can add more fields as needed, matching your Artist model
+                        })
+                        .catch(() => {
+                            document.getElementById('modalArtistName').textContent = this.getAttribute('data-artist-name');
+                            document.getElementById('modalArtistEmail').textContent = this.getAttribute('data-artist-email');
+                        })
+                        .finally(() => {
+                            const modalElement = document.getElementById('artistDetailModal');
+                            if (typeof bootstrap !== 'undefined') {
+                                const modal = new bootstrap.Modal(modalElement);
+                                modal.show();
+                            } else if (typeof $ !== 'undefined' && $.fn.modal) {
+                                $('#artistDetailModal').modal('show');
+                            }
+                        });
                 });
             });
             
